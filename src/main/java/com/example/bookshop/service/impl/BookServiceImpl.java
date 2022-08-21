@@ -98,6 +98,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
+        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), offset, limit), Root.class).getBody();
+        return getBooksFromGoogleRoot(root);
+    }
+
+    @Override
     public Page<Book> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) {
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBookByTitleContaining(searchWord, nextPage);

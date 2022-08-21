@@ -141,7 +141,7 @@ p.error-browser
                 <div class="search">
                     <form class="form form_search" action="#" method="post" data-searchlimit="20">
                         <input class="search-input" id="querypage" name="querypage" type="text"
-                               placeholder="Search over 30 million book titles" value="Техника"/>
+                               placeholder="Search over 30 million book titles" value="Техника" th:value="${searchWordDto.searchWord}"/>
                         <button class="search-button" type="submit" name="searchpage" id="searchpage">Поиск
                         </button>
                     </form>
@@ -153,7 +153,7 @@ p.error-browser
                     </h2>
                 </header>
                 <div class="Cards Cards_search Cards_refresh">
-                    <div th:each="book : ${searchResults}">
+                    <div th:each="book : ${searchResultBooks}">
                         <div class="Card">
                             <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg"
                                                                        alt="card.jpg"/></a>
@@ -171,8 +171,8 @@ p.error-browser
                         </div>
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                     data-refreshshow="search" data-refreshoffset="20"
-                                                                     data-refreshlimit="20" data-refreshquery="Техника">Показать еще</a>
+                                                                     data-refreshshow="search" data-refreshoffset="0"
+                                                                     data-refreshlimit="6" data-refreshquery="Техника">Показать еще</a>
                     </div>
                 </div>
             </div>

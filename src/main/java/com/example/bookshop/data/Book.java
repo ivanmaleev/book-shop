@@ -54,18 +54,18 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "price")
-    @JsonProperty("price")
+    @Column(name = "priceOld")
+    @JsonProperty("priceOld")
     private Integer priceOld;
 
-    @Column(name = "discount")
-    @JsonProperty("discount")
+    @Column(name = "price")
+    @JsonProperty("price")
     private Double price;
 
-    @JsonProperty
-    public Integer dicsountPrice() {
-        Integer discountedPriceInt = priceOld - Math.toIntExact(Math.round(price * priceOld));
-        return discountedPriceInt;
+    @JsonProperty("discount")
+    public Integer getDiscount() {
+        Integer discount = 100 - (int) (price * 100 / priceOld);
+        return discount;
     }
 
 

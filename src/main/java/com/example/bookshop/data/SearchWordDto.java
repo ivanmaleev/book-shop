@@ -1,21 +1,12 @@
 package com.example.bookshop.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchWordDto {
-
-    private String example;
-
-    public SearchWordDto(String example) {
-        this.example = example;
-    }
-
-    public SearchWordDto() {
-    }
-
-    public void setExample(String example) {
-        this.example = example;
-    }
-
-    public String getExample() {
-        return example;
-    }
+    private String searchWord;
 }

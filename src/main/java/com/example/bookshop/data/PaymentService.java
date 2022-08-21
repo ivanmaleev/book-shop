@@ -7,7 +7,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class PaymentService {
@@ -20,7 +19,7 @@ public class PaymentService {
 
 
     public String getPaymentUrl(List<Book> booksFromCookieSlugs) throws NoSuchAlgorithmException {
-        Double paymentSumTotal = booksFromCookieSlugs.stream().mapToDouble(Book::dicsountPrice).sum();
+        Double paymentSumTotal = booksFromCookieSlugs.stream().mapToDouble(Book::getPrice).sum();
         MessageDigest md = MessageDigest.getInstance("MD5");
         String invId = "5"; //just for testing TODO order indexing later
         md.update((merchantLogin + ":" + paymentSumTotal.toString() + ":" + invId + ":" + firstTestPass).getBytes());
