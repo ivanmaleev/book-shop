@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.data.SearchWordDto;
 import com.example.bookshop.errs.EmptySearchException;
 import com.example.bookshop.service.BookService;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @NoArgsConstructor
@@ -18,17 +21,23 @@ public class SearchPageController {
     private BookService bookService;
 
     @GetMapping(value = {"/search", "/search/{SearchWord}"})
-    public String getSearchResult(@PathVariable(value = "SearchWord", required = false) String searchWord,
-                                  Model model) throws EmptySearchException {
+    public String getSearchResultBooks(@PathVariable(value = "SearchWord", required = false) String searchWord,
+                                       Model model) throws EmptySearchException {
         if (searchWord != null) {
-
             model.addAttribute("searchWordDto", new SearchWordDto(searchWord));
             model.addAttribute("searchResultBooks",
-                    bookService.getPageOfGoogleBooksApiSearchResult(searchWord, 0, 6));
+                    bookService.getPageOfGoogleBooksApiSearchResult(searchWord, 0, 20));
             return "/search/index";
         } else {
             throw new EmptySearchException("Поиск по null невозможен");
         }
+    }
 
+    @GetMapping("/searchPage/{SearchWord}")
+    @ResponseBody
+    public BooksPageDto getSearchResultBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                 @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+                                                 @PathVariable(value = "SearchWord", required = false) String searchWord) {
+        return new BooksPageDto(bookService.getPageOfGoogleBooksApiSearchResult(searchWord, offset, limit));
     }
 }
