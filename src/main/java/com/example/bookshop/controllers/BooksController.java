@@ -1,10 +1,9 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.Book;
-import com.example.bookshop.data.BookRepository;
+import com.example.bookshop.entity.Book;
+import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.data.ResourceStorage;
 import com.example.bookshop.service.BookService;
-import com.sun.source.doctree.SeeTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

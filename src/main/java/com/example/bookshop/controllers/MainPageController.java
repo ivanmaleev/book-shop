@@ -2,8 +2,6 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.data.BooksPageDto;
-import com.example.bookshop.data.SearchWordDto;
-import com.example.bookshop.errs.EmptySearchException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

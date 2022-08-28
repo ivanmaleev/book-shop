@@ -1,8 +1,8 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.Book;
-import com.example.bookshop.data.BookRepository;
-import com.example.bookshop.data.PaymentService;
+import com.example.bookshop.entity.Book;
+import com.example.bookshop.repository.BookRepository;
+import com.example.bookshop.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

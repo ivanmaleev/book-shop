@@ -1,5 +1,7 @@
 package com.example.bookshop.data;
 
+import com.example.bookshop.entity.Book;
+
 import java.util.List;
 
 public class BooksPageDto {

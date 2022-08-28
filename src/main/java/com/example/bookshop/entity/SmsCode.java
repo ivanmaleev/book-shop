@@ -1,4 +1,4 @@
-package com.example.bookshop.data;
+package com.example.bookshop.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

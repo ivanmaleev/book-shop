@@ -1,5 +1,6 @@
-package com.example.bookshop.data;
+package com.example.bookshop.entity;
 
+import com.example.bookshop.entity.Book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

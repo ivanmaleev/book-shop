@@ -1,5 +1,6 @@
-package com.example.bookshop.data;
+package com.example.bookshop.service;
 
+import com.example.bookshop.entity.Book;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

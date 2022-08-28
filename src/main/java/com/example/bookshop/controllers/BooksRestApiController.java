@@ -1,7 +1,7 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.ApiResponse;
-import com.example.bookshop.data.Book;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +41,21 @@ public class BooksRestApiController {
         response.setData(data);
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/books/by-price-range")
-    public ResponseEntity<List<Book>> priceRangeBookss(@RequestParam("min")Integer min, @RequestParam("max")Integer max){
-        return ResponseEntity.ok(bookService.getBooksWithPriceBetween(min, max));
-    }
-
-    @GetMapping("/books/with-max-discount")
-    public ResponseEntity<List<Book>> maxPriceBooks(){
-        return ResponseEntity.ok(bookService.getBooksWithMaxPrice());
-    }
-
-    @GetMapping("/books/bestsellers")
-    public ResponseEntity<List<Book>> bestSellerBooks(){
-        return ResponseEntity.ok(bookService.getBestsellers());
-    }
+//
+//    @GetMapping("/books/by-price-range")
+//    public ResponseEntity<List<Book>> priceRangeBookss(@RequestParam("min")Integer min, @RequestParam("max")Integer max){
+//        return ResponseEntity.ok(bookService.getBooksWithPriceBetween(min, max));
+//    }
+//
+//    @GetMapping("/books/with-max-discount")
+//    public ResponseEntity<List<Book>> maxPriceBooks(){
+//        return ResponseEntity.ok(bookService.getBooksWithMaxPrice());
+//    }
+//
+//    @GetMapping("/books/bestsellers")
+//    public ResponseEntity<List<Book>> bestSellerBooks(){
+//        return ResponseEntity.ok(bookService.getBestsellers());
+//    }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ApiResponse<Book>> handleMissingServletRequestParameterException(Exception exception){

@@ -1,7 +1,10 @@
 package com.example.bookshop.config;
 
 import com.example.bookshop.service.BookService;
+import com.example.bookshop.service.GenreService;
+import com.example.bookshop.service.LoadGenresService;
 import com.example.bookshop.service.impl.BookServiceImpl;
+import com.example.bookshop.service.impl.GenreServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -17,5 +20,10 @@ public class AppConfig {
     @Bean
     public BookService bookService() {
         return new BookServiceImpl();
+    }
+
+    @Bean
+    public GenreService genreService(){
+        return new GenreServiceImpl();
     }
 }

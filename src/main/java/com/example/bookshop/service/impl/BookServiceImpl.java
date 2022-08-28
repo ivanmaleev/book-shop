@@ -1,26 +1,22 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.data.Author;
-import com.example.bookshop.data.Book;
-import com.example.bookshop.data.BookRepository;
+import com.example.bookshop.entity.Author;
+import com.example.bookshop.entity.Book;
+import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.data.google.api.books.Item;
 import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import com.example.bookshop.service.BookService;
+import com.example.bookshop.service.LoadGenresService;
 import lombok.NoArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriBuilder;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +35,6 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
     @Autowired
     private RestTemplate restTemplate;
-
-    @Override
-    public List<Book> getBooksData() {
-        return bookRepository.findAll();
-    }
 
     @Override
     public List<Book> getBooksByAuthor(String authorName) {
@@ -65,26 +56,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooksWithPriceBetween(Integer min, Integer max) {
-        return bookRepository.findBooksByPriceOldBetween(min, max);
-    }
-
-    @Override
-    public List<Book> getBooksWithPrice(Integer price) {
-        return bookRepository.findBooksByPriceOldIs(price);
-    }
-
-    @Override
-    public List<Book> getBooksWithMaxPrice() {
-        return bookRepository.getBooksWithMaxDiscount();
-    }
-
-    @Override
-    public List<Book> getBestsellers() {
-        return bookRepository.getBestsellers();
-    }
-
-    @Override
     public List<Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
 
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), offset, limit), Root.class).getBody();
@@ -93,6 +64,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
+
+//
+//        LoadGenresService loadGenresService = new LoadGenresService();
+//        loadGenresService.loadGenres();
+
+
+
+
+
+
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), offset, limit), Root.class).getBody();
         return getBooksFromGoogleRoot(root);
     }
@@ -101,12 +82,6 @@ public class BookServiceImpl implements BookService {
     public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), offset, limit), Root.class).getBody();
         return getBooksFromGoogleRoot(root);
-    }
-
-    @Override
-    public Page<Book> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) {
-        Pageable nextPage = PageRequest.of(offset, limit);
-        return bookRepository.findBookByTitleContaining(searchWord, nextPage);
     }
 
     @Override
@@ -119,6 +94,12 @@ public class BookServiceImpl implements BookService {
     public Book getBook(String slug) {
         com.example.bookshop.data.book.Root root = restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
         return getBookFromGoogleRoot(root);
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(String genreName, Integer offset, Integer limit) {
+        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), offset, limit), Root.class).getBody();
+        return getBooksFromGoogleRoot(root);
     }
 
     private String getGoogleBookApiUrl(String slug) {

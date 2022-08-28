@@ -1,9 +1,8 @@
 package com.example.bookshop.security;
 
-import com.example.bookshop.data.SmsCode;
-import com.example.bookshop.data.SmsCodeRepository;
+import com.example.bookshop.entity.SmsCode;
+import com.example.bookshop.repository.SmsCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;

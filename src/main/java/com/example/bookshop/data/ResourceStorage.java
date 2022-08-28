@@ -1,5 +1,7 @@
 package com.example.bookshop.data;
 
+import com.example.bookshop.entity.BookFile;
+import com.example.bookshop.repository.BookFileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

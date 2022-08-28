@@ -1,4 +1,4 @@
-package com.example.bookshop.data;
+package com.example.bookshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

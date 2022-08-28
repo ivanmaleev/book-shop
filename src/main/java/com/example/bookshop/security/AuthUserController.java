@@ -1,6 +1,6 @@
 package com.example.bookshop.security;
 
-import com.example.bookshop.data.SmsCode;
+import com.example.bookshop.entity.SmsCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="1" author="Maleev Ivan">
+        <comment>
+            Создание таблицы Genres
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.genre
+            (
+                id   bigserial    NOT NULL PRIMARY KEY,
+                name varchar(254) NOT NULL,
+                ord  int
+            )
+        </sql>
+        <sql>
+            CREATE TABLE book_shop.genre_lang
+            (
+                genre_id bigint NOT NULL REFERENCES book_shop.genre (id) ON DELETE RESTRICT,
+                name public.hstore
+            )
+        </sql>
+        <sql>
+            CREATE FUNCTION book_shop.genre(character varying DEFAULT 'en')
+                RETURNS TABLE (id bigint, name varchar, ord int)
+                LANGUAGE sql AS '
+            select g.id, coalesce(gl.name -> $1, g.name) as name, g.ord
+            from book_shop.genre g
+            left join book_shop.genre_lang gl on g.id = gl.genre_id;
+            '
+        </sql>
+    </changeSet>
+</databaseChangeLog>
+
+
+
