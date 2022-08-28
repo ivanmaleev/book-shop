@@ -78,7 +78,7 @@
           <ul class="menu menu_main">
             <li class="menu-item"><a class="menu-link" href="/index.html">Главная</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/genres.sql/index.html">Жанры</a>
+            <li class="menu-item"><a class="menu-link" href="/genres/index.html">Жанры</a>
             </li>
             <li class="menu-item"><a class="menu-link" href="/books/recent.html">Новинки</a>
             </li>
@@ -97,24 +97,22 @@
         <ul class="breadcrumbs">
           <li class="breadcrumbs-item"><a href="/index.html">Главная</a>
           </li>
-          <li class="breadcrumbs-item"><a href="/genres.sql/index.html">Жанры</a>
+          <li class="breadcrumbs-item"><a href="/genres/index.html">Жанры</a>
           </li>
-          <li class="breadcrumbs-item"><a href="/genres.sql/index.html">Легкое чтение</a>
-          </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Детективы</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${genre.name}">Детективы</span>
           </li>
         </ul>
         <header class="Middle-header">
-          <h1 class="Middle-title">Детективы
+          <h1 class="Middle-title" th:text="${genre.name}">Детективы
           </h1>
         </header>
         <div class="Section">
           <div class="Cards Cards_refresh">
             <div class="Card" th:each="book : ${booksByGenre}">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg" th:src="${book.image}"/></a>
+              <div class="Card-picture"><a href="#" th:href="@{'/books/slug/' + ${book.slug}}"><img src="/assets/img/content/main/card.jpg" alt="card.jpg" th:src="${book.image}"/></a>
               </div>
               <div class="Card-content">
-                <strong class="Card-title"><a href="#" th:text="${book.title}">Техника</a>
+                <strong class="Card-title"><a href="#" th:href="@{'/books/slug/' + ${book.slug}}" th:text="${book.title}">Техника</a>
                 </strong>
                 <div class="Card-description" th:text="${book.author}">Кондратенко Александр Петрович
                 </div>
@@ -123,7 +121,7 @@
               </div>
             </div>
 
-            <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#" data-refreshshow="genre" data-refreshoffset="0" data-refreshlimit="20" data-refreshid="1020">Показать еще</a>
+            <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#" data-refreshshow="genre" data-refreshoffset="0" data-refreshlimit="20" data-refreshid="1020" th:data-refreshid="${genre.id}">Показать еще</a>
             </div>
           </div>
         </div>
@@ -153,7 +151,7 @@
           <ul class="menu menu_vt Footer-menu">
             <li class="menu-item"><a class="menu-link" href="/index.html">Главная</a>
             </li>
-            <li class="menu-item"><a class="menu-link" href="/genres.sql/index.html">Жанры</a>
+            <li class="menu-item"><a class="menu-link" href="/genres/index.html">Жанры</a>
             </li>
             <li class="menu-item"><a class="menu-link" href="/books/recent.html">Новинки</a>
             </li>

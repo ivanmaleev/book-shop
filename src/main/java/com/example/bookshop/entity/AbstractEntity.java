@@ -15,13 +15,13 @@ import java.io.Serializable;
 @MappedSuperclass
 @EqualsAndHashCode
 @NoArgsConstructor
-public class AbstractEntity implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
     /**
      * Уникальный идентификатор
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 }

@@ -24,5 +24,5 @@ public interface BookService {
 
     Book getBook(String slug);
 
-    List<Book> getBooksByGenre(String genreName, Integer offset, Integer limit);
+    List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 }

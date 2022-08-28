@@ -8,11 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "genre")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
+@Table(name = "genre", schema = "book_shop")
 public class Genre extends AbstractEntity {
 
     private static final long serialVersionUID = -6530011050346355790L;
