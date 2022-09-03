@@ -1,5 +1,7 @@
 package com.example.bookshop.service.impl;
 
+import com.example.bookshop.constants.Langs;
+import com.example.bookshop.dto.AlphabetObject;
 import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
@@ -9,6 +11,7 @@ import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
+import com.example.bookshop.service.LoadGenresService;
 import lombok.NoArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,18 +69,17 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
 
+//        LoadGenresService loadGenresService = new LoadGenresService();
+//        loadGenresService.loadGenres();
+
+
+
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(defaultLocale), offset, limit), Root.class).getBody();
         return getBooksFromGoogleRoot(root);
     }
 
     @Override
     public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
-
-//
-//        LoadGenresService loadGenresService = new LoadGenresService();
-//        loadGenresService.loadGenres();
-
-
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(defaultLocale), offset, limit), Root.class).getBody();
         return getBooksFromGoogleRoot(root);
     }
@@ -102,7 +104,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
-        GenreDto genreDto = genreService.findGenreById(genreId, "en");
+        GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
         String searchString = getRandomSearchWord(defaultLocale) + "+subject:" + genreDto.getName();
         Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchString, offset, limit), Root.class).getBody();
         return getBooksFromGoogleRoot(root);
@@ -187,16 +189,9 @@ public class BookServiceImpl implements BookService {
     }
 
     private String getRandomSearchWord(String lang) {
-        //TODO переделать
-        String alphabet;
-        if ("ru".equals(lang)) {
-            alphabet = "абвгдеёжзийклмнопрстуфхцчшщыэюя";
-        } else {
-            alphabet = "abcdefghijklmnopqrstuvwxwz";
-        }
         Random r = new Random();
-        char c = alphabet.charAt(r.nextInt(alphabet.length()));
-        return String.valueOf(c);
+        List<AlphabetObject> alphabetObjects = AlphabetService.alphabetLangMap.get(lang);
+        return String.valueOf(alphabetObjects.get(r.nextInt(alphabetObjects.size())).getLetter());
     }
 
 }

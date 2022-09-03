@@ -8,7 +8,7 @@
 
     <changeSet id="1" author="Maleev Ivan">
         <comment>
-            Создание таблицы Genres
+            Создание таблицы Genre
         </comment>
         <sql>
             CREATE TABLE book_shop.genre
@@ -33,6 +33,18 @@
             from book_shop.genre g
             left join book_shop.genre_lang gl on g.id = gl.genre_id;
             '
+        </sql>
+
+        <comment>
+            Создание таблицы Author
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.author
+            (
+                id   bigserial    NOT NULL PRIMARY KEY,
+                last_name varchar(254) NOT NULL,
+                first_name varchar(254) NOT NULL
+            )
         </sql>
     </changeSet>
 </databaseChangeLog>

@@ -1,5 +1,6 @@
 package com.example.bookshop.service.impl;
 
+import com.example.bookshop.constants.Langs;
 import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.repository.GenreRepository;
 import com.example.bookshop.service.GenreService;
@@ -50,7 +51,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private void loadLangGenreMap() {
-        List<String> langs = List.of("ru", "en");
+        List<String> langs = List.of(Langs.RU, Langs.EN);
         langs.forEach(lang -> {
             langGenreMap.putIfAbsent(lang, new HashMap<>());
             Map<Long, GenreDto> genresMap = langGenreMap.get(lang);

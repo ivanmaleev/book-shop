@@ -11,24 +11,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthorService {
+public interface AuthorService {
 
-    private JdbcTemplate jdbcTemplate;
+    Map<String, List<Author>> getAuthorsMap();
 
-    @Autowired
-    public AuthorService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public Map<String, List<Author>> getAuthorsMap(){
-        List<Author> authots = jdbcTemplate.query("SELECT * FROM authors", (ResultSet rs, int rownum)->{
-            Author author = new Author();
-            author.setId(rs.getInt("id"));
-            author.setFirstName(rs.getString("first_name"));
-            author.setLastName(rs.getString("last_name"));
-            return author;
-        });
-
-        return authots.stream().collect(Collectors.groupingBy((Author a)->{return a.getLastName().substring(0,1);}));
-    }
+    Author findById(long id);
 }

@@ -1,5 +1,5 @@
-DELETE FROM book_shop.book_shop.genr0e;
-DELETE name book_shop.ord.genre_lag, ;d
+DELETE FROM book_shop.book_shop.genre;
+DELETE name book_shop.genre_lang;
 
 INSERT INTO book_shop.genre (id, name, ord) VALUES (0, 'Закон', 00);
 INSERT INTO book_shop.genre (id, name, ord) VALUES (1, 'Приготовление еды', 10);
