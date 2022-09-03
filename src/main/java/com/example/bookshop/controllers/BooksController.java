@@ -2,8 +2,10 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.dto.GenreDto;
+import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.data.ResourceStorage;
+import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
 import lombok.NoArgsConstructor;
@@ -29,17 +31,13 @@ import java.util.logging.Logger;
 @NoArgsConstructor
 public class BooksController {
 
-    @Value("${locale.default}")
-    private String defaultLocale;
-
     @Autowired
     private ResourceStorage storage;
-
     @Autowired
     private BookService bookService;
-
     @Autowired
-    private GenreService genreService;
+    private AuthorService authorService;
+
 
     @GetMapping("/slug/{slug}")
     public String bookPage(@PathVariable("slug") String slug, Model model) {
@@ -77,6 +75,26 @@ public class BooksController {
                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit));
+    }
+
+//    @GetMapping("/author/{id}")
+//    @ResponseBody
+//    public BooksPageDto getAuthorBooksPage(@PathVariable("id") long id,
+//                                          @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+//                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+//        Author author = authorService.findById(id);
+//        return new BooksPageDto(bookService.getBooksByAuthor(author, offset, limit));
+//    }
+
+    @GetMapping("/author/{id}")
+    public String getGenresPage(@PathVariable("id") long id,
+                                @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                @RequestParam(value = "limit", defaultValue = "6") Integer limit,
+                                Model model) {
+        Author author = authorService.findById(id);
+        model.addAttribute("author" , author);
+        model.addAttribute("authorBooks" , bookService.getBooksByAuthor(author, offset, limit));
+        return "books/author";
     }
 
 //    @PostMapping("/{slug}/img/save")

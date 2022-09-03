@@ -12,15 +12,9 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    List<Book> findBooksByAuthor_FirstName(String name);
-
     List<Book> findBooksByAuthorFirstNameContaining(String authorsFirstName);
 
     List<Book> findBooksByTitleContaining(String bookTitle);
-
-    List<Book> findBooksByPriceOldBetween(Integer min, Integer max);
-
-    List<Book> findBooksByPriceOldIs(Integer price);
 
     @Query("from Book where isBestseller=1")
     List<Book> getBestsellers();

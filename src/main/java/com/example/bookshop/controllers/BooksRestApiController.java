@@ -25,10 +25,10 @@ public class BooksRestApiController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/books/by-author")
-    public ResponseEntity<List<Book>> booksByAuthor(@RequestParam("author")String authorName){
-        return ResponseEntity.ok(bookService.getBooksByAuthor(authorName));
-    }
+//    @GetMapping("/books/by-author")
+//    public ResponseEntity<List<Book>> booksByAuthor(@RequestParam("author")String authorName){
+//        return ResponseEntity.ok(bookService.getBooksByAuthor(authorName));
+//    }
 
     @GetMapping("/books/by-title")
     public ResponseEntity<ApiResponse<Book>> booksByTitle(@RequestParam("title")String title) throws BookstoreApiWrongParameterException {

@@ -1,5 +1,6 @@
 package com.example.bookshop.service;
 
+import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.List;
 @Service
 public interface BookService {
 
-    List<Book> getBooksByAuthor(String authorName);
+    List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit);
 
     List<Book> getBooksByTitle(String title) throws BookstoreApiWrongParameterException;
 

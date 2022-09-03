@@ -29,6 +29,9 @@ import java.util.Random;
 @NoArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    @Value("${google.books.api.attempts}")
+    private Integer attempts;
+
     @Value("${google.books.api.key}")
     private String apiKey;
 
@@ -48,8 +51,9 @@ public class BookServiceImpl implements BookService {
     private RestTemplate restTemplate;
 
     @Override
-    public List<Book> getBooksByAuthor(String authorName) {
-        return bookRepository.findBooksByAuthorFirstNameContaining(authorName);
+    public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+        String searchString = "+inauthor:" + author.getLastName() + " " + author.getFirstName();
+        return getBooks(searchString, offset, limit);
     }
 
     @Override
@@ -72,28 +76,22 @@ public class BookServiceImpl implements BookService {
 //        LoadGenresService loadGenresService = new LoadGenresService();
 //        loadGenresService.loadGenres();
 
-
-
-        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(defaultLocale), offset, limit), Root.class).getBody();
-        return getBooksFromGoogleRoot(root);
+        return getBooks(null, offset, limit);
     }
 
     @Override
     public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
-        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(defaultLocale), offset, limit), Root.class).getBody();
-        return getBooksFromGoogleRoot(root);
+        return getBooks(null, offset, limit);
     }
 
     @Override
     public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
-        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(defaultLocale), offset, limit), Root.class).getBody();
-        return getBooksFromGoogleRoot(root);
+        return getBooks(null, offset, limit);
     }
 
     @Override
     public List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit) {
-        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchWord, offset, limit), Root.class).getBody();
-        return getBooksFromGoogleRoot(root);
+        return getBooks(searchWord, offset, limit);
     }
 
     @Override
@@ -105,9 +103,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
-        String searchString = getRandomSearchWord(defaultLocale) + "+subject:" + genreDto.getName();
-        Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchString, offset, limit), Root.class).getBody();
-        return getBooksFromGoogleRoot(root);
+        String searchString = "+subject:" + genreDto.getName();
+        return getBooks(searchString, offset, limit);
     }
 
     private String getGoogleBookApiUrl(String slug) {
@@ -192,6 +189,24 @@ public class BookServiceImpl implements BookService {
         Random r = new Random();
         List<AlphabetObject> alphabetObjects = AlphabetService.alphabetLangMap.get(lang);
         return String.valueOf(alphabetObjects.get(r.nextInt(alphabetObjects.size())).getLetter());
+    }
+
+    private List<Book> getBooks(String searchString, Integer offset, Integer limit) {
+        Root root = null;
+        for (int i = 0; i < attempts; i++) {
+            String searchWord = "";
+            if (searchString != null) {
+                searchWord = getRandomSearchWord(defaultLocale) + searchString;
+            } else {
+                searchWord = getRandomSearchWord(defaultLocale);
+            }
+
+            root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchWord, offset, limit), Root.class).getBody();
+            if (root != null && root.getItems() != null) {
+                break;
+            }
+        }
+        return getBooksFromGoogleRoot(root);
     }
 
 }
