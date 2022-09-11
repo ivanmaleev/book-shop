@@ -108,6 +108,15 @@
           <div class="Cards Cards_refresh">
             <div class="Card" th:each="book : ${authorBooks}">
               <div class="Card-picture"><a href="#" th:href="@{'/books/slug/' + ${book.slug}}"><img src="/assets/img/content/main/card.jpg" alt="card.jpg" th:src="${book.image}"/></a>
+                <div class="Card-sale" th:if="${book.discount}" th:text="@{${book.discount} + '% скидка'}">30% скидка
+                </div>
+                <div class="Card-ribbon"><span class="Card-ribbonText" th:if="${book.isBestseller}">Бестселлер</span>
+                </div>
+                <div th:switch="${book.status}">
+                  <a th:case="'PAID'" class="Card-status" title="Куплена"><img src="/assets/img/icons/check.svg" alt="Куплена"></a>
+                  <a th:case="'CART'" class="Card-status" title="В корзине"><img src="/assets/img/icons/shopping-basket.svg" alt="В корзине"></a>
+                  <a th:case="'KEPT'" class="Card-status" title="Отложена"><img src="/assets/img/icons/heart.svg" alt="Отложена"></a>
+                </div>
               </div>
               <div class="Card-content">
                 <strong class="Card-title"><a href="#" th:href="@{'/books/slug/' + ${book.slug}}" th:text="${book.title}">Техника</a>

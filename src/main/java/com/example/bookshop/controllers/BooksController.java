@@ -8,6 +8,7 @@ import com.example.bookshop.data.ResourceStorage;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -31,6 +34,7 @@ import java.util.logging.Logger;
 @NoArgsConstructor
 public class BooksController {
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     @Autowired
     private ResourceStorage storage;
     @Autowired
@@ -55,11 +59,27 @@ public class BooksController {
 
     @GetMapping("/recent")
     @ResponseBody
-    public BooksPageDto getRecentBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                           @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
-        Date endDate = Date.from(Instant.now());
-        Date fromDate = Date.from(Instant.now().minus(3560, ChronoUnit.DAYS));
-        return new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, endDate));
+    public BooksPageDto getRecentBooksPage(@RequestParam(value = "from", required = false) String from,
+                                           @RequestParam(value = "to", required = false) String to,
+                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+        Date fromDate = null;
+        Date toDate = null;
+        if (StringUtils.isNotBlank(from) && StringUtils.isNotBlank(to)) {
+            try {
+                fromDate = sdf.parse(from);
+                toDate = sdf.parse(to);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (fromDate == null) {
+            fromDate = Date.from(Instant.now().minus(1068, ChronoUnit.DAYS));
+        }
+        if (toDate == null) {
+            toDate = Date.from(Instant.now());
+        }
+        return new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate));
     }
 
     @GetMapping("/popular")
@@ -92,8 +112,8 @@ public class BooksController {
                                 @RequestParam(value = "limit", defaultValue = "6") Integer limit,
                                 Model model) {
         Author author = authorService.findById(id);
-        model.addAttribute("author" , author);
-        model.addAttribute("authorBooks" , bookService.getBooksByAuthor(author, offset, limit));
+        model.addAttribute("author", author);
+        model.addAttribute("authorBooks", bookService.getBooksByAuthor(author, offset, limit));
         return "books/author";
     }
 

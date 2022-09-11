@@ -82,7 +82,7 @@ public class LoadGenresService {
 
     private String getRandomSearchWord() {
         Random r = new Random();
-        List<AlphabetObject> alphabetObjects = AlphabetService.alphabetLangMap.get(Langs.RU);
+        List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(Langs.RU);
         return String.valueOf(alphabetObjects.get(r.nextInt(alphabetObjects.size())).getLetter());
     }
 }

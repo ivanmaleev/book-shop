@@ -1,6 +1,11 @@
-package com.example.bookshop.security;
+package com.example.bookshop.controllers;
 
 import com.example.bookshop.entity.SmsCode;
+import com.example.bookshop.security.BookstoreUserRegister;
+import com.example.bookshop.security.ContactConfirmationPayload;
+import com.example.bookshop.security.ContactConfirmationResponse;
+import com.example.bookshop.security.RegistrationForm;
+import com.example.bookshop.security.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,8 +33,8 @@ public class AuthUserController {
         this.javaMailSender = javaMailSender;
     }
 
-    @GetMapping("/signin")
-    public String handleSignin() {
+    @GetMapping("/signin.html")
+    public String signinPage() {
         return "signin";
     }
 

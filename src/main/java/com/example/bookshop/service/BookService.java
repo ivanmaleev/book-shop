@@ -13,8 +13,6 @@ public interface BookService {
 
     List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit);
 
-    List<Book> getBooksByTitle(String title) throws BookstoreApiWrongParameterException;
-
     List<Book> getPageofRecommendedBooks(Integer offset, Integer limit);
 
     List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end);

@@ -1,7 +1,7 @@
 package com.example.bookshop.data;
 
 import com.example.bookshop.entity.BookFile;
-import com.example.bookshop.repository.BookFileRepository;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 
 @Service
+@NoArgsConstructor
 public class ResourceStorage {
 
     @Value("${upload.path}")
@@ -27,12 +28,12 @@ public class ResourceStorage {
     @Value("${download.path}")
     String downloadPath;
 
-    private final BookFileRepository bookFileRepository;
-
-    @Autowired
-    public ResourceStorage(BookFileRepository bookFileRepository) {
-        this.bookFileRepository = bookFileRepository;
-    }
+//    private final BookFileRepository bookFileRepository;
+//
+//    @Autowired
+//    public ResourceStorage(BookFileRepository bookFileRepository) {
+//        this.bookFileRepository = bookFileRepository;
+//    }
 
     public String saveNewBookImage(MultipartFile file, String slug) throws IOException {
 
@@ -54,12 +55,12 @@ public class ResourceStorage {
     }
 
     public Path getBookFilePath(String hash) {
-        BookFile bookFile = bookFileRepository.findBookFileByHash(hash);
+        BookFile bookFile = null;//bookFileRepository.findBookFileByHash(hash);
         return Paths.get(bookFile.getPath());
     }
 
     public MediaType getBookFileMime(String hash) {
-        BookFile bookFile = bookFileRepository.findBookFileByHash(hash);
+        BookFile bookFile = null;//bookFileRepository.findBookFileByHash(hash);
         String mimeType =
                 URLConnection.guessContentTypeFromName(Paths.get(bookFile.getPath()).getFileName().toString());
 
@@ -71,7 +72,7 @@ public class ResourceStorage {
     }
 
     public byte[] getBookFileByteArray(String hash) throws IOException {
-        BookFile bookFile = bookFileRepository.findBookFileByHash(hash);
+        BookFile bookFile = null;//bookFileRepository.findBookFileByHash(hash);
         Path path = Paths.get(downloadPath, bookFile.getPath());
         return Files.readAllBytes(path);
 

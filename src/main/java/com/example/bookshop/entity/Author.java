@@ -21,12 +21,12 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
-    private String lastName;
+    private String lastName = "";
 
 
-    @OneToMany(mappedBy = "author")
-    @JsonIgnore
-    private List<Book> bookList = new ArrayList<>();
+//    @OneToMany(mappedBy = "author")
+//    @JsonIgnore
+//    private List<Book> bookList = new ArrayList<>();
 
     public Author(List<String> authors) {
         if(authors!=null){
@@ -36,13 +36,13 @@ public class Author {
 
     public Author(){}
 
-    public List<Book> getBookList() {
-        return bookList;
-    }
-
-    public void setBookList(List<Book> bookList) {
-        this.bookList = bookList;
-    }
+//    public List<Book> getBookList() {
+//        return bookList;
+//    }
+//
+//    public void setBookList(List<Book> bookList) {
+//        this.bookList = bookList;
+//    }
 
     @Override
     public String toString() {

@@ -1,8 +1,8 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.service.PaymentService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,26 +18,20 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @Controller
-@RequestMapping("/book")
-public class BookshpCartController {
+@NoArgsConstructor
+public class CartController {
 
     @ModelAttribute(name = "bookCart")
     public List<Book> bookCart() {
         return new ArrayList<>();
     }
 
-    private final BookRepository bookRepository;
-    private final PaymentService paymentService;
-
     @Autowired
-    public BookshpCartController(BookRepository bookRepository, PaymentService paymentService) {
-        this.bookRepository = bookRepository;
-        this.paymentService = paymentService;
-    }
+    private PaymentService paymentService;
 
-    @GetMapping("/cart")
-    public String handleCartRequest(@CookieValue(value = "cartContents", required = false) String cartContents,
-                                    Model model) {
+    @GetMapping("/cart.html")
+    public String cartPage(@CookieValue(value = "cartContents", required = false) String cartContents,
+                           Model model) {
         if (cartContents == null || cartContents.equals("")) {
             model.addAttribute("isCartEmpty", true);
         } else {
@@ -46,7 +40,7 @@ public class BookshpCartController {
             cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() - 1) :
                     cartContents;
             String[] cookieSlugs = cartContents.split("/");
-            List<Book> booksFromCookieSlugs = bookRepository.findBooksBySlugIn(cookieSlugs);
+            List<Book> booksFromCookieSlugs = new ArrayList<>();//bookRepository.findBooksBySlugIn(cookieSlugs);
             model.addAttribute("bookCart", booksFromCookieSlugs);
         }
 
@@ -98,7 +92,7 @@ public class BookshpCartController {
         cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() - 1) :
                 cartContents;
         String[] cookieSlugs = cartContents.split("/");
-        List<Book> booksFromCookieSlugs = bookRepository.findBooksBySlugIn(cookieSlugs);
+        List<Book> booksFromCookieSlugs = new ArrayList<>(); //bookRepository.findBooksBySlugIn(cookieSlugs);
         String paymentUrl = paymentService.getPaymentUrl(booksFromCookieSlugs);
         return new RedirectView(paymentUrl);
     }

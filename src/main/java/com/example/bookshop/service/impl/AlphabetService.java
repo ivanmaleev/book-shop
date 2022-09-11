@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class AlphabetService {
 
-    public static Map<String, List<AlphabetObject>> alphabetLangMap;
+    public static final Map<String, List<AlphabetObject>> alphabetLangMap;
 
     static {
         alphabetLangMap = new HashMap();
@@ -33,9 +33,12 @@ public class AlphabetService {
             alphabet = alphabetString
                     .chars()
                     .mapToObj(ch -> new AlphabetObject(idAtomic.incrementAndGet(), (char) ch, String.valueOf((char) ch)))
-                    //.mapToObj(ch -> new AlphabetObject(idAtomic.incrementAndGet(), (char) ch, "gg")
                     .collect(Collectors.toList());
             alphabetLangMap.putIfAbsent(lang, alphabet);
         });
+    }
+
+    public static List<AlphabetObject> getAlphabet(String lang){
+        return new ArrayList<>(alphabetLangMap.get(lang));
     }
 }

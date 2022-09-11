@@ -30,17 +30,17 @@ public class BooksRestApiController {
 //        return ResponseEntity.ok(bookService.getBooksByAuthor(authorName));
 //    }
 
-    @GetMapping("/books/by-title")
-    public ResponseEntity<ApiResponse<Book>> booksByTitle(@RequestParam("title")String title) throws BookstoreApiWrongParameterException {
-        ApiResponse<Book> response = new ApiResponse<>();
-        List<Book> data = bookService.getBooksByTitle(title);
-        response.setDebugMessage("successful request");
-        response.setMessage("data size: "+data.size()+" elements");
-        response.setStatus(HttpStatus.OK);
-        response.setTimeStamp(LocalDateTime.now());
-        response.setData(data);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/books/by-title")
+//    public ResponseEntity<ApiResponse<Book>> booksByTitle(@RequestParam("title")String title) throws BookstoreApiWrongParameterException {
+//        ApiResponse<Book> response = new ApiResponse<>();
+//        List<Book> data = bookService.getBooksByTitle(title);
+//        response.setDebugMessage("successful request");
+//        response.setMessage("data size: "+data.size()+" elements");
+//        response.setStatus(HttpStatus.OK);
+//        response.setTimeStamp(LocalDateTime.now());
+//        response.setData(data);
+//        return ResponseEntity.ok(response);
+//    }
 //
 //    @GetMapping("/books/by-price-range")
 //    public ResponseEntity<List<Book>> priceRangeBookss(@RequestParam("min")Integer min, @RequestParam("max")Integer max){

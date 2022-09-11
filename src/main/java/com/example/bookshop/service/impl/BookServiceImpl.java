@@ -5,14 +5,13 @@ import com.example.bookshop.dto.AlphabetObject;
 import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.repository.BookRepository;
-import com.example.bookshop.data.google.api.books.Item;
 import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
-import com.example.bookshop.service.LoadGenresService;
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,14 +20,17 @@ import org.springframework.web.client.RestTemplate;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 @NoArgsConstructor
+@Slf4j
 public class BookServiceImpl implements BookService {
 
+    private final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     @Value("${google.books.api.attempts}")
     private Integer attempts;
 
@@ -42,9 +44,6 @@ public class BookServiceImpl implements BookService {
     private String defaultLocale;
 
     @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
     private GenreService genreService;
 
     @Autowired
@@ -53,21 +52,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         String searchString = "+inauthor:" + author.getLastName() + " " + author.getFirstName();
-        return getBooks(searchString, offset, limit);
-    }
-
-    @Override
-    public List<Book> getBooksByTitle(String title) throws BookstoreApiWrongParameterException {
-        if (title.equals("") || title.length() <= 1) {
-            throw new BookstoreApiWrongParameterException("Wrong values passed to one or more parameters");
-        } else {
-            List<Book> data = bookRepository.findBooksByTitleContaining(title);
-            if (data.size() > 0) {
-                return data;
-            } else {
-                throw new BookstoreApiWrongParameterException("No data found with specified parameters...");
-            }
-        }
+        return getBooks(searchString, null, null, offset, limit);
     }
 
     @Override
@@ -76,22 +61,24 @@ public class BookServiceImpl implements BookService {
 //        LoadGenresService loadGenresService = new LoadGenresService();
 //        loadGenresService.loadGenres();
 
-        return getBooks(null, offset, limit);
+        return getBooks(null, null, null, offset, limit);
     }
 
     @Override
-    public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
-        return getBooks(null, offset, limit);
+    public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date fromDate, Date endDate) {
+        String from = sdf.format(fromDate);
+        String to = sdf.format(endDate);
+        return getBooks(null, from, to, offset, limit);
     }
 
     @Override
     public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
-        return getBooks(null, offset, limit);
+        return getBooks(null, null, null, offset, limit);
     }
 
     @Override
     public List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit) {
-        return getBooks(searchWord, offset, limit);
+        return getBooks(searchWord, null, null, offset, limit);
     }
 
     @Override
@@ -103,8 +90,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
-        String searchString = "+subject:" + genreDto.getName();
-        return getBooks(searchString, offset, limit);
+        String searchString = "+subject:\"" + genreDto.getName() + "\"";
+        return getBooks(searchString, null, null, offset, limit);
     }
 
     private String getGoogleBookApiUrl(String slug) {
@@ -120,7 +107,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
-    private String getGoogleBooksApiUrl(String searchWord, Integer offset, Integer limit) {
+    private String getGoogleBooksApiUrl(String searchWord, String from, String to, Integer offset, Integer limit) {
         URIBuilder builder = new URIBuilder();
         builder.setScheme("https");
         builder.setHost(googleUrl);
@@ -132,6 +119,12 @@ public class BookServiceImpl implements BookService {
         builder.addParameter("filter", "paid-ebooks");
         builder.addParameter("startIndex", offset.toString());
         builder.addParameter("maxResults", limit.toString());
+        builder.addParameter("projection", "lite");
+        //TODO
+        builder.addParameter("langRestrict", Langs.RU);
+        if (StringUtils.isNotBlank(from) && StringUtils.isNotBlank(to)) {
+            builder.addParameter("tbs", "cdr:1,cd_min:" + from + ",cd_max:" + to);
+        }
         try {
             URL url = builder.build().toURL();
             String urlString = url.toString();
@@ -147,22 +140,35 @@ public class BookServiceImpl implements BookService {
 
     private List<Book> getBooksFromGoogleRoot(Root root) {
         ArrayList<Book> books = new ArrayList<>();
-        if (root != null) {
-            for (Item item : root.getItems()) {
-                Book book = new Book();
-                if (item.getVolumeInfo() != null) {
-                    book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
-                    book.setTitle(item.getVolumeInfo().getTitle());
-                    book.setImage(item.getVolumeInfo().getImageLinks().getThumbnail());
-                    book.setSlug(item.getId());
-                }
-                if (item.getSaleInfo() != null) {
-                    book.setPrice(item.getSaleInfo().getRetailPrice().getAmount());
-                    Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
-                    book.setPriceOld(oldPrice.intValue());
-                }
-                books.add(book);
-            }
+        List<String> statuses = List.of("PAID", "CART", "KEPT", "");
+        final Random random = new Random();
+        if (root != null && root.getItems() != null) {
+            root.getItems()
+                    .forEach(item -> {
+                        Book book = new Book();
+                        if (item.getVolumeInfo() != null) {
+                            if (item.getVolumeInfo().getAuthors() != null) {
+                                book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
+                            }
+                            book.setTitle(item.getVolumeInfo().getTitle());
+                            book.setImage(item.getVolumeInfo().getImageLinks().getThumbnail());
+                            book.setSlug(item.getId());
+                            book.setId(item.getId());
+                        }
+                        if (item.getSaleInfo() != null && item.getSaleInfo().getRetailPrice() != null) {
+                            book.setPrice(item.getSaleInfo().getRetailPrice().getAmount());
+                            Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
+                            book.setPriceOld(oldPrice.intValue());
+                        }
+                        //TODO бестселлер и стутус книги
+                        int i = random.nextInt(10);
+                        if (i > 7) {
+                            book.setIsBestseller(1);
+                        }
+                        book.setStatus(statuses.get(random.nextInt(4)));
+                        log.debug("Load book " + book);
+                        books.add(book);
+                    });
         }
         return books;
     }
@@ -175,6 +181,7 @@ public class BookServiceImpl implements BookService {
                 book.setTitle(root.getVolumeInfo().getTitle());
                 book.setImage(root.getVolumeInfo().getImageLinks().getThumbnail());
                 book.setSlug(root.getId());
+                book.setId(root.getId());
             }
             if (root.getSaleInfo() != null) {
                 book.setPrice(root.getSaleInfo().getRetailPrice().getAmount());
@@ -182,26 +189,29 @@ public class BookServiceImpl implements BookService {
                 book.setPriceOld(oldPrice.intValue());
             }
         }
+        log.debug("Load book " + book);
         return book;
     }
 
-    private String getRandomSearchWord(String lang) {
+    private String getRandomSearchWord(List<AlphabetObject> alphabetObjects) {
         Random r = new Random();
-        List<AlphabetObject> alphabetObjects = AlphabetService.alphabetLangMap.get(lang);
-        return String.valueOf(alphabetObjects.get(r.nextInt(alphabetObjects.size())).getLetter());
+        int i = r.nextInt(alphabetObjects.size());
+        final char letter = alphabetObjects.get(i).getLetter();
+        alphabetObjects.remove(i);
+        return String.valueOf(letter);
     }
 
-    private List<Book> getBooks(String searchString, Integer offset, Integer limit) {
+    private List<Book> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
         Root root = null;
+        List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(defaultLocale);
         for (int i = 0; i < attempts; i++) {
             String searchWord = "";
             if (searchString != null) {
-                searchWord = getRandomSearchWord(defaultLocale) + searchString;
+                searchWord = getRandomSearchWord(alphabetObjects) + searchString;
             } else {
-                searchWord = getRandomSearchWord(defaultLocale);
+                searchWord = getRandomSearchWord(alphabetObjects);
             }
-
-            root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchWord, offset, limit), Root.class).getBody();
+            root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchWord, from, to, offset, limit), Root.class).getBody();
             if (root != null && root.getItems() != null) {
                 break;
             }
