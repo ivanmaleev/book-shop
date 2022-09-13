@@ -43,10 +43,10 @@ public class Book {
     private String description;
 
     @JsonProperty("priceOld")
-    private Integer priceOld;
+    private Integer priceOld = 1;
 
     @JsonProperty("price")
-    private Double price;
+    private Double price = 0D;
 
     @JsonProperty("discount")
     public Integer getDiscount() {
