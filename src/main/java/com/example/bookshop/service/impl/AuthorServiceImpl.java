@@ -6,6 +6,7 @@ import com.example.bookshop.service.AuthorService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Cacheable("authorsMap")
     public Map<String, List<Author>> getAuthorsMap() {
         List<Author> authorList = jdbcTemplate.query("SELECT * FROM book_shop.author", (ResultSet rs, int rownum) -> {
             Author author = new Author();
@@ -43,6 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Cacheable("author")
     public Author findById(long id) {
         return authorsRepository.findById(id);
     }

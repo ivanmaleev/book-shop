@@ -40,7 +40,6 @@ public class GenreServiceImpl implements GenreService {
         return getGenreMap(lang).get(id);
     }
 
-
     private Map<Long, GenreDto> getGenreMap(String lang) {
         Map<Long, GenreDto> genreMap = langGenreMap.get(lang);
         if (genreMap == null || genreMap.isEmpty()) {

@@ -5,11 +5,13 @@ import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.LoadGenresService;
 import com.example.bookshop.service.impl.BookServiceImpl;
 import com.example.bookshop.service.impl.GenreServiceImpl;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
+@EnableCaching
 public class AppConfig {
 
     @Bean
