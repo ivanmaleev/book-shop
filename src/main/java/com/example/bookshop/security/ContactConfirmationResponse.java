@@ -1,14 +1,9 @@
 package com.example.bookshop.security;
 
+import lombok.Data;
+
+@Data
 public class ContactConfirmationResponse {
 
     private String result;
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
 }

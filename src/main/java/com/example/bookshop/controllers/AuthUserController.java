@@ -33,7 +33,7 @@ public class AuthUserController {
         this.javaMailSender = javaMailSender;
     }
 
-    @GetMapping("/signin.html")
+    @GetMapping({"/signin.html", "/signin"})
     public String signinPage() {
         return "signin";
     }
@@ -46,7 +46,7 @@ public class AuthUserController {
 
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestContactConfirmation(ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         response.setResult("true");
 
@@ -61,7 +61,7 @@ public class AuthUserController {
 
     @PostMapping("/requestEmailConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestEmailConfirmation(@RequestBody ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestEmailConfirmation(ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("bookstore00@mail.ru");
@@ -77,12 +77,12 @@ public class AuthUserController {
 
     @PostMapping("/approveContact")
     @ResponseBody
-    public ContactConfirmationResponse handleApproveContact(@RequestBody ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleApproveContact(ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
 
-        if(smsService.verifyCode(payload.getCode())){
+       // if(smsService.verifyCode(payload.getCode())){
             response.setResult("true");
-        }
+     //   }
 
         return response;
     }
@@ -123,11 +123,11 @@ public class AuthUserController {
         return "my";
     }
 
-    @GetMapping("/profile")
-    public String handleProfile(Model model) {
-        model.addAttribute("curUsr", userRegister.getCurrentUser());
-        return "profile";
-    }
+//    @GetMapping("/profile")
+//    public String handleProfile(Model model) {
+//        model.addAttribute("curUsr", userRegister.getCurrentUser());
+//        return "profile";
+//    }
 
 //    @GetMapping("/logout")
 //    public String handleLogout(HttpServletRequest request) {
