@@ -50,15 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/my","/profile").authenticated()//.hasRole("USER")
+                .antMatchers("/my","/profile").hasRole("USER")//.authenticated()
                 .antMatchers("/**").permitAll()
                 .and().formLogin()
                 .loginPage("/signin").failureUrl("/signin")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token")
-                .and().oauth2Login()
-                .and().oauth2Client();
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token");
 
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }

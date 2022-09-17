@@ -28,21 +28,15 @@ public class BookstoreUserRegister {
         this.jwtUtil = jwtUtil;
     }
 
-    public BookstoreUser registerNewUser(RegistrationForm registrationForm) {
+    public void registerNewUser(RegistrationForm registrationForm) {
 
-        BookstoreUser userbyEmail = bookstoreUserRepository.findBookstoreUserByEmail(registrationForm.getEmail());
-        BookstoreUser userbyPhone = bookstoreUserRepository.findBookstoreUserByPhone(registrationForm.getPhone());
-
-        if (userbyEmail == null && userbyPhone == null) {
+        if (bookstoreUserRepository.findBookstoreUserByEmail(registrationForm.getEmail()) == null) {
             BookstoreUser user = new BookstoreUser();
             user.setName(registrationForm.getName());
             user.setEmail(registrationForm.getEmail());
             user.setPhone(registrationForm.getPhone());
             user.setPassword(passwordEncoder.encode(registrationForm.getPass()));
             bookstoreUserRepository.save(user);
-            return user;
-        }else {
-            return userbyPhone;
         }
     }
 
@@ -69,17 +63,17 @@ public class BookstoreUserRegister {
         return response;
     }
 
-    public ContactConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload payload) {
-        RegistrationForm registrationForm = new RegistrationForm();
-        registrationForm.setPhone(payload.getContact());
-        registrationForm.setPass(payload.getCode());
-        registerNewUser(registrationForm);
-        UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(payload.getContact());
-        String jwtToken = jwtUtil.generateToken(userDetails);
-        ContactConfirmationResponse response = new ContactConfirmationResponse();
-        response.setResult(jwtToken);
-        return response;
-    }
+//    public ContactConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload payload) {
+//        RegistrationForm registrationForm = new RegistrationForm();
+//        registrationForm.setPhone(payload.getContact());
+//        registrationForm.setPass(payload.getCode());
+//        registerNewUser(registrationForm);
+//        UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(payload.getContact());
+//        String jwtToken = jwtUtil.generateToken(userDetails);
+//        ContactConfirmationResponse response = new ContactConfirmationResponse();
+//        response.setResult(jwtToken);
+//        return response;
+//    }
 
     public Object getCurrentUser() {
         BookstoreUserDetails userDetails =
