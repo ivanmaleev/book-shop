@@ -63,18 +63,6 @@ public class BookstoreUserRegister {
         return response;
     }
 
-//    public ContactConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload payload) {
-//        RegistrationForm registrationForm = new RegistrationForm();
-//        registrationForm.setPhone(payload.getContact());
-//        registrationForm.setPass(payload.getCode());
-//        registerNewUser(registrationForm);
-//        UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(payload.getContact());
-//        String jwtToken = jwtUtil.generateToken(userDetails);
-//        ContactConfirmationResponse response = new ContactConfirmationResponse();
-//        response.setResult(jwtToken);
-//        return response;
-//    }
-
     public Object getCurrentUser() {
         BookstoreUserDetails userDetails =
                 (BookstoreUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

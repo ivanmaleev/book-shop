@@ -41,7 +41,7 @@ public class AuthUserController {
 
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestContactConfirmation(ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         response.setResult("true");
 
@@ -99,23 +99,18 @@ public class AuthUserController {
         return loginResponse;
     }
 
-//    @PostMapping("/login-by-phone-number")
-//    @ResponseBody
-//    public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody ContactConfirmationPayload payload,
-//                                                   HttpServletResponse httpServletResponse) {
+    @PostMapping("/login-by-phone-number")
+    @ResponseBody
+    public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody ContactConfirmationPayload payload,
+                                                   HttpServletResponse httpServletResponse) {
 //        if(smsService.verifyCode(payload.getCode())) {
 //            ContactConfirmationResponse loginResponse = userRegister.jwtLoginByPhoneNumber(payload);
 //            Cookie cookie = new Cookie("token", loginResponse.getResult());
 //            httpServletResponse.addCookie(cookie);
 //            return loginResponse;
 //        }else {
-//            return null;
+            return null;
 //        }
-//    }
-
-    @GetMapping("/my")
-    public String handleMy() {
-        return "my";
     }
 
 //    @GetMapping("/profile")
