@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PostponedPageController {
 
-    @GetMapping("/postponed.html")
+    @GetMapping("/postponed")
     public String postponedPage(Model model) {
         return "/postponed";
     }

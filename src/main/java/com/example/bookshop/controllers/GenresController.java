@@ -2,8 +2,10 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.constants.Langs;
 import com.example.bookshop.dto.GenreDto;
+import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.persistence.EntityManager;
 
 @Controller
+@NoArgsConstructor
 @RequestMapping("/genres")
 public class GenresController {
 
@@ -27,9 +30,10 @@ public class GenresController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/index.html")
+    @GetMapping({"", "/"})
     public String getGenresPage(Model model) {
         model.addAttribute("genres", genreService.findGenres(defaultLocale));
+        model.addAttribute("topbarActive", new TopBar(false, true, false, false, false));
         return "genres/index";
     }
 

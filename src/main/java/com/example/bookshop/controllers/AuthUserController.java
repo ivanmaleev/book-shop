@@ -28,7 +28,7 @@ public class AuthUserController {
     private final SmsService smsService;
     private final JavaMailSender javaMailSender;
 
-    @GetMapping({"/signin.html", "/signin"})
+    @GetMapping( "/signin")
     public String signinPage() {
         return "signin";
     }

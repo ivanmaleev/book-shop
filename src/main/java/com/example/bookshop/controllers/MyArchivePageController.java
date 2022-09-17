@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MyArchivePageController {
 
-    @GetMapping("/myarchive.html")
+    @GetMapping("/myarchive")
     public String myarchivePage(Model model) {
         return "/myarchive";
     }

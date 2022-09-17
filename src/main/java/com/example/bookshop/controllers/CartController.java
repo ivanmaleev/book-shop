@@ -29,7 +29,7 @@ public class CartController {
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping("/cart.html")
+    @GetMapping("/cart")
     public String cartPage(@CookieValue(value = "cartContents", required = false) String cartContents,
                            Model model) {
         if (cartContents == null || cartContents.equals("")) {

@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.AuthorService;
@@ -32,9 +33,10 @@ public class AuthorsController {
         this.authorService = authorService;
     }
 
-    @GetMapping({"", "/index.html"})
+    @GetMapping({"", "/"})
     public String authorsPage(Model model) {
         model.addAttribute("authorsMap", authorService.getAuthorsMap());
+        model.addAttribute("topbarActive", new TopBar(false, false, false, false, true));
         return "/authors/index";
     }
 

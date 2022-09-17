@@ -1,20 +1,26 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@NoArgsConstructor
+@RequestMapping("/popular")
 public class PopularPageController {
 
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/books/popular.html")
+    @GetMapping({"", "/"})
     public String popularBooksPage(Model model) {
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 20));
+        model.addAttribute("topbarActive", new TopBar(false, false, false, true, false));
         return "books/popular";
     }
 }
