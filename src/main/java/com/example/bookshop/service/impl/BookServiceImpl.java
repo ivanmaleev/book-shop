@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
@@ -28,6 +29,7 @@ import java.util.Random;
 
 @NoArgsConstructor
 @Slf4j
+@Cacheable("books")
 public class BookServiceImpl implements BookService {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
