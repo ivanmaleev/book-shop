@@ -18,13 +18,16 @@ public class JWTUtil {
     @Value("${auth.secret}")
     private String secret;
 
+    @Value("${auth.expiredMinutes}")
+    private long expired;
+
     private String createToken(Map<String, Object> claims, String username) {
         return Jwts
                 .builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * expired))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
