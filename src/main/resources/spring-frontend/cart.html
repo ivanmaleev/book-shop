@@ -12,7 +12,7 @@
 <!--[if gt IE 9]><!-->
 <html lang="ru" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
-  <title>Тут название страницы написать</title>
+  <title th:text="#{page.cart}">Тут название страницы написать</title>
   <meta name="description" content="Описание страницы">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
@@ -52,15 +52,14 @@
 
           <div class="Cart-product" th:each="book : ${bookCart}">
             <div class="Cart-block Cart-block_row">
-              <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img"
-                                                                                         th:src="${book.image}"
-                                                                                         src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
+              <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#" th:href="@{'/books/slug/' + ${book.slug}}">
+                <img class="Cart-img" th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
               </div>
               <div class="Cart-block Cart-block_row">
                 <div class="Cart-block Cart-block_info">
                   <div class="Cart-author"><a href="#" th:text="${book.author}">Борис Васильевич Маяковский</a>
                   </div>
-                  <div class="Cart-title"><a href="#" th:text="${book.title}">Трубы</a>
+                  <div class="Cart-title"><a href="#" th:href="@{'/books/slug/' + ${book.slug}}" th:text="${book.title}">Трубы</a>
                   </div>
                   <div class="Cart-rating"><span class="Rating"><span class="Rating-stars"><span class="Rating-star Rating-star_view">
                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
