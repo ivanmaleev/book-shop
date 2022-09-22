@@ -36,24 +36,24 @@ public class CartServiceImpl implements CartService {
     }
 
     private void addBookToPostponed(BookCartRequest bookCartRequest, Cookie[] cookies, HttpServletResponse response, Model model) {
-        Optional<Cookie> cartContents = Arrays.stream(cookies)
+        Optional<Cookie> postponedContents = Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals("postponedContents"))
                 .findFirst();
-        if (!cartContents.isPresent() || cartContents.get().getValue().equals("")) {
+        if (!postponedContents.isPresent() || postponedContents.get().getValue().equals("")) {
             Cookie cookie = new Cookie("postponedContents", bookCartRequest.getBookId());
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
-        } else if (!cartContents.get().getValue().contains(bookCartRequest.getBookId())) {
+        } else if (!postponedContents.get().getValue().contains(bookCartRequest.getBookId())) {
             StringJoiner stringJoiner = new StringJoiner("/");
-            stringJoiner.add(cartContents.get().getValue()).add(bookCartRequest.getBookId());
+            stringJoiner.add(postponedContents.get().getValue()).add(bookCartRequest.getBookId());
             Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
         } else {
-            List<String> cookieBooks = new ArrayList<>(Arrays.asList(cartContents.get().getValue().split("/")));
+            List<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedContents.get().getValue().split("/")));
             cookieBooks.remove(bookCartRequest.getBookId());
             Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
             model.addAttribute("isPostponedEmpty", false);
         }
@@ -68,13 +68,13 @@ public class CartServiceImpl implements CartService {
                 .findFirst();
         if (!cartContents.isPresent() || cartContents.get().getValue().equals("")) {
             Cookie cookie = new Cookie("cartContents", bookCartRequest.getBookId());
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
         } else if (!cartContents.get().getValue().contains(bookCartRequest.getBookId())) {
             StringJoiner stringJoiner = new StringJoiner("/");
             stringJoiner.add(cartContents.get().getValue()).add(bookCartRequest.getBookId());
             Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
         }
         model.addAttribute("isCartEmpty", false);
@@ -89,7 +89,7 @@ public class CartServiceImpl implements CartService {
             List<String> cookieBooks = new ArrayList<>(Arrays.asList(cartContents.get().getValue().split("/")));
             cookieBooks.remove(bookCartRequest.getBookId());
             Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
-            cookie.setPath("/books");
+            cookie.setPath("/");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
         } else {

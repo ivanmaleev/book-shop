@@ -158,7 +158,7 @@ public class BookServiceImpl implements BookService {
                             book.setId(item.getId());
                         }
                         if (item.getSaleInfo() != null && item.getSaleInfo().getRetailPrice() != null) {
-                            book.setPrice(item.getSaleInfo().getRetailPrice().getAmount());
+                            book.setPrice((int) item.getSaleInfo().getRetailPrice().getAmount());
                             Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
                             book.setPriceOld(oldPrice.intValue());
                         }
@@ -186,7 +186,7 @@ public class BookServiceImpl implements BookService {
                 book.setId(root.getId());
             }
             if (root.getSaleInfo() != null) {
-                book.setPrice(root.getSaleInfo().getRetailPrice().getAmount());
+                book.setPrice((int) root.getSaleInfo().getRetailPrice().getAmount());
                 Double oldPrice = root.getSaleInfo().getListPrice().getAmount();
                 book.setPriceOld(oldPrice.intValue());
             }

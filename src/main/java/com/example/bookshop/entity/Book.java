@@ -46,7 +46,7 @@ public class Book {
     private Integer priceOld = 1;
 
     @JsonProperty("price")
-    private Double price = 0D;
+    private Integer price = 0;
 
     @JsonProperty("discount")
     public Integer getDiscount() {

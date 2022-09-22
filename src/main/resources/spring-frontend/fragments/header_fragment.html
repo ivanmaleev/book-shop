@@ -42,7 +42,7 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="CartBlock-amount">0</span>
+                            <span class="CartBlock-amount" th:text="${commonData?.postponedBooksCounter}">0</span>
                         </a>
                         <a class="CartBlock-block" href="/cart.html" th:href="@{/books/cart}">
                             <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="30" height="23" viewBox="0 0 30 23">
@@ -52,7 +52,7 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="CartBlock-amount">0</span>
+                            <span class="CartBlock-amount" th:text="${commonData?.cartBooksCounter}">0</span>
                         </a>
                             <a sec:authorize="isAuthenticated()" class="CartBlock-block" href="/profile.html" th:href="@{/profile}">
                                 <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="22" height="23" viewBox="0 0 22 23">
