@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.data.BooksPageDto;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Controller
@@ -25,17 +27,20 @@ public class MainPageController {
     private BookService bookService;
     @Autowired
     private CommonService commonService;
+    @ModelAttribute("commonData")
+    public CommonPageData commonPageData(HttpServletRequest request) {
+        return commonService.getCommonPageData(request);
+    }
 
     @GetMapping({"/", "/index"})
-    public String mainPage(HttpServletRequest request,
-                           Model model) {
+    public String mainPage(Model model) {
         Date endDate = Date.from(Instant.now());
         Date fromDate = Date.from(Instant.now().minus(3560, ChronoUnit.DAYS));
         model.addAttribute("recommendedBooks", bookService.getPageofRecommendedBooks(0, 6));
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6, fromDate, endDate));
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));
         model.addAttribute("topbarActive", new TopBar(true, false, false, false, false));
-        model.addAttribute("commonData", commonService.getCommonPageData(request));
+        //model.addAttribute("commonData", commonService.getCommonPageData(request));
         return "index";
     }
 }

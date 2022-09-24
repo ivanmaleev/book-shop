@@ -1,12 +1,15 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CartService;
+import com.example.bookshop.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -17,6 +20,12 @@ public class PostponedPageController {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private CommonService commonService;
+    @ModelAttribute("commonData")
+    public CommonPageData commonPageData(HttpServletRequest request) {
+        return commonService.getCommonPageData(request);
+    }
 
     @GetMapping("/books/postponed")
     public String postponedPage(@CookieValue(value = "postponedContents", required = false) String postponedContents,

@@ -1,10 +1,12 @@
 package com.example.bookshop.config;
 
+import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.LoadGenresService;
+import com.example.bookshop.service.impl.BookRatingServiceImpl;
 import com.example.bookshop.service.impl.BookServiceImpl;
 import com.example.bookshop.service.impl.CartServiceImpl;
 import com.example.bookshop.service.impl.CommonServiceImpl;
@@ -37,5 +39,9 @@ public class AppConfig {
     @Bean
     public CommonService commonService(){
         return new CommonServiceImpl();
+    }
+    @Bean
+    public BookRatingService bookRatingService(){
+        return new BookRatingServiceImpl();
     }
 }

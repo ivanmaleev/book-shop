@@ -1,11 +1,13 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.entity.SmsCode;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.security.ContactConfirmationPayload;
 import com.example.bookshop.security.ContactConfirmationResponse;
 import com.example.bookshop.security.RegistrationForm;
 import com.example.bookshop.security.SmsService;
+import com.example.bookshop.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,11 +15,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -27,7 +31,12 @@ public class AuthUserController {
     private final BookstoreUserRegister userRegister;
     private final SmsService smsService;
     private final JavaMailSender javaMailSender;
-
+    @Autowired
+    private CommonService commonService;
+    @ModelAttribute("commonData")
+    public CommonPageData commonPageData(HttpServletRequest request) {
+        return commonService.getCommonPageData(request);
+    }
     @GetMapping( "/signin")
     public String signinPage() {
         return "signin";

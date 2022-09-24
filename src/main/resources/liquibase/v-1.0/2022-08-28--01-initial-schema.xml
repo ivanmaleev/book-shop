@@ -8,6 +8,20 @@
 
     <changeSet id="1" author="Maleev Ivan">
         <comment>
+            Создание таблицы Users
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.users
+            (
+                id       bigserial    NOT NULL PRIMARY KEY,
+                name     varchar(254) NOT NULL,
+                email    varchar(100) NOT NULL,
+                phone    varchar(100),
+                password varchar(100) NOT NULL
+            )
+        </sql>
+
+        <comment>
             Создание таблицы Genre
         </comment>
         <sql>
@@ -41,9 +55,22 @@
         <sql>
             CREATE TABLE book_shop.author
             (
-                id   bigserial    NOT NULL PRIMARY KEY,
-                last_name varchar(254) NOT NULL,
+                id         bigserial    NOT NULL PRIMARY KEY,
+                last_name  varchar(254) NOT NULL,
                 first_name varchar(254) NOT NULL
+            )
+        </sql>
+
+        <comment>
+            Создание таблицы Book rating
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.book_raiting
+            (
+                id      bigserial   NOT NULL PRIMARY KEY,
+                user_id bigint      NOT NULL REFERENCES book_shop.users (id) ON DELETE RESTRICT,
+                book_id varchar(20) NOT NULL,
+                rating  integer     NOT NULL
             )
         </sql>
     </changeSet>

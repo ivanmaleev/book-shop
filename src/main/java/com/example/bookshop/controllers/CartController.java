@@ -2,17 +2,21 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.BookCartRequest;
 import com.example.bookshop.dto.CartData;
+import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CartService;
+import com.example.bookshop.service.CommonService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +29,12 @@ public class CartController {
     private BookService bookService;
     @Autowired
     private CartService cartService;
-
+    @Autowired
+    private CommonService commonService;
+    @ModelAttribute("commonData")
+    public CommonPageData commonPageData(HttpServletRequest request) {
+        return commonService.getCommonPageData(request);
+    }
     @GetMapping("/books/cart")
     public String cartPage(@CookieValue(value = "cartContents", required = false) String cartContents,
                            Model model) {
