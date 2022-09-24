@@ -20,5 +20,12 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
     )
     Optional<BookRatingDto> findBookRating(String bookId);
 
+    @Query(value = "SELECT new com.example.bookshop.dto.BookRatingDto(max(br.bookId), cast(avg(br.rating) as integer), count(br.id)) \n" +
+            "FROM BookRating AS br \n" +
+            "WHERE br.bookId IN (?1) \n" +
+            "GROUP BY br.bookId"
+    )
+    List<BookRatingDto> findBooksRating(List<String> bookIds);
+
     List<BookRating> findAllByUserAndAndBookId(BookstoreUser user, String bookId);
 }

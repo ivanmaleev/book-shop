@@ -1,6 +1,10 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.BookDto;
+import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CommonPageData;
+import com.example.bookshop.entity.Book;
+import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -22,6 +28,9 @@ public class PostponedPageController {
     private BookService bookService;
     @Autowired
     private CommonService commonService;
+    @Autowired
+    private BookRatingService bookRatingService;
+
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
         return commonService.getCommonPageData(request);
@@ -29,7 +38,7 @@ public class PostponedPageController {
 
     @GetMapping("/books/postponed")
     public String postponedPage(@CookieValue(value = "postponedContents", required = false) String postponedContents,
-                           Model model) {
+                                Model model) {
         if (postponedContents == null || postponedContents.equals("")) {
             model.addAttribute("isPostponedEmpty", true);
         } else {
@@ -38,9 +47,26 @@ public class PostponedPageController {
             postponedContents = postponedContents.endsWith("/") ? postponedContents.substring(0, postponedContents.length() - 1) :
                     postponedContents;
             String[] cookieSlugs = postponedContents.split("/");
-            model.addAttribute("bookPostponed", Arrays.stream(cookieSlugs)
+            List<Book> books = Arrays.stream(cookieSlugs)
                     .map(slug -> bookService.getBook(slug))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList());
+            Map<String, List<BookRatingDto>> bookRatings = bookRatingService.getBooksRating(books
+                            .stream()
+                            .map(Book::getSlug)
+                            .collect(Collectors.toList()))
+                    .stream()
+                    .collect(Collectors.groupingBy(BookRatingDto::getBookId));
+            List<BookDto> bookDtos = books
+                    .stream()
+                    .map(book -> {
+                        BookDto bookDto = new BookDto(book);
+                        List<BookRatingDto> bookRatingDtos = bookRatings.get(book.getSlug());
+                        if (bookRatingDtos != null && !bookRatingDtos.isEmpty()) {
+                            bookDto.setRating(bookRatingDtos.get(0).getRating());
+                        }
+                        return bookDto;
+                    }).collect(Collectors.toList());
+            model.addAttribute("bookPostponed", bookDtos);
         }
         return "/postponed";
     }

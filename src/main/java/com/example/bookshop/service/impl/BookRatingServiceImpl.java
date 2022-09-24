@@ -24,6 +24,11 @@ public class BookRatingServiceImpl implements BookRatingService {
         return bookRating.orElseGet(() -> new BookRatingDto(bookId, 0, 0));
     }
 
+    @Override
+    public List<BookRatingDto> getBooksRating(List<String> bookIds) {
+        return bookRatingRepository.findBooksRating(bookIds);
+    }
+
 
     @Transactional
     @Override

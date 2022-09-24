@@ -8,11 +8,14 @@ import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public interface BookRatingService {
 
     BookRatingDto getBookRating(String bookId);
+
+    List<BookRatingDto> getBooksRating(List<String> bookIds);
 
     @Transactional
     BookRating saveBookRating(BookstoreUser currentUser, BookRatingRequest bookRatingRequest);

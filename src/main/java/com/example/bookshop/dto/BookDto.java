@@ -1,5 +1,8 @@
-package com.example.bookshop.entity;
+package com.example.bookshop.dto;
 
+import com.example.bookshop.entity.Author;
+import com.example.bookshop.entity.Book;
+import com.example.bookshop.entity.BookFile;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,40 +17,33 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class BookDto {
     private String id;
     private Date pubDate;
-    @JsonIgnore
     private Author author = new Author();
-
-    @JsonGetter("authors")
-    public String authorsFullName() {
-        return author.toString();
-    }
-
     private Integer isBestseller = 0;
     private String slug;
     private String title;
     private String image;
-    private String status;  // PAID, CART, KEPT
-
-    private List<BookFile> bookFileList = new ArrayList<>();
-
-    public List<BookFile> getBookFileList() {
-        return bookFileList;
-    }
-
-    public void setBookFileList(List<BookFile> bookFileList) {
-        this.bookFileList = bookFileList;
-    }
-
+    private String status;
     private String description;
-
-    @JsonProperty("priceOld")
     private Integer priceOld = 0;
-
-    @JsonProperty("price")
     private Integer price = 0;
+    private Integer rating = 0;
+
+    public BookDto(Book book) {
+        this.id = book.getId();
+        this.pubDate = book.getPubDate();
+        this.author = book.getAuthor();
+        this.isBestseller = book.getIsBestseller();
+        this.slug = book.getSlug();
+        this.title = book.getTitle();
+        this.image = book.getImage();
+        this.status = book.getStatus();
+        this.description = book.getDescription();
+        this.priceOld = book.getPriceOld();
+        this.price = book.getPrice();
+    }
 
     @JsonProperty("discount")
     public Integer getDiscount() {
