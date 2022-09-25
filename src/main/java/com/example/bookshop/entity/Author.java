@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 //@AllArgsConstructor
 @Entity
 @Table(name = "author", schema = "book_shop")
-public class Author {
+public class Author implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +30,13 @@ public class Author {
 //    private List<Book> bookList = new ArrayList<>();
 
     public Author(List<String> authors) {
-        if(authors!=null){
+        if (authors != null) {
             this.lastName = authors.toString();
         }
     }
 
-    public Author(){}
+    public Author() {
+    }
 
 //    public List<Book> getBookList() {
 //        return bookList;

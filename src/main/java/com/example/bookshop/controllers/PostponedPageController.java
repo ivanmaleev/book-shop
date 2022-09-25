@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,19 +51,19 @@ public class PostponedPageController {
             List<Book> books = Arrays.stream(cookieSlugs)
                     .map(slug -> bookService.getBook(slug))
                     .collect(Collectors.toList());
-            Map<String, List<BookRatingDto>> bookRatings = bookRatingService.getBooksRating(books
+            Map<String, BookRatingDto> bookRatings = new HashMap<>();
+            bookRatingService.getBooksRating(books
                             .stream()
                             .map(Book::getSlug)
                             .collect(Collectors.toList()))
-                    .stream()
-                    .collect(Collectors.groupingBy(BookRatingDto::getBookId));
+                    .forEach(bookRatingDto -> bookRatings.put(bookRatingDto.getBookId(), bookRatingDto));
             List<BookDto> bookDtos = books
                     .stream()
                     .map(book -> {
                         BookDto bookDto = new BookDto(book);
-                        List<BookRatingDto> bookRatingDtos = bookRatings.get(book.getSlug());
-                        if (bookRatingDtos != null && !bookRatingDtos.isEmpty()) {
-                            bookDto.setRating(bookRatingDtos.get(0).getRating());
+                        BookRatingDto bookRating = bookRatings.get(book.getSlug());
+                        if (bookRating != null) {
+                            bookDto.setRating(bookRating.getRating());
                         }
                         return bookDto;
                     }).collect(Collectors.toList());

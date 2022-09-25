@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class Book implements Serializable {
+    private static final long serialVersionUID = -328587793115176643L;
+
     private String id;
     private Date pubDate;
     @JsonIgnore
@@ -49,6 +52,20 @@ public class Book {
 
     @JsonProperty("price")
     private Integer price = 0;
+
+    public Book(BookRedis bookRedis) {
+        this.id = bookRedis.getId();
+        this.pubDate = bookRedis.getPubDate();
+        this.author = bookRedis.getAuthor();
+        this.isBestseller = bookRedis.getIsBestseller();
+        this.slug = bookRedis.getSlug();
+        this.title = bookRedis.getTitle();
+        this.image = bookRedis.getImage();
+        this.status = bookRedis.getStatus();
+        this.description = bookRedis.getDescription();
+        this.priceOld = bookRedis.getPriceOld();
+        this.price = bookRedis.getPrice();
+    }
 
     @JsonProperty("discount")
     public Integer getDiscount() {

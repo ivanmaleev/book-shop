@@ -6,7 +6,9 @@ import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.data.google.api.books.Root;
+import com.example.bookshop.entity.BookRedis;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
+import com.example.bookshop.repository.BookRedisRepository;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
@@ -25,31 +27,28 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @NoArgsConstructor
 @Slf4j
-@Cacheable("books")
 public class BookServiceImpl implements BookService {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     @Value("${google.books.api.attempts}")
     private Integer attempts;
-
     @Value("${google.books.api.key}")
     private String apiKey;
-
     @Value("${google.books.api.url}")
     private String googleUrl;
-
     @Value("${locale.default}")
     private String defaultLocale;
-
     @Autowired
     private GenreService genreService;
-
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private BookRedisRepository bookRedisRepository;
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
@@ -59,10 +58,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
-
-//        LoadGenresService loadGenresService = new LoadGenresService();
-//        loadGenresService.loadGenres();
-
         return getBooks(null, null, null, offset, limit);
     }
 
@@ -85,6 +80,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBook(String slug) {
+        Optional<BookRedis> bookRedisOptional = bookRedisRepository.findById(slug);
+        if (bookRedisOptional.isPresent()) {
+            return new Book(bookRedisOptional.get());
+        }
         com.example.bookshop.data.book.Root root = restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
         return getBookFromGoogleRoot(root);
     }
@@ -191,6 +190,7 @@ public class BookServiceImpl implements BookService {
                 book.setPriceOld(oldPrice.intValue());
             }
         }
+        bookRedisRepository.save(new BookRedis(book));
         log.debug("Load book " + book);
         return book;
     }
