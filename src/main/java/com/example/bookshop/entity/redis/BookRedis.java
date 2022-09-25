@@ -1,5 +1,7 @@
-package com.example.bookshop.entity;
+package com.example.bookshop.entity.redis;
 
+import com.example.bookshop.entity.Author;
+import com.example.bookshop.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

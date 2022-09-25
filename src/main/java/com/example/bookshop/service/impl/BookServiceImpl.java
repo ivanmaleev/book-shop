@@ -6,9 +6,10 @@ import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.data.google.api.books.Root;
-import com.example.bookshop.entity.BookRedis;
-import com.example.bookshop.errs.BookstoreApiWrongParameterException;
+import com.example.bookshop.entity.redis.BookRedis;
+import com.example.bookshop.entity.redis.BookRequestRedis;
 import com.example.bookshop.repository.BookRedisRepository;
+import com.example.bookshop.repository.BookRequestRepository;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Slf4j
@@ -49,6 +50,8 @@ public class BookServiceImpl implements BookService {
     private RestTemplate restTemplate;
     @Autowired
     private BookRedisRepository bookRedisRepository;
+    @Autowired
+    private BookRequestRepository bookRequestRepository;
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
@@ -206,6 +209,7 @@ public class BookServiceImpl implements BookService {
     private List<Book> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
         Root root = null;
         List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(defaultLocale);
+        String requestUrl = "";
         for (int i = 0; i < attempts; i++) {
             String searchWord = "";
             if (searchString != null) {
@@ -213,12 +217,27 @@ public class BookServiceImpl implements BookService {
             } else {
                 searchWord = getRandomSearchWord(alphabetObjects);
             }
-            root = restTemplate.getForEntity(getGoogleBooksApiUrl(searchWord, from, to, offset, limit), Root.class).getBody();
+            requestUrl = getGoogleBooksApiUrl(searchWord, from, to, offset, limit);
+            Optional<BookRequestRedis> bookRequestRedisOptional = bookRequestRepository.findById(requestUrl);
+            if (bookRequestRedisOptional.isPresent()) {
+                return bookRequestRedisOptional.get().getBooks()
+                        .stream()
+                        .map(Book::new)
+                        .collect(Collectors.toList());
+            }
+            root = restTemplate.getForEntity(requestUrl, Root.class).getBody();
             if (root != null && root.getItems() != null) {
                 break;
             }
         }
-        return getBooksFromGoogleRoot(root);
+        List<Book> books = getBooksFromGoogleRoot(root);
+        if (!"".equals(requestUrl)) {
+            bookRequestRepository.save(new BookRequestRedis(requestUrl, books
+                    .stream()
+                    .map(BookRedis::new)
+                    .collect(Collectors.toList())));
+        }
+        return books;
     }
 
 }

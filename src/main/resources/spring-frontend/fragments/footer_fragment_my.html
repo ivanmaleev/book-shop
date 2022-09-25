@@ -87,10 +87,10 @@
                 <ul class="menu menu_vt Footer-menu">
                     <li class="menu-item"><a class="menu-link" href="/my.html" th:href="@{/my}">Мои книги (55)</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/cart.html" th:href="@{/books/cart}">Корзина
+                    <li class="menu-item"><a class="menu-link" href="/cart.html" th:href="@{/books/cart}" th:text="@{'Корзина (' + ${commonData?.cartBooksCounter} + ')'}">Корзина
                         (7)</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/postponed.html" th:href="@{/books/postponed}">Отложено
+                    <li class="menu-item"><a class="menu-link" href="/postponed.html" th:href="@{/books/postponed}" th:text="@{'Отложено (' + ${commonData?.postponedBooksCounter} + ')'}">Отложено
                         (2)</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" href="/profile.html" th:href="@{/profile}">Мой
