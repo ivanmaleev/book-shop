@@ -6,7 +6,7 @@ import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.entity.BookRatingResponse;
+import com.example.bookshop.dto.response.BookRatingResponse;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.AuthorService;

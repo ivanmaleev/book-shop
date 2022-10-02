@@ -1,12 +1,13 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.request.BookCommentRequest;
-import com.example.bookshop.dto.request.BookRatingRequest;
-import com.example.bookshop.entity.BookCommentResponse;
+import com.example.bookshop.dto.request.CommentRatingRequest;
+import com.example.bookshop.dto.response.BookCommentResponse;
+import com.example.bookshop.dto.response.CommentRatingResponse;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
+import com.example.bookshop.service.BookCommentRatingService;
 import com.example.bookshop.service.BookCommentService;
-import com.example.bookshop.service.BookRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class BookCommentController {
-
     @Autowired
     private BookCommentService bookCommentService;
     @Autowired
     private BookstoreUserRegister userRegister;
+
+    @Autowired
+    private BookCommentRatingService bookCommentRatingService;
 
     @PostMapping("/bookComment")
     @ResponseBody
@@ -30,5 +33,16 @@ public class BookCommentController {
             return new BookCommentResponse(true);
         }
         return new BookCommentResponse(false);
+    }
+
+    @PostMapping("/rateBookComment")
+    @ResponseBody
+    public CommentRatingResponse rateBook(@RequestBody CommentRatingRequest commentRatingRequest) {
+        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        if (!currentUser.isAnonymousUser()) {
+            bookCommentRatingService.saveBookCommentRating(currentUser, commentRatingRequest);
+            return new CommentRatingResponse(true);
+        }
+        return new CommentRatingResponse(false);
     }
 }

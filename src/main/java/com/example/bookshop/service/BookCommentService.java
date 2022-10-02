@@ -1,5 +1,6 @@
 package com.example.bookshop.service;
 
+import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.entity.BookComment;
 import com.example.bookshop.security.BookstoreUser;
@@ -14,5 +15,5 @@ public interface BookCommentService {
     @Transactional
     BookComment saveBookComment(BookstoreUser currentUser, BookCommentRequest bookCommentRequest);
 
-    List<BookComment> getBookComments(String bookId);
+    List<BookCommentDto> getBookComments(String bookId);
 }

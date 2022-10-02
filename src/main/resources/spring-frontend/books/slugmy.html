@@ -396,7 +396,7 @@
                           <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
                         </g>
                       </g>
-                    </svg></span></span><span class="Rating-title">567 отзывов</span></span>
+                    </svg></span></span><span class="Rating-title" th:text="@{${bookComments.size()} + ' отзывов'}">567 отзывов</span></span>
             </div>
           </div>
           <div class="Comments">
@@ -465,9 +465,9 @@
                   </p>
                   <div class="Comment-footer">
                     <div class="Comment-appeal">
-                      <button class="btn btn_white btn_like" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span class="btn-content">200</span>
+                      <button class="btn btn_white btn_like" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111" th:data-likeid="${comment.id}"><span class="btn-icon"><img src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span class="btn-content" th:text="${comment.likes}">200</span>
                       </button>
-                      <button class="btn btn_white btn_dislike" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/></span><span class="btn-content">100</span>
+                      <button class="btn btn_white btn_dislike" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111" th:data-likeid="${comment.id}"><span class="btn-icon"><img src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/></span><span class="btn-content" th:text="${comment.dislikes}">100</span>
                       </button>
                     </div>
                   </div>

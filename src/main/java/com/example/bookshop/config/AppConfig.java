@@ -1,5 +1,6 @@
 package com.example.bookshop.config;
 
+import com.example.bookshop.service.BookCommentRatingService;
 import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
@@ -7,6 +8,7 @@ import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.LoadGenresService;
+import com.example.bookshop.service.impl.BookCommentRatingServiceImpl;
 import com.example.bookshop.service.impl.BookCommentServiceImpl;
 import com.example.bookshop.service.impl.BookRatingServiceImpl;
 import com.example.bookshop.service.impl.BookServiceImpl;
@@ -49,5 +51,9 @@ public class AppConfig {
     @Bean
     public BookCommentService bookCommentService(){
         return new BookCommentServiceImpl();
+    }
+    @Bean
+    public BookCommentRatingService bookCommentRatingService(){
+        return new BookCommentRatingServiceImpl();
     }
 }

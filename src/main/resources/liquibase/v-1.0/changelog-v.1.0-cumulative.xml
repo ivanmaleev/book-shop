@@ -6,4 +6,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <include file="2022-08-28--01-initial-schema.xml" relativeToChangelogFile="true"/>
+    <include file="2022-10-02--01-add-book-comment-rating.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

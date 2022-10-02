@@ -392,7 +392,7 @@
           <div class="Product-comments">
             <div class="Product-comments-header">
               <h3 class="Product-comments-title">Отзывы
-              </h3><span class="Product-comments-amount">567 отзывов</span>
+              </h3><span class="Product-comments-amount" th:text="@{${bookComments.size()} + ' отзывов'}">567 отзывов</span>
             </div>
           </div>
           <div class="Comments">
@@ -448,9 +448,9 @@
                   </p>
                   <div class="Comment-footer">
                     <div class="Comment-appeal">
-                      <button class="btn btn_white btn_like" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span class="btn-content">200</span>
+                      <button class="btn btn_white btn_like" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111" th:data-likeid="${comment.id}"><span class="btn-icon"><img src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span class="btn-content" th:text="${comment.likes}">200</span>
                       </button>
-                      <button class="btn btn_white btn_dislike" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/></span><span class="btn-content">100</span>
+                      <button class="btn btn_white btn_dislike" data-btntype="check" data-check="false" data-btnradio="two2" data-likeid="1111" th:data-likeid="${comment.id}"><span class="btn-icon"><img src="/assets/img/icons/comment/dislike.svg" alt="dislike.svg"/></span><span class="btn-content" th:text="${comment.dislikes}">100</span>
                       </button>
                     </div>
                   </div>

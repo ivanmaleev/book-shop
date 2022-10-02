@@ -1,5 +1,6 @@
 package com.example.bookshop.service.impl;
 
+import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.entity.BookComment;
 import com.example.bookshop.repository.BookCommentRepository;
@@ -20,7 +21,7 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    public List<BookComment> getBookComments(String bookId) {
+    public List<BookCommentDto> getBookComments(String bookId) {
         return bookCommentRepository.findAllByBookId(bookId);
     }
 }

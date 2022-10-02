@@ -38,4 +38,8 @@ public class BookComment extends AbstractEntity {
         this.user = user;
         this.bookId = bookId;
     }
+
+    public BookComment(Long commentId) {
+        this.setId(commentId);
+    }
 }
