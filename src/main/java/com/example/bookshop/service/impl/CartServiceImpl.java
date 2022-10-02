@@ -1,14 +1,12 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.dto.BookCartRequest;
+import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.service.CartService;
-import lombok.SneakyThrows;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

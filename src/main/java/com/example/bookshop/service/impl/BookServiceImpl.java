@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
-        String searchString = "+inauthor:" + author.getLastName() + " " + author.getFirstName();
+        String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() +"\"";
         return getBooks(searchString, null, null, offset, limit);
     }
 

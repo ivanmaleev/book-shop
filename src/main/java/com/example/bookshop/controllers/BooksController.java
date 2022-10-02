@@ -3,13 +3,14 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CommonPageData;
-import com.example.bookshop.dto.BookRatingRequest;
+import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookRatingResponse;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.AuthorService;
+import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
@@ -21,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -45,6 +45,8 @@ public class BooksController {
     @Autowired
     private BookRatingService bookRatingService;
     @Autowired
+    private BookCommentService bookCommentService;
+    @Autowired
     private BookstoreUserRegister userRegister;
 
     @ModelAttribute("commonData")
@@ -59,6 +61,12 @@ public class BooksController {
         Book book = bookService.getBook(slug);
         model.addAttribute("slugBook", book);
         model.addAttribute("bookRating", bookRatingService.getBookRating(slug));
+        model.addAttribute("bookComments", bookCommentService.getBookComments(slug));
+
+        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        if (!currentUser.isAnonymousUser()) {
+            return "/books/slugmy";
+        }
         return "/books/slug";
     }
 
@@ -108,15 +116,6 @@ public class BooksController {
                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit));
     }
-
-//    @GetMapping("/author/{id}")
-//    @ResponseBody
-//    public BooksPageDto getAuthorBooksPage(@PathVariable("id") long id,
-//                                          @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-//                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-//        Author author = authorService.findById(id);
-//        return new BooksPageDto(bookService.getBooksByAuthor(author, offset, limit));
-//    }
 
     @GetMapping("/author/{id}")
     public String getAuthorsBooksPage(@PathVariable("id") long id,

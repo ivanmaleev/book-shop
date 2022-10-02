@@ -1,6 +1,6 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.dto.BookCartRequest;
+import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CartData;

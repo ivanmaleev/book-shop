@@ -65,12 +65,26 @@
             Создание таблицы Book rating
         </comment>
         <sql>
-            CREATE TABLE book_shop.book_raiting
+            CREATE TABLE book_shop.book_rating
             (
                 id      bigserial   NOT NULL PRIMARY KEY,
                 user_id bigint      NOT NULL REFERENCES book_shop.users (id) ON DELETE RESTRICT,
                 book_id varchar(20) NOT NULL,
                 rating  integer     NOT NULL
+            )
+        </sql>
+
+        <comment>
+            Создание таблицы Book comments
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.book_comment
+            (
+                id       bigserial    NOT NULL PRIMARY KEY,
+                text     text NOT NULL,
+                user_id bigint      NOT NULL REFERENCES book_shop.users (id) ON DELETE RESTRICT,
+                book_id varchar(20) NOT NULL,
+                date timestamp NOT NULL
             )
         </sql>
     </changeSet>

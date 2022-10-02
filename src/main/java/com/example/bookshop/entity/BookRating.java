@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "book_raiting", schema = "book_shop")
+@Table(name = "book_rating", schema = "book_shop")
 public class BookRating extends AbstractEntity {
 
     @ManyToOne

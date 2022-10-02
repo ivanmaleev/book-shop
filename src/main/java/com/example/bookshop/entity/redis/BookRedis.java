@@ -2,12 +2,13 @@ package com.example.bookshop.entity.redis;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
+import liquibase.pro.packaged.I;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
 import java.util.Date;
 
 @Data
