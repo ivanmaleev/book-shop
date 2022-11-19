@@ -20,7 +20,6 @@ public class BookCommentController {
     private BookCommentService bookCommentService;
     @Autowired
     private BookstoreUserRegister userRegister;
-
     @Autowired
     private BookCommentRatingService bookCommentRatingService;
 

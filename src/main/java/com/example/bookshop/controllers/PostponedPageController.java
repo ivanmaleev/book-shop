@@ -1,13 +1,9 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.dto.BookDto;
-import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CommonPageData;
-import com.example.bookshop.entity.Book;
-import com.example.bookshop.service.BookRatingService;
-import com.example.bookshop.service.BookService;
-import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
+import com.example.bookshop.service.PostponedService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,21 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class PostponedPageController {
 
     @Autowired
-    private BookService bookService;
-    @Autowired
     private CommonService commonService;
+
     @Autowired
-    private BookRatingService bookRatingService;
+    private PostponedService postponedService;
 
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
@@ -40,34 +30,11 @@ public class PostponedPageController {
     @GetMapping("/books/postponed")
     public String postponedPage(@CookieValue(value = "postponedContents", required = false) String postponedContents,
                                 Model model) {
-        if (postponedContents == null || postponedContents.equals("")) {
+        if (StringUtils.isBlank(postponedContents)) {
             model.addAttribute("isPostponedEmpty", true);
         } else {
             model.addAttribute("isPostponedEmpty", false);
-            postponedContents = postponedContents.startsWith("/") ? postponedContents.substring(1) : postponedContents;
-            postponedContents = postponedContents.endsWith("/") ? postponedContents.substring(0, postponedContents.length() - 1) :
-                    postponedContents;
-            String[] cookieSlugs = postponedContents.split("/");
-            List<Book> books = Arrays.stream(cookieSlugs)
-                    .map(slug -> bookService.getBook(slug))
-                    .collect(Collectors.toList());
-            Map<String, BookRatingDto> bookRatings = new HashMap<>();
-            bookRatingService.getBooksRating(books
-                            .stream()
-                            .map(Book::getSlug)
-                            .collect(Collectors.toList()))
-                    .forEach(bookRatingDto -> bookRatings.put(bookRatingDto.getBookId(), bookRatingDto));
-            List<BookDto> bookDtos = books
-                    .stream()
-                    .map(book -> {
-                        BookDto bookDto = new BookDto(book);
-                        BookRatingDto bookRating = bookRatings.get(book.getSlug());
-                        if (bookRating != null) {
-                            bookDto.setRating(bookRating.getRating());
-                        }
-                        return bookDto;
-                    }).collect(Collectors.toList());
-            model.addAttribute("bookPostponed", bookDtos);
+            model.addAttribute("bookPostponed", postponedService.getPostponedBooks(postponedContents));
         }
         return "/postponed";
     }

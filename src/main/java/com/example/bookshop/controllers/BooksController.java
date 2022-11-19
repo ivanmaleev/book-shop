@@ -14,9 +14,10 @@ import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
-import com.nimbusds.oauth2.sdk.util.StringUtils;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -72,17 +73,17 @@ public class BooksController {
 
     @GetMapping("/recommended")
     @ResponseBody
-    public BooksPageDto getRecommendedBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
-        return new BooksPageDto(bookService.getPageofRecommendedBooks(offset, limit));
+    public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                                @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
+        return ResponseEntity.ok(new BooksPageDto(bookService.getPageofRecommendedBooks(offset, limit)));
     }
 
     @GetMapping("/recent")
     @ResponseBody
-    public BooksPageDto getRecentBooksPage(@RequestParam(value = "from", required = false) String from,
-                                           @RequestParam(value = "to", required = false) String to,
-                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+    public ResponseEntity<BooksPageDto> getRecentBooksPage(@RequestParam(value = "from", required = false) String from,
+                                                           @RequestParam(value = "to", required = false) String to,
+                                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         Date fromDate = null;
         Date toDate = null;
         if (StringUtils.isNotBlank(from) && StringUtils.isNotBlank(to)) {
@@ -99,22 +100,22 @@ public class BooksController {
         if (toDate == null) {
             toDate = Date.from(Instant.now());
         }
-        return new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate));
+        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
     }
 
     @GetMapping("/popular")
     @ResponseBody
-    public BooksPageDto getPopularBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                            @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
-        return new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit));
+    public ResponseEntity<BooksPageDto> getPopularBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                            @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
+        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit)));
     }
 
     @GetMapping("/genre/{id}")
     @ResponseBody
-    public BooksPageDto getGenreBooksPage(@PathVariable("id") long id,
-                                          @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        return new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit));
+    public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long id,
+                                                          @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+        return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit)));
     }
 
     @GetMapping("/author/{id}")
@@ -130,13 +131,13 @@ public class BooksController {
 
     @PostMapping("/rateBook")
     @ResponseBody
-    public BookRatingResponse rateBook(@RequestBody BookRatingRequest bookRatingRequest) {
+    public ResponseEntity<BookRatingResponse> rateBook(@RequestBody BookRatingRequest bookRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         if (!currentUser.isAnonymousUser()) {
             bookRatingService.saveBookRating(currentUser, bookRatingRequest);
-            return new BookRatingResponse(true);
+            return ResponseEntity.ok(new BookRatingResponse(true));
         }
-        return new BookRatingResponse(false);
+        return ResponseEntity.ok(new BookRatingResponse(false));
     }
 
 //    @PostMapping("/{slug}/img/save")

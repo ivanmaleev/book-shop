@@ -19,8 +19,9 @@ import java.util.List;
 @Data
 public class Author extends AbstractEntity implements Serializable {
 
+    private static final long serialVersionUID = -8510159208698888882L;
     private String firstName;
-    private String lastName = "";
+    private String lastName;
 
 
 //    @OneToMany(mappedBy = "author")
@@ -31,9 +32,12 @@ public class Author extends AbstractEntity implements Serializable {
         if (authors != null) {
             this.lastName = authors.toString();
         }
+        this.firstName = "";
     }
 
     public Author() {
+        this.firstName = "";
+        this.lastName = "";
     }
 
 //    public List<Book> getBookList() {
@@ -46,7 +50,6 @@ public class Author extends AbstractEntity implements Serializable {
 
     @Override
     public String toString() {
-        //return firstName + ' ' + lastName;
-        return lastName;
+        return lastName + " " + firstName;
     }
 }

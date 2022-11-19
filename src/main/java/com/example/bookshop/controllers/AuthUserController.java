@@ -33,11 +33,13 @@ public class AuthUserController {
     private final JavaMailSender javaMailSender;
     @Autowired
     private CommonService commonService;
+
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
         return commonService.getCommonPageData(request);
     }
-    @GetMapping( "/signin")
+
+    @GetMapping("/signin")
     public String signinPage() {
         return "signin";
     }
@@ -53,12 +55,11 @@ public class AuthUserController {
     public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         response.setResult("true");
-
-        if(payload.getContact().contains("@")){
+        if (payload.getContact().contains("@")) {
             return response;
-        }else{
+        } else {
             String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
-            smsService.saveNewCode(new SmsCode(smsCodeString,60)); //expires in 1 min.
+            smsService.saveNewCode(new SmsCode(smsCodeString, 60)); //expires in 1 min.
             return response;
         }
     }
@@ -70,10 +71,10 @@ public class AuthUserController {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("bookstore00@mail.ru");
         message.setTo(payload.getContact());
-        SmsCode smsCode = new SmsCode(smsService.generateCode(),300); //5 minutes
+        SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
         smsService.saveNewCode(smsCode);
         message.setSubject("Bookstore email verification!");
-        message.setText("Verification code is: "+smsCode.getCode());
+        message.setText("Verification code is: " + smsCode.getCode());
         javaMailSender.send(message);
         response.setResult("true");
         return response;
@@ -84,9 +85,9 @@ public class AuthUserController {
     public ContactConfirmationResponse handleApproveContact(ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
 
-       // if(smsService.verifyCode(payload.getCode())){
-            response.setResult("true");
-     //   }
+        // if(smsService.verifyCode(payload.getCode())){
+        response.setResult("true");
+        //   }
 
         return response;
     }
@@ -111,14 +112,14 @@ public class AuthUserController {
     @PostMapping("/login-by-phone-number")
     @ResponseBody
     public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody ContactConfirmationPayload payload,
-                                                   HttpServletResponse httpServletResponse) {
+                                                                HttpServletResponse httpServletResponse) {
 //        if(smsService.verifyCode(payload.getCode())) {
 //            ContactConfirmationResponse loginResponse = userRegister.jwtLoginByPhoneNumber(payload);
 //            Cookie cookie = new Cookie("token", loginResponse.getResult());
 //            httpServletResponse.addCookie(cookie);
 //            return loginResponse;
 //        }else {
-            return null;
+        return null;
 //        }
     }
 
