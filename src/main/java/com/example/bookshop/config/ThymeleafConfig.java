@@ -8,7 +8,7 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 public class ThymeleafConfig {
 
     @Bean
-    public SpringSecurityDialect springSecurityDialect(){
+    public SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
     }
 }

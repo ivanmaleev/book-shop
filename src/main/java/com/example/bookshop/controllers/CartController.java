@@ -1,13 +1,9 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.dto.BookDto;
-import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CartData;
 import com.example.bookshop.dto.CommonPageData;
-import com.example.bookshop.entity.Book;
-import com.example.bookshop.service.BookRatingService;
-import com.example.bookshop.service.BookService;
+import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
 import lombok.NoArgsConstructor;
@@ -15,15 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @NoArgsConstructor

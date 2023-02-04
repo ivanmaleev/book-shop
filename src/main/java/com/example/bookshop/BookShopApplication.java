@@ -5,9 +5,13 @@ import com.example.bookshop.service.LoadGenresService;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
@@ -23,7 +27,15 @@ import java.util.Set;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class BookShopApplication {
 
+
+    @Autowired
+    LoadGenresService loadGenresService;
     public static void main(String[] args) {
         SpringApplication.run(BookShopApplication.class, args);
     }
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void doSomethingAfterStartup() {
+//        loadGenresService.loadGenres();
+//    }
 }

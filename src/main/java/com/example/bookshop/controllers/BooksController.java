@@ -4,9 +4,9 @@ import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.request.BookRatingRequest;
+import com.example.bookshop.dto.response.BookRatingResponse;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.dto.response.BookRatingResponse;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.AuthorService;
@@ -20,7 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -56,9 +63,10 @@ public class BooksController {
     }
 
     @GetMapping("/slug/{slug}")
-    public String bookPage(@ModelAttribute Book slugBook,
-                           @ModelAttribute BookRatingDto bookRating,
-                           @PathVariable("slug") String slug, Model model) {
+    //public String bookPage(@ModelAttribute Book slugBook,
+    public String bookPage(
+            @ModelAttribute BookRatingDto bookRating,
+            @PathVariable("slug") String slug, Model model) {
         Book book = bookService.getBook(slug);
         model.addAttribute("slugBook", book);
         model.addAttribute("bookRating", bookRatingService.getBookRating(slug));

@@ -1,10 +1,7 @@
 package com.example.bookshop.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,8 +12,8 @@ public class MvcConfig implements WebMvcConfigurer {
     private String uploadPath;
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/book-covers/**").addResourceLocations("file:"+uploadPath+"/");
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/book-covers/**").addResourceLocations("file:" + uploadPath + "/");
     }
 
 }

@@ -7,23 +7,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Book implements Serializable {
-//    private static final long serialVersionUID = -328587793115176643L;
+@ConditionalOnProperty(value="google.books.api.enable", havingValue = "true")
+public class BookGoogleApi extends Book implements Serializable {
+    private static final long serialVersionUID = -328587793115176643L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private Date pubDate;
     @JsonIgnore
@@ -58,7 +59,7 @@ public abstract class Book implements Serializable {
     @JsonProperty("price")
     private Integer price = 0;
 
-    public Book(BookRedis bookRedis) {
+    public BookGoogleApi(BookRedis bookRedis) {
         this.id = bookRedis.getId();
         this.pubDate = bookRedis.getPubDate();
         this.author = bookRedis.getAuthor();

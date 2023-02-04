@@ -1,9 +1,8 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.entity.Author;
-import com.example.bookshop.repository.AuthorsRepository;
+import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.service.AuthorService;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
-    private AuthorsRepository authorsRepository;
+    private AuthorRepository authorsRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

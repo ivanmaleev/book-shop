@@ -2,7 +2,6 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,7 +18,7 @@ public interface BookService {
 
     List<Book> getPageOfPopularBooks(Integer offset, Integer limit);
 
-    List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit);
+    List<Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
     Book getBook(String slug);
 

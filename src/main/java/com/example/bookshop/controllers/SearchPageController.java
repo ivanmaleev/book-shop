@@ -40,7 +40,7 @@ public class SearchPageController {
         if (StringUtils.isNotBlank(searchWord)) {
             model.addAttribute("searchWordDto", new SearchWordDto(searchWord));
             model.addAttribute("searchResultBooks",
-                    bookService.getPageOfGoogleBooksApiSearchResult(searchWord, 0, 20));
+                    bookService.getPageOfSearchResult(searchWord, 0, 20));
             return "/search/index";
         } else {
             throw new EmptySearchException("Поиск по пустой строке невозможен");
@@ -53,6 +53,6 @@ public class SearchPageController {
             @RequestParam(value = "offset", defaultValue = "0") Integer offset,
             @RequestParam(value = "limit", defaultValue = "20") Integer limit,
             @PathVariable(value = "SearchWord", required = false) String searchWord) {
-        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfGoogleBooksApiSearchResult(searchWord, offset, limit)));
+        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfSearchResult(searchWord, offset, limit)));
     }
 }

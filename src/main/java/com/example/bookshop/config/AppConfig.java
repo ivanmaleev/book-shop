@@ -7,16 +7,17 @@ import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;
-import com.example.bookshop.service.LoadGenresService;
 import com.example.bookshop.service.PostponedService;
 import com.example.bookshop.service.impl.BookCommentRatingServiceImpl;
 import com.example.bookshop.service.impl.BookCommentServiceImpl;
 import com.example.bookshop.service.impl.BookRatingServiceImpl;
-import com.example.bookshop.service.impl.BookServiceImpl;
+import com.example.bookshop.service.impl.BookServiceGoogleApiImpl;
+import com.example.bookshop.service.impl.BookServiceLocalImpl;
 import com.example.bookshop.service.impl.CartServiceImpl;
 import com.example.bookshop.service.impl.CommonServiceImpl;
 import com.example.bookshop.service.impl.GenreServiceImpl;
 import com.example.bookshop.service.impl.PostponedServiceImpl;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +32,14 @@ public class AppConfig {
         return new RestTemplate();
     }
     @Bean
-    public BookService bookService() {
-        return new BookServiceImpl();
+    @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
+    public BookService bookServiceGoogleApi() {
+        return new BookServiceGoogleApiImpl();
+    }
+    @Bean
+    @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
+    public BookService bookServiceLocal() {
+        return new BookServiceLocalImpl();
     }
     @Bean
     public GenreService genreService(){

@@ -6,6 +6,7 @@ import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.data.google.api.books.Root;
+import com.example.bookshop.entity.BookGoogleApi;
 import com.example.bookshop.entity.redis.BookRedis;
 import com.example.bookshop.entity.redis.BookRequestRedis;
 import com.example.bookshop.repository.BookRedisRepository;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
@@ -33,7 +36,8 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Slf4j
-public class BookServiceImpl implements BookService {
+@ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
+public class BookServiceGoogleApiImpl implements BookService {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     @Value("${google.books.api.attempts}")
@@ -55,7 +59,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
-        String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() +"\"";
+        String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() + "\"";
         return getBooks(searchString, null, null, offset, limit);
     }
 
@@ -77,7 +81,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit) {
+    public List<Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return getBooks(searchWord, null, null, offset, limit);
     }
 
@@ -85,7 +89,7 @@ public class BookServiceImpl implements BookService {
     public Book getBook(String slug) {
         Optional<BookRedis> bookRedisOptional = bookRedisRepository.findById(slug);
         if (bookRedisOptional.isPresent()) {
-            return new Book(bookRedisOptional.get());
+            return new BookGoogleApi(bookRedisOptional.get());
         }
         com.example.bookshop.data.book.Root root = restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
         return getBookFromGoogleRoot(root);
@@ -149,7 +153,7 @@ public class BookServiceImpl implements BookService {
         if (root != null && root.getItems() != null) {
             root.getItems()
                     .forEach(item -> {
-                        Book book = new Book();
+                        Book book = new BookGoogleApi();
                         if (item.getVolumeInfo() != null) {
                             if (item.getVolumeInfo().getAuthors() != null) {
                                 book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
@@ -178,7 +182,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book getBookFromGoogleRoot(com.example.bookshop.data.book.Root root) {
-        Book book = new Book();
+        Book book = new BookGoogleApi();
         if (root != null) {
             if (root.getVolumeInfo() != null) {
                 book.setAuthor(new Author(root.getVolumeInfo().getAuthors()));
@@ -222,7 +226,7 @@ public class BookServiceImpl implements BookService {
             if (bookRequestRedisOptional.isPresent()) {
                 return bookRequestRedisOptional.get().getBooks()
                         .stream()
-                        .map(Book::new)
+                        .map(BookGoogleApi::new)
                         .collect(Collectors.toList());
             }
             root = restTemplate.getForEntity(requestUrl, Root.class).getBody();

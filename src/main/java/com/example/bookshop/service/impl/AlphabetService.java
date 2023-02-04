@@ -2,7 +2,6 @@ package com.example.bookshop.service.impl;
 
 import com.example.bookshop.constants.Langs;
 import com.example.bookshop.dto.AlphabetObject;
-import com.example.bookshop.dto.GenreDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class AlphabetService {
         });
     }
 
-    public static List<AlphabetObject> getAlphabet(String lang){
+    public static List<AlphabetObject> getAlphabet(String lang) {
         return new ArrayList<>(alphabetLangMap.get(lang));
     }
 }
