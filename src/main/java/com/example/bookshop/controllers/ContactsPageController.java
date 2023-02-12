@@ -18,7 +18,7 @@ public class ContactsPageController {
     private CommonService commonService;
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, false);
     }
     @GetMapping("/contacts")
     public String contactsPage(Model model) {

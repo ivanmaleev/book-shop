@@ -16,7 +16,6 @@ import javax.persistence.Table;
 @Table(name = "book_rating", schema = "book_shop")
 public class BookRating extends AbstractEntity {
 
-
     private static final long serialVersionUID = -9222633831955107069L;
     @ManyToOne
     @JoinColumn(name = "user_id")

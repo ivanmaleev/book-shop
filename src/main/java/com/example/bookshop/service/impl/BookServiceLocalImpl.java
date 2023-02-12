@@ -2,8 +2,12 @@ package com.example.bookshop.service.impl;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
+import com.example.bookshop.entity.Genre;
+import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.repository.BookRepository;
+import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.service.BookService;
+import com.example.bookshop.service.UsersBookService;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ public class BookServiceLocalImpl implements BookService {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private UsersBookService usersBookService;
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
@@ -67,6 +73,28 @@ public class BookServiceLocalImpl implements BookService {
 
     @Override
     public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
-        return Collections.emptyList();
+        Genre genre = new Genre();
+        genre.setId(genreId);
+        return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent()
+                .stream()
+                .map(bl -> (Book) bl)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived) {
+        usersBookService.addBooksToUser(books, user, archived);
+    }
+
+    @Override
+    public List<Book> findUsersBooks(Long userId, boolean archived) {
+        List<String> bookIds = usersBookService.findUsersBooks(userId, archived)
+                .stream()
+                .map(UsersBook::getBookId)
+                .collect(Collectors.toList());
+        return bookRepository.findAllBySlugIn(bookIds)
+                .stream()
+                .map(bl -> (Book) bl)
+                .collect(Collectors.toList());
     }
 }

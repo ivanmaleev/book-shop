@@ -16,6 +16,7 @@
                 id            varchar(36)  NOT NULL PRIMARY KEY,
                 pub_date      timestamp,
                 author_id     bigint       NOT NULL REFERENCES book_shop.author (id) ON DELETE RESTRICT,
+                genre_id      bigint       NOT NULL REFERENCES book_shop.genre (id) ON DELETE RESTRICT,
                 is_bestseller int4,
                 slug          varchar(254) NOT NULL,
                 title         varchar(254) NOT NULL,

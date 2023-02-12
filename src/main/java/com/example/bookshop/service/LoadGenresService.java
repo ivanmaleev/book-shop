@@ -7,13 +7,16 @@ import com.example.bookshop.dto.AlphabetObject;
 import com.example.bookshop.entity.AbstractEntity;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.BookLocal;
+import com.example.bookshop.entity.Genre;
 import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.repository.BookRepository;
+import com.example.bookshop.repository.GenreRepository;
 import com.example.bookshop.service.impl.AlphabetService;
 import lombok.NoArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,8 +32,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.bookshop.constants.Langs.EN;
+
 @NoArgsConstructor
 @Component
+@ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
 public class LoadGenresService {
 
     @Value("${google.books.api.key}")
@@ -45,6 +51,8 @@ public class LoadGenresService {
     private BookRepository bookRepository;
     @Autowired
     private AuthorRepository authorRepository;
+    @Autowired
+    private GenreRepository genreRepository;
 
     private Set<String> genres = new HashSet<>();
     private Set<String> authors = new HashSet<>();
@@ -140,6 +148,21 @@ public class LoadGenresService {
                     }
                 }
             }
+
+            if (item.getVolumeInfo().getCategories() != null
+                    && !item.getVolumeInfo().getCategories().isEmpty()) {
+                String genreName = item.getVolumeInfo().getCategories().get(0);
+                Genre genre = genreRepository.findByName(genreName, EN);
+                if (genre != null) {
+                    book.setGenre(genre);
+                } else {
+                    return null;
+                }
+
+            } else {
+                return null;
+            }
+
             book.setTitle(item.getVolumeInfo().getTitle());
             book.setImage(item.getVolumeInfo().getImageLinks().getThumbnail());
             book.setSlug(item.getId());

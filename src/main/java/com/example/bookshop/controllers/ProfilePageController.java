@@ -20,7 +20,7 @@ public class ProfilePageController {
     private CommonService commonService;
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, true);
     }
 
     @GetMapping("/profile")

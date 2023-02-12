@@ -13,7 +13,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(nativeQuery = true,
             value = "SELECT * \n" +
                     "FROM book_shop.author a \n" +
-                    "WHERE ?1 LIKE concat('%', a.last_name, '%') \n" +
+                    "WHERE lower(?1) LIKE concat('%', lower(a.last_name), '%') \n" +
                     "LIMIT 1")
     Author findTopByLastNameLike(String lastName);
 

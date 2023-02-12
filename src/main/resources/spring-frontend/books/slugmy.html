@@ -314,7 +314,7 @@
                 </div>
                 <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span><a href="/tags/">Современные</a>,&#32;<a href="/tags/">Психологическая проза</a>
                 </div>
-                <div class="ProductCard-cost"><span class="ProductCard-titleProp" th:text="@{'-' + ${slugBook.discount} + '%'}">Цена:</span><span class="ProductCard-priceOld" th:text="${slugBook.priceOld}">₽300</span><span class="ProductCard-price" th:text="${slugBook.price}">₽180</span>
+                <div class="ProductCard-cost"><span class="ProductCard-titleProp" th:text="@{'-' + ${slugBook.discount} + '%'}">Цена:</span><span class="ProductCard-priceOld" th:text="'₽' + ${slugBook.priceOld}">₽300</span><span class="ProductCard-price" th:text="'₽' + ${slugBook.price}">₽180</span>
                 </div>
                 <!--+div.-info
                 //+div.-cost

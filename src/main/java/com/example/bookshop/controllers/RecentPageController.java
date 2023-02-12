@@ -28,7 +28,7 @@ public class RecentPageController {
     private CommonService commonService;
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, false);
     }
     @GetMapping({"", "/"})
     public String recentBooksPage(Model model) {

@@ -31,7 +31,7 @@ public class SearchPageController {
 
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, false);
     }
 
     @GetMapping(value = {"/search", "/search/{SearchWord}"})

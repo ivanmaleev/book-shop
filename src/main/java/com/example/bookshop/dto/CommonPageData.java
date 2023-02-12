@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class CommonPageData {
     private Integer cartBooksCounter;
     private Integer postponedBooksCounter;
+    private Integer usersBooksCounter;
 }

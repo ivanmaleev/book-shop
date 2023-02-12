@@ -40,6 +40,9 @@ public class BookLocal extends Book implements Serializable {
     @ManyToOne
     private Author author = new Author();
 
+    @ManyToOne
+    private Genre genre;
+
     @JsonGetter("authors")
     public String authorsFullName() {
         return author.toString();

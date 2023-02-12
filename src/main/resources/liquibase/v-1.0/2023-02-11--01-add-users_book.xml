@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="1" author="Maleev Ivan">
+        <comment>
+            Создание таблицы User's book
+        </comment>
+        <sql>
+            CREATE TABLE book_shop.users_book
+            (
+                id       bigserial   NOT NULL PRIMARY KEY,
+                user_id  bigint      NOT NULL REFERENCES book_shop.users (id) ON DELETE RESTRICT,
+                book_id  varchar(20) NOT NULL,
+                archived boolean     NOT NULL DEFAULT FALSE
+            )
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>
+
+
+

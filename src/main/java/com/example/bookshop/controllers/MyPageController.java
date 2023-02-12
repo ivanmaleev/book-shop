@@ -1,6 +1,9 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.CommonPageData;
+import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.BookstoreUserRegister;
+import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,13 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 public class MyPageController {
 
     @Autowired
+    private BookService bookService;
+    @Autowired
+    private BookstoreUserRegister userRegister;
+    @Autowired
     private CommonService commonService;
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, true);
     }
     @GetMapping("/my")
     public String myPage(Model model) {
+        final BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        model.addAttribute("usersBooks", bookService.findUsersBooks(currentUser.getId(), false));
         return "/my";
     }
 }

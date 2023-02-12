@@ -8,4 +8,5 @@
     <include file="2022-08-28--01-initial-schema.xml" relativeToChangelogFile="true"/>
     <include file="2022-10-02--01-add-book-comment-rating.xml" relativeToChangelogFile="true"/>
     <include file="2023-02-04--01-add-book.xml" relativeToChangelogFile="true"/>
+    <include file="2023-02-11--01-add-users_book.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

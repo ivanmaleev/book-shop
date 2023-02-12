@@ -73,8 +73,8 @@ p.error-browser
                                         <div class="Card-description" th:text="${book.author.toUpperCase()}">
                                         </div>
                                         <div class="Card-cost">
-                                            <span class="Card-priceOld" th:text="${book.priceOld}"></span>
-                                            <span class="Card-price" th:text="${book.price}"></span>
+                                            <span class="Card-priceOld" th:text="'₽' + ${book.priceOld}"></span>
+                                            <span class="Card-price" th:text="'₽' + ${book.price}"></span>
                                         </div>
                                     </div>
                                 </div>

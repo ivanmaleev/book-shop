@@ -95,9 +95,9 @@
                 <div class="Cart-block Cart-block_price">
                   <div class="Cart-priceTitle">Цена:
                   </div>
-                  <div class="Cart-price Cart-price_old" th:text="${book.priceOld}">150 р.
+                  <div class="Cart-price Cart-price_old" th:text="'₽' + ${book.priceOld}">150 р.
                   </div>
-                  <div class="Cart-price" th:text="${book.price}">100 р.
+                  <div class="Cart-price" th:text="'₽' + ${book.price}">100 р.
                   </div>
                   <div class="Cart-sale" th:text="${'-' + book.discount + '%'}">-30%
                   </div>
@@ -109,7 +109,7 @@
           <div class="Cart-total">
             <div class="Cart-block Cart-block_total">
               <strong class="Cart-title">Итого:
-              </strong><span class="Cart-price" th:text="${cartData.sumPrice}">534 р.</span><span class="Cart-price_old" th:text="${cartData.sumOldPrice}">658 р.</span>
+              </strong><span class="Cart-price" th:text="'₽' + ${cartData.sumPrice}">534 р.</span><span class="Cart-price_old" th:text="'₽' + ${cartData.sumOldPrice}">658 р.</span>
             </div>
             <div class="Cart-block"><a class="btn btn_success btn_md" href="/order.html" th:href="@{/books/pay}">Купить</a>
             </div>

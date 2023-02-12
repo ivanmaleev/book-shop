@@ -32,7 +32,7 @@ public class CartController {
 
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, false);
     }
 
     @GetMapping("/books/cart")

@@ -24,7 +24,7 @@ public class PostponedPageController {
 
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request);
+        return commonService.getCommonPageData(request, false);
     }
 
     @GetMapping("/books/postponed")

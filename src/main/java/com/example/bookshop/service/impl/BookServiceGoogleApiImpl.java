@@ -1,25 +1,26 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.constants.Langs;
+import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.dto.AlphabetObject;
 import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.entity.BookGoogleApi;
 import com.example.bookshop.entity.redis.BookRedis;
 import com.example.bookshop.entity.redis.BookRequestRedis;
 import com.example.bookshop.repository.BookRedisRepository;
 import com.example.bookshop.repository.BookRequestRepository;
+import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
+import com.example.bookshop.service.UsersBookService;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,6 +57,8 @@ public class BookServiceGoogleApiImpl implements BookService {
     private BookRedisRepository bookRedisRepository;
     @Autowired
     private BookRequestRepository bookRequestRepository;
+    @Autowired
+    private UsersBookService usersBookService;
 
     @Override
     public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
@@ -244,4 +247,16 @@ public class BookServiceGoogleApiImpl implements BookService {
         return books;
     }
 
+    @Override
+    public void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived) {
+        usersBookService.addBooksToUser(books, user, archived);
+    }
+
+    @Override
+    public List<Book> findUsersBooks(Long userId, boolean archived) {
+        return usersBookService.findUsersBooks(userId, archived)
+                .stream()
+                .map(usersBook -> getBook(usersBook.getBookId()))
+                .collect(Collectors.toList());
+    }
 }

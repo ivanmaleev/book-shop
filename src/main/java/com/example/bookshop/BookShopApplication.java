@@ -28,7 +28,7 @@ import java.util.Set;
 public class BookShopApplication {
 
 
-    @Autowired
+    @Autowired(required = false)
     LoadGenresService loadGenresService;
     public static void main(String[] args) {
         SpringApplication.run(BookShopApplication.class, args);

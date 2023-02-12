@@ -8,5 +8,5 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface CommonService {
 
-    CommonPageData getCommonPageData(HttpServletRequest request);
+    CommonPageData getCommonPageData(HttpServletRequest request, boolean usersPage);
 }
