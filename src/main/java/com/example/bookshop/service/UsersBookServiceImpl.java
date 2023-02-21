@@ -19,7 +19,7 @@ public class UsersBookServiceImpl implements UsersBookService {
     private UsersBookRepository usersBookRepository;
 
     @Override
-    public void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived) {
+    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
         usersBookRepository.saveAll(books.stream()
                 .map(book -> new UsersBook(user, book.getSlug(), archived))
                 .collect(Collectors.toList()));

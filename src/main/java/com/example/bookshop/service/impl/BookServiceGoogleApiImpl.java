@@ -61,30 +61,30 @@ public class BookServiceGoogleApiImpl implements BookService {
     private UsersBookService usersBookService;
 
     @Override
-    public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() + "\"";
         return getBooks(searchString, null, null, offset, limit);
     }
 
     @Override
-    public List<Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
+    public List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
     @Override
-    public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date fromDate, Date endDate) {
+    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date fromDate, Date endDate) {
         String from = sdf.format(fromDate);
         String to = sdf.format(endDate);
         return getBooks(null, from, to, offset, limit);
     }
 
     @Override
-    public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
     @Override
-    public List<Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return getBooks(searchWord, null, null, offset, limit);
     }
 
@@ -99,7 +99,7 @@ public class BookServiceGoogleApiImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
         String searchString = "+subject:\"" + genreDto.getName() + "\"";
         return getBooks(searchString, null, null, offset, limit);
@@ -149,7 +149,7 @@ public class BookServiceGoogleApiImpl implements BookService {
         }
     }
 
-    private List<Book> getBooksFromGoogleRoot(Root root) {
+    private List<? extends Book> getBooksFromGoogleRoot(Root root) {
         ArrayList<Book> books = new ArrayList<>();
         List<String> statuses = List.of("PAID", "CART", "KEPT", "");
         final Random random = new Random();
@@ -213,7 +213,7 @@ public class BookServiceGoogleApiImpl implements BookService {
         return String.valueOf(letter);
     }
 
-    private List<Book> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
+    private List<? extends Book> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
         Root root = null;
         List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(defaultLocale);
         String requestUrl = "";
@@ -237,7 +237,7 @@ public class BookServiceGoogleApiImpl implements BookService {
                 break;
             }
         }
-        List<Book> books = getBooksFromGoogleRoot(root);
+        List<? extends Book> books = getBooksFromGoogleRoot(root);
         if (!"".equals(requestUrl)) {
             bookRequestRepository.save(new BookRequestRedis(requestUrl, books
                     .stream()
@@ -248,12 +248,12 @@ public class BookServiceGoogleApiImpl implements BookService {
     }
 
     @Override
-    public void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived) {
+    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
         usersBookService.addBooksToUser(books, user, archived);
     }
 
     @Override
-    public List<Book> findUsersBooks(Long userId, boolean archived) {
+    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
         return usersBookService.findUsersBooks(userId, archived)
                 .stream()
                 .map(usersBook -> getBook(usersBook.getBookId()))

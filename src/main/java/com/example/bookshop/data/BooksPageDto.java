@@ -7,9 +7,9 @@ import java.util.List;
 public class BooksPageDto {
 
     private Integer count;
-    private List<Book> books;
+    private List<? extends Book> books;
 
-    public BooksPageDto(List<Book> books) {
+    public BooksPageDto(List<? extends Book> books) {
         this.count = books.size();
         this.books = books;
     }
@@ -22,7 +22,7 @@ public class BooksPageDto {
         this.count = count;
     }
 
-    public List<Book> getBooks() {
+    public List<? extends Book> getBooks() {
         return books;
     }
 

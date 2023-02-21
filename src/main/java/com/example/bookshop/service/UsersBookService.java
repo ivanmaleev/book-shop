@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface UsersBookService {
 
-    void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived);
+    void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived);
 
     List<UsersBook> findUsersBooks(Long userId, boolean archived);
 

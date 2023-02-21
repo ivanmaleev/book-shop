@@ -30,7 +30,7 @@ public class BookServiceLocalImpl implements BookService {
     private UsersBookService usersBookService;
 
     @Override
-    public List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent()
                 .stream()
                 .map(bl -> (Book) bl)
@@ -38,7 +38,7 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
+    public List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent()
                 .stream()
                 .map(bl -> (Book) bl)
@@ -46,7 +46,7 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
+    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
         return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent()
                 .stream()
                 .map(bl -> (Book) bl)
@@ -54,7 +54,7 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<Book> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent()
                 .stream()
                 .map(bl -> (Book) bl)
@@ -62,7 +62,7 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return Collections.emptyList();
     }
 
@@ -72,22 +72,19 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         Genre genre = new Genre();
         genre.setId(genreId);
-        return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent()
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent();
     }
 
     @Override
-    public void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived) {
+    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
         usersBookService.addBooksToUser(books, user, archived);
     }
 
     @Override
-    public List<Book> findUsersBooks(Long userId, boolean archived) {
+    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
         List<String> bookIds = usersBookService.findUsersBooks(userId, archived)
                 .stream()
                 .map(UsersBook::getBookId)

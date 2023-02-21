@@ -12,21 +12,21 @@ import java.util.List;
 @Service
 public interface BookService {
 
-    List<Book> getBooksByAuthor(Author author, Integer offset, Integer limit);
+    List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit);
 
-    List<Book> getPageofRecommendedBooks(Integer offset, Integer limit);
+    List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit);
 
-    List<Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end);
+    List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end);
 
-    List<Book> getPageOfPopularBooks(Integer offset, Integer limit);
+    List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit);
 
-    List<Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
+    List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
     Book getBook(String slug);
 
-    List<Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
+    List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 
-    void addBooksToUser(List<Book> books, BookstoreUser user, boolean archived);
+    void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived);
 
-    List<Book> findUsersBooks(Long userId, boolean archived);
+    List<? extends Book> findUsersBooks(Long userId, boolean archived);
 }

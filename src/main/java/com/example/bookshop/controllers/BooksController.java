@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -123,7 +124,8 @@ public class BooksController {
     public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long id,
                                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit)));
+        final List<? extends Book> books = bookService.getBooksByGenreId(id, offset, limit);
+        return ResponseEntity.ok(new BooksPageDto(books));
     }
 
     @GetMapping("/author/{id}")
