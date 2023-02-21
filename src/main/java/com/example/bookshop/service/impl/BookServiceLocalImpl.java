@@ -31,34 +31,22 @@ public class BookServiceLocalImpl implements BookService {
 
     @Override
     public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
-        return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent()
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent();
     }
 
     @Override
     public List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
-        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent()
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
     @Override
     public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
-        return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent()
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent();
     }
 
     @Override
     public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
-        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent()
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
     @Override
@@ -89,9 +77,6 @@ public class BookServiceLocalImpl implements BookService {
                 .stream()
                 .map(UsersBook::getBookId)
                 .collect(Collectors.toList());
-        return bookRepository.findAllBySlugIn(bookIds)
-                .stream()
-                .map(bl -> (Book) bl)
-                .collect(Collectors.toList());
+        return bookRepository.findAllBySlugIn(bookIds);
     }
 }
