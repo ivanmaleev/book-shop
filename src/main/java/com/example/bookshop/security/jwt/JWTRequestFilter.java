@@ -1,11 +1,9 @@
 package com.example.bookshop.security.jwt;
 
-import com.example.bookshop.security.BookstoreUserDetails;
 import com.example.bookshop.security.BookstoreUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
@@ -35,14 +34,14 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         String username = null;
         Cookie[] cookies = httpServletRequest.getCookies();
 
-        if (cookies != null) {
+        if (Objects.nonNull(cookies)) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     token = cookie.getValue();
                     username = jwtUtil.extractUsername(token);
                 }
 
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (Objects.nonNull(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
                     UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(username);
                     if (jwtUtil.validateToken(token, userDetails)) {
                         UsernamePasswordAuthenticationToken authenticationToken =
@@ -56,6 +55,6 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(httpServletRequest,httpServletResponse);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

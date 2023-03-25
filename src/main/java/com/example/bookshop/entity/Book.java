@@ -40,15 +40,15 @@ public abstract class Book implements Serializable {
     private String image;
     private String status;  // PAID, CART, KEPT
 
-//    private List<BookFile> bookFileList = new ArrayList<>();
+    private List<BookFile> bookFileList = new ArrayList<>();
 
-//    public List<BookFile> getBookFileList() {
-//        return bookFileList;
-//    }
-//
-//    public void setBookFileList(List<BookFile> bookFileList) {
-//        this.bookFileList = bookFileList;
-//    }
+    public List<BookFile> getBookFileList() {
+        return bookFileList;
+    }
+
+    public void setBookFileList(List<BookFile> bookFileList) {
+        this.bookFileList = bookFileList;
+    }
 
     private String description;
 

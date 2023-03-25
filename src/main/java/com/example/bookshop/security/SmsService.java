@@ -5,6 +5,7 @@ import com.example.bookshop.repository.SmsCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -40,13 +41,13 @@ public class SmsService {
     }
 
     public void saveNewCode(SmsCode smsCode) {
-        if (smsCodeRepository.findByCode(smsCode.getCode()) == null) {
+        if (Objects.isNull(smsCodeRepository.findByCode(smsCode.getCode()))) {
             smsCodeRepository.save(smsCode);
         }
     }
 
     public Boolean verifyCode(String code) {
         SmsCode smsCode = smsCodeRepository.findByCode(code);
-        return (smsCode != null && !smsCode.isExpired());
+        return (Objects.nonNull(smsCode) && !smsCode.isExpired());
     }
 }

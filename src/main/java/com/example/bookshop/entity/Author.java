@@ -1,15 +1,12 @@
 package com.example.bookshop.entity;
 
-import com.example.bookshop.entity.Book;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //@Data
 //@NoArgsConstructor
@@ -29,7 +26,7 @@ public class Author extends AbstractEntity implements Serializable {
 //    private List<Book> bookList = new ArrayList<>();
 
     public Author(List<String> authors) {
-        if (authors != null) {
+        if (Objects.nonNull(authors)) {
             this.lastName = authors.toString();
         }
         this.firstName = "";

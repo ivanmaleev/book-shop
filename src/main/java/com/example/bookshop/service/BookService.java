@@ -2,10 +2,10 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +24,9 @@ public interface BookService {
 
     Book getBook(String slug);
 
-    List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
+    List<? extends Book> getBooks(Collection<String> slugList);
 
-    void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived);
+    List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 
     List<? extends Book> findUsersBooks(Long userId, boolean archived);
 }

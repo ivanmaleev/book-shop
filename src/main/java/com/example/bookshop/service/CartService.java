@@ -6,18 +6,22 @@ import com.example.bookshop.dto.request.BookCartRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public interface CartService {
 
-    void changeBookStatus(BookCartRequest bookCartRequest,
-                          HttpServletRequest request,
-                          HttpServletResponse response, Model model);
-
     List<BookDto> getCartBooks(String cartContents);
 
     CartData getCartData(List<BookDto> bookDtos);
+
+    void addBookToCart(BookCartRequest bookCartRequest, Cookie[] cookies,
+                               HttpServletResponse response, Model model);
+
+    void removeBookFromCart(BookCartRequest bookCartRequest, Cookie[] cookies,
+                                    HttpServletResponse response, Model model);
 }

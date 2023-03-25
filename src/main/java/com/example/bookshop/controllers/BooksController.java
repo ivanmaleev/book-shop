@@ -36,6 +36,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/books")
@@ -103,10 +104,10 @@ public class BooksController {
                 throw new RuntimeException(e);
             }
         }
-        if (fromDate == null) {
+        if (Objects.isNull(fromDate)) {
             fromDate = Date.from(Instant.now().minus(1068, ChronoUnit.DAYS));
         }
-        if (toDate == null) {
+        if (Objects.isNull(toDate)) {
             toDate = Date.from(Instant.now());
         }
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));

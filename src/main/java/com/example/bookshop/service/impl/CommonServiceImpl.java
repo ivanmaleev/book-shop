@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 public class CommonServiceImpl implements CommonService {
@@ -27,7 +28,7 @@ public class CommonServiceImpl implements CommonService {
             commonPageData.setUsersBooksCounter(usersBookService.getCount(currentUser.getId()));
         }
 
-        if (request.getCookies() != null) {
+        if (Objects.nonNull(request.getCookies())) {
             Optional<Cookie> cartContents = Arrays.stream(request.getCookies())
                     .filter(cookie -> cookie.getName().equals("cartContents"))
                     .findFirst();

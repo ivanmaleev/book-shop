@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -60,15 +61,15 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
+    public List<? extends Book> getBooks(Collection<String> slugList) {
+        return bookRepository.findAllBySlugIn(slugList);
+    }
+
+    @Override
     public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         Genre genre = new Genre();
         genre.setId(genreId);
         return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent();
-    }
-
-    @Override
-    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
-        usersBookService.addBooksToUser(books, user, archived);
     }
 
     @Override

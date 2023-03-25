@@ -14,7 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -41,15 +43,15 @@ public class BookGoogleApi extends Book implements Serializable {
     private String image;
     private String status;  // PAID, CART, KEPT
 
-//    private List<BookFile> bookFileList = new ArrayList<>();
+    private List<BookFile> bookFileList = new ArrayList<>();
 
-//    public List<BookFile> getBookFileList() {
-//        return bookFileList;
-//    }
-//
-//    public void setBookFileList(List<BookFile> bookFileList) {
-//        this.bookFileList = bookFileList;
-//    }
+    public List<BookFile> getBookFileList() {
+        return bookFileList;
+    }
+
+    public void setBookFileList(List<BookFile> bookFileList) {
+        this.bookFileList = bookFileList;
+    }
 
     private String description;
 

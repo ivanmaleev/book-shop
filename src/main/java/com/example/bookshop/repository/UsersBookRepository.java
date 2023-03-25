@@ -1,6 +1,7 @@
 package com.example.bookshop.repository;
 
 import com.example.bookshop.entity.UsersBook;
+import com.example.bookshop.security.BookstoreUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
                     "FROM book_shop.users_book AS ub \n" +
                     "WHERE ub.user_id = ?1")
     Integer getCount(Long userId);
+
+    boolean existsByBookIdAndUserAndArchived(String bookId, BookstoreUser user, boolean archived);
 }

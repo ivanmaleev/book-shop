@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="1" author="Maleev Ivan">
+        <comment>
+            Создание индекса по полю slug таблица Book
+        </comment>
+
+        <sql>
+            CREATE UNIQUE INDEX slug_idx ON book_shop.book (slug);
+        </sql>
+
+        <comment>
+            Создание индекса по полю user_id таблица USERS_BOOK
+        </comment>
+        <sql>
+            CREATE INDEX user_id_idx ON book_shop.users_book (user_id);
+        </sql>
+
+        <comment>
+            Создание индекса по полю book_id таблица USERS_BOOK
+        </comment>
+        <sql>
+            CREATE INDEX book_id_idx ON book_shop.users_book (book_id);
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>
+
+
+

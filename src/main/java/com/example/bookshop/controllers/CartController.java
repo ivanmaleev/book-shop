@@ -50,13 +50,6 @@ public class CartController {
         return "cart";
     }
 
-    @PostMapping("/books/changeBookStatus")
-    public void handleChangeBookStatus(@RequestBody BookCartRequest bookCartRequest,
-                                       HttpServletRequest request,
-                                       HttpServletResponse response, Model model) {
-        cartService.changeBookStatus(bookCartRequest, request, response, model);
-    }
-
 //    @GetMapping("/pay")
 //    public RedirectView handlePay(@CookieValue(value = "cartContents", required = false) String cartContents) throws NoSuchAlgorithmException {
 //

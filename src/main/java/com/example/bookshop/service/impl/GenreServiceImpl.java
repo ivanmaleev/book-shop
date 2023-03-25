@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor
@@ -42,7 +43,7 @@ public class GenreServiceImpl implements GenreService {
 
     private Map<Long, GenreDto> getGenreMap(String lang) {
         Map<Long, GenreDto> genreMap = langGenreMap.get(lang);
-        if (genreMap == null || genreMap.isEmpty()) {
+        if (Objects.isNull(genreMap) || genreMap.isEmpty()) {
             loadLangGenreMap();
             genreMap = langGenreMap.get(lang);
         }

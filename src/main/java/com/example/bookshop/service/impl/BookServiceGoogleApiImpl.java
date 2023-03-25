@@ -29,8 +29,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -99,10 +102,29 @@ public class BookServiceGoogleApiImpl implements BookService {
     }
 
     @Override
+    public List<? extends Book> getBooks(Collection<String> slugList) {
+        if (Objects.isNull(slugList)) {
+            return Collections.emptyList();
+        }
+        return slugList
+                .stream()
+                .map(this::getBook)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
         String searchString = "+subject:\"" + genreDto.getName() + "\"";
         return getBooks(searchString, null, null, offset, limit);
+    }
+
+    @Override
+    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
+        return usersBookService.findUsersBooks(userId, archived)
+                .stream()
+                .map(usersBook -> getBook(usersBook.getBookId()))
+                .collect(Collectors.toList());
     }
 
     private String getGoogleBookApiUrl(String slug) {
@@ -140,7 +162,7 @@ public class BookServiceGoogleApiImpl implements BookService {
             URL url = builder.build().toURL();
             String urlString = url.toString();
             //TODo
-            if (searchWord != null) {
+            if (Objects.nonNull(searchWord)) {
                 urlString = urlString + "&q=" + searchWord;
             }
             return urlString;
@@ -149,16 +171,16 @@ public class BookServiceGoogleApiImpl implements BookService {
         }
     }
 
-    private List<? extends Book> getBooksFromGoogleRoot(Root root) {
-        ArrayList<Book> books = new ArrayList<>();
+    private List<BookGoogleApi> getBooksFromGoogleRoot(Root root) {
+        ArrayList<BookGoogleApi> books = new ArrayList<>();
         List<String> statuses = List.of("PAID", "CART", "KEPT", "");
         final Random random = new Random();
-        if (root != null && root.getItems() != null) {
+        if (Objects.nonNull(root) && Objects.nonNull(root.getItems())) {
             root.getItems()
                     .forEach(item -> {
-                        Book book = new BookGoogleApi();
-                        if (item.getVolumeInfo() != null) {
-                            if (item.getVolumeInfo().getAuthors() != null) {
+                        BookGoogleApi book = new BookGoogleApi();
+                        if (Objects.nonNull(item.getVolumeInfo())) {
+                            if (Objects.nonNull(item.getVolumeInfo().getAuthors())) {
                                 book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
                             }
                             book.setTitle(item.getVolumeInfo().getTitle());
@@ -166,7 +188,7 @@ public class BookServiceGoogleApiImpl implements BookService {
                             book.setSlug(item.getId());
                             book.setId(item.getId());
                         }
-                        if (item.getSaleInfo() != null && item.getSaleInfo().getRetailPrice() != null) {
+                        if (Objects.nonNull(item.getSaleInfo()) && Objects.nonNull(item.getSaleInfo().getRetailPrice())) {
                             book.setPrice((int) item.getSaleInfo().getRetailPrice().getAmount());
                             Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
                             book.setPriceOld(oldPrice.intValue());
@@ -186,15 +208,15 @@ public class BookServiceGoogleApiImpl implements BookService {
 
     private Book getBookFromGoogleRoot(com.example.bookshop.data.book.Root root) {
         Book book = new BookGoogleApi();
-        if (root != null) {
-            if (root.getVolumeInfo() != null) {
+        if (Objects.nonNull(root)) {
+            if (Objects.nonNull(root.getVolumeInfo())) {
                 book.setAuthor(new Author(root.getVolumeInfo().getAuthors()));
                 book.setTitle(root.getVolumeInfo().getTitle());
                 book.setImage(root.getVolumeInfo().getImageLinks().getThumbnail());
                 book.setSlug(root.getId());
                 book.setId(root.getId());
             }
-            if (root.getSaleInfo() != null) {
+            if (Objects.nonNull(root.getSaleInfo())) {
                 book.setPrice((int) root.getSaleInfo().getRetailPrice().getAmount());
                 Double oldPrice = root.getSaleInfo().getListPrice().getAmount();
                 book.setPriceOld(oldPrice.intValue());
@@ -213,13 +235,13 @@ public class BookServiceGoogleApiImpl implements BookService {
         return String.valueOf(letter);
     }
 
-    private List<? extends Book> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
+    private List<BookGoogleApi> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
         Root root = null;
         List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(defaultLocale);
         String requestUrl = "";
         for (int i = 0; i < attempts; i++) {
             String searchWord = "";
-            if (searchString != null) {
+            if (Objects.nonNull(searchString)) {
                 searchWord = getRandomSearchWord(alphabetObjects) + searchString;
             } else {
                 searchWord = getRandomSearchWord(alphabetObjects);
@@ -233,11 +255,11 @@ public class BookServiceGoogleApiImpl implements BookService {
                         .collect(Collectors.toList());
             }
             root = restTemplate.getForEntity(requestUrl, Root.class).getBody();
-            if (root != null && root.getItems() != null) {
+            if (Objects.nonNull(root) && Objects.nonNull(root.getItems())) {
                 break;
             }
         }
-        List<? extends Book> books = getBooksFromGoogleRoot(root);
+        final List<BookGoogleApi> books = getBooksFromGoogleRoot(root);
         if (!"".equals(requestUrl)) {
             bookRequestRepository.save(new BookRequestRedis(requestUrl, books
                     .stream()
@@ -245,18 +267,5 @@ public class BookServiceGoogleApiImpl implements BookService {
                     .collect(Collectors.toList())));
         }
         return books;
-    }
-
-    @Override
-    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
-        usersBookService.addBooksToUser(books, user, archived);
-    }
-
-    @Override
-    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
-        return usersBookService.findUsersBooks(userId, archived)
-                .stream()
-                .map(usersBook -> getBook(usersBook.getBookId()))
-                .collect(Collectors.toList());
     }
 }

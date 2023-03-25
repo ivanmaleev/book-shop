@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,14 +71,14 @@ public class LoadGenresService {
             Root root = restTemplate.getForEntity(getGoogleBooksApiUrl(getRandomSearchWord(), 0, 40), Root.class).getBody();
             root.getItems()
                     .forEach(item -> {
-                        if (item.getVolumeInfo() != null
-                                && item.getVolumeInfo().getCategories() != null
-                                && item.getVolumeInfo().getAuthors() != null
+                        if (Objects.nonNull(item.getVolumeInfo())
+                                && Objects.nonNull(item.getVolumeInfo().getCategories())
+                                && Objects.nonNull(item.getVolumeInfo().getAuthors())
                                 && item.getVolumeInfo().getAuthors().size() > 0) {
                             //genres.addAll(item.getVolumeInfo().getCategories());
                             //authors.addAll(item.getVolumeInfo().getAuthors());
                             BookLocal book = getBook(item);
-                            if (book != null) {
+                            if (Objects.nonNull(book)) {
                                 bookRepository.save(book);
                                 System.out.println(book);
                             }
@@ -105,7 +106,7 @@ public class LoadGenresService {
             URL url = builder.build().toURL();
             String urlString = url.toString();
             //TODo
-            if (searchWord != null) {
+            if (Objects.nonNull(searchWord)) {
                 urlString = urlString + "&q=" + searchWord;
             }
             return urlString;
@@ -124,26 +125,26 @@ public class LoadGenresService {
         final Random random = new Random();
         BookLocal book = new BookLocal();
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        if (item.getVolumeInfo() != null) {
+        if (Objects.nonNull(item.getVolumeInfo())) {
 
-            if (bookRepository.findTopBySlug(item.getId()) != null) {
+            if (Objects.nonNull(bookRepository.findTopBySlug(item.getId()))) {
                 return null;
             }
             if (item.getVolumeInfo().getAuthors() != null) {
 
                 List<String> authors1 = item.getVolumeInfo().getAuthors();
-                if (authors1 != null && !authors1.isEmpty()) {
+                if (Objects.nonNull(authors1) && !authors1.isEmpty()) {
                     Author author = authorRepository.findTopByLastNameLike(authors1.get(0));
                     book.setAuthor(author);
                 }
-                if (book.getAuthor() == null) {
+                if (Objects.isNull(book.getAuthor())) {
                     long i = random.nextInt(500);
                     final List<Author> authors2 = authorsMap.get(i);
                     if (authors2 != null) {
                         book.setAuthor(authors2.get(0));
                     }
 
-                    if (book.getAuthor() == null) {
+                    if (Objects.isNull(book.getAuthor())) {
                         return null;
                     }
                 }

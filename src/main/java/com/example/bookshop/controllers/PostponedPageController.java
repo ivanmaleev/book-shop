@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.PostponedService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostponedPageController {
@@ -33,8 +36,13 @@ public class PostponedPageController {
         if (StringUtils.isBlank(postponedContents)) {
             model.addAttribute("isPostponedEmpty", true);
         } else {
+            List<BookDto> postponedBooks = postponedService.getPostponedBooks(postponedContents);
             model.addAttribute("isPostponedEmpty", false);
-            model.addAttribute("bookPostponed", postponedService.getPostponedBooks(postponedContents));
+            model.addAttribute("booksPostponed", postponedBooks);
+            model.addAttribute("bookIdsPostponed", postponedBooks
+                    .stream()
+                    .map(BookDto::getSlug)
+                    .collect(Collectors.toList()));
         }
         return "/postponed";
     }

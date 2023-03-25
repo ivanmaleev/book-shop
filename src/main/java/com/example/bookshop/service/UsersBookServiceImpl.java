@@ -1,7 +1,8 @@
 package com.example.bookshop.service;
 
-import com.example.bookshop.entity.Book;
+import com.example.bookshop.entity.BookLocal;
 import com.example.bookshop.entity.UsersBook;
+import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.UsersBookRepository;
 import com.example.bookshop.security.BookstoreUser;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,25 @@ public class UsersBookServiceImpl implements UsersBookService {
 
     @Autowired
     private UsersBookRepository usersBookRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     @Override
-    public void addBooksToUser(List<? extends Book> books, BookstoreUser user, boolean archived) {
-        usersBookRepository.saveAll(books.stream()
-                .map(book -> new UsersBook(user, book.getSlug(), archived))
-                .collect(Collectors.toList()));
+    public void addBooksToUser(List<String> bookSlugList, BookstoreUser user, boolean archived) {
+        bookSlugList = validateSlugs(bookSlugList, user, archived);
+        if (!bookSlugList.isEmpty()) {
+            usersBookRepository.saveAll(bookSlugList.stream()
+                    .map(slug -> new UsersBook(user, slug, archived))
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private List<String> validateSlugs(List<String> bookSlugList, BookstoreUser user, boolean archived) {
+        return bookRepository.findAllBySlugIn(bookSlugList)
+                .stream()
+                .filter(book -> !usersBookRepository.existsByBookIdAndUserAndArchived(book.getSlug(), user, archived))
+                .map(BookLocal::getSlug)
+                .collect(Collectors.toList());
     }
 
     @Override

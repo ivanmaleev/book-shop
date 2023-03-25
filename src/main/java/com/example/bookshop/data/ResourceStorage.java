@@ -15,6 +15,7 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 
@@ -64,7 +65,7 @@ public class ResourceStorage {
         String mimeType =
                 URLConnection.guessContentTypeFromName(Paths.get(bookFile.getPath()).getFileName().toString());
 
-        if (mimeType != null) {
+        if (Objects.nonNull(mimeType)) {
             return MediaType.parseMediaType(mimeType);
         }else {
             return MediaType.APPLICATION_OCTET_STREAM;

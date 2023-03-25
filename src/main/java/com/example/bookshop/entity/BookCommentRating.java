@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -38,6 +39,6 @@ public class BookCommentRating extends AbstractEntity {
     }
 
     private int getNormalizeRating(Integer rating) {
-        return rating == null ? 0 : Math.max(Math.min(rating, 1), -1);
+        return Objects.isNull(rating) ? 0 : Math.max(Math.min(rating, 1), -1);
     }
 }
