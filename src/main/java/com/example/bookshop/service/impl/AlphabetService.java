@@ -17,7 +17,7 @@ public class AlphabetService {
     public static final Map<String, List<AlphabetObject>> alphabetLangMap;
 
     static {
-        alphabetLangMap = new HashMap();
+        alphabetLangMap = new HashMap<>();
         List<String> langs = List.of(Langs.RU, Langs.EN);
         langs.forEach(lang -> {
             List<AlphabetObject> alphabet;

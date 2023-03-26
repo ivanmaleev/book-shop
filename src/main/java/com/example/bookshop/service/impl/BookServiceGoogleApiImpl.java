@@ -121,7 +121,7 @@ public class BookServiceGoogleApiImpl implements BookService {
 
     @Override
     public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
-        return usersBookService.findUsersBooks(userId, archived)
+        return usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .stream()
                 .map(usersBook -> getBook(usersBook.getBookId()))
                 .collect(Collectors.toList());

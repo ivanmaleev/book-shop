@@ -1,8 +1,13 @@
-package com.example.bookshop.service;
+package com.example.bookshop.service.impl;
 
+import com.example.bookshop.constants.BookStatus;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
+import com.example.bookshop.service.BookStatusService;
+import com.example.bookshop.service.CartService;
+import com.example.bookshop.service.PostponedService;
+import com.example.bookshop.service.UsersBookService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -19,6 +24,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.BiConsumer;
+
+import static com.example.bookshop.constants.BookStatus.ARCHIVED;
 
 public class BookStatusServiceImpl implements BookStatusService {
 
@@ -60,10 +67,8 @@ public class BookStatusServiceImpl implements BookStatusService {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         if (!currentUser.isAnonymousUser() &&
                 Objects.nonNull(bookCartRequest) && StringUtils.isNotBlank(bookCartRequest.getBookId())) {
-            usersBookService.addBooksToUser(List.of(bookCartRequest.getBookId()), currentUser, true);
+            usersBookService.addBooksToUser(List.of(bookCartRequest.getBookId()), currentUser, ARCHIVED);
         }
-
-
     }
 
     @Override

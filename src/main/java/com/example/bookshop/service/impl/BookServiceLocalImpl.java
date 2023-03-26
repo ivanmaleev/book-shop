@@ -74,7 +74,7 @@ public class BookServiceLocalImpl implements BookService {
 
     @Override
     public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
-        List<String> bookIds = usersBookService.findUsersBooks(userId, archived)
+        List<String> bookIds = usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .stream()
                 .map(UsersBook::getBookId)
                 .collect(Collectors.toList());

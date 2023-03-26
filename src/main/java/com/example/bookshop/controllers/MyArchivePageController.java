@@ -30,7 +30,7 @@ public class MyArchivePageController {
 
     @GetMapping("/myarchive")
     public String myarchivePage(Model model) {
-        final BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         model.addAttribute("usersArchivedBooks", bookService.findUsersBooks(currentUser.getId(), true));
         return "/myarchive";
     }

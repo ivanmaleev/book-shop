@@ -13,6 +13,12 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
 
     List<UsersBook> findAllByUserIdAndAndArchived(Long userId, boolean archived);
 
+    List<UsersBook> findAllByUserId(Long userId);
+
+    List<UsersBook> findAllByUserIdAndBookIdIn(Long userId, List<String> bookSlugList);
+
+    List<UsersBook> findAllByUserIdAndBookIdInAndArchived(Long userId, List<String> bookSlugList, boolean archived);
+
     @Query(nativeQuery = true,
             value = "SELECT count(*) \n" +
                     "FROM book_shop.users_book AS ub \n" +
@@ -20,4 +26,6 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
     Integer getCount(Long userId);
 
     boolean existsByBookIdAndUserAndArchived(String bookId, BookstoreUser user, boolean archived);
+
+    UsersBook findTopByUserIdAndBookId(Long userId, String bookId);
 }

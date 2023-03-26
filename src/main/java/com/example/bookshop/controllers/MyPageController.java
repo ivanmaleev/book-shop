@@ -28,7 +28,7 @@ public class MyPageController {
     }
     @GetMapping("/my")
     public String myPage(Model model) {
-        final BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         model.addAttribute("usersBooks", bookService.findUsersBooks(currentUser.getId(), false));
         return "/my";
     }

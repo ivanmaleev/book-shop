@@ -14,6 +14,7 @@ import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import com.example.bookshop.service.UsersBookService;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -48,6 +48,8 @@ public class BooksController {
 //    private ResourceStorage storage;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UsersBookService usersBookService;
     @Autowired
     private AuthorService authorService;
     @Autowired
@@ -69,12 +71,14 @@ public class BooksController {
     public String bookPage(
             @ModelAttribute BookRatingDto bookRating,
             @PathVariable("slug") String slug, Model model) {
+        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+
         Book book = bookService.getBook(slug);
+        book.setStatus(Objects.toString(usersBookService.getBookStatus(currentUser.getId(), slug)));
         model.addAttribute("slugBook", book);
         model.addAttribute("bookRating", bookRatingService.getBookRating(slug));
         model.addAttribute("bookComments", bookCommentService.getBookComments(slug));
 
-        BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         if (!currentUser.isAnonymousUser()) {
             return "/books/slugmy";
         }
@@ -125,8 +129,7 @@ public class BooksController {
     public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long id,
                                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        final List<? extends Book> books = bookService.getBooksByGenreId(id, offset, limit);
-        return ResponseEntity.ok(new BooksPageDto(books));
+        return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit)));
     }
 
     @GetMapping("/author/{id}")
@@ -144,11 +147,12 @@ public class BooksController {
     @ResponseBody
     public ResponseEntity<BookRatingResponse> rateBook(@RequestBody BookRatingRequest bookRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        boolean result = false;
         if (!currentUser.isAnonymousUser()) {
             bookRatingService.saveBookRating(currentUser, bookRatingRequest);
-            return ResponseEntity.ok(new BookRatingResponse(true));
+            result = true;
         }
-        return ResponseEntity.ok(new BookRatingResponse(false));
+        return ResponseEntity.ok(new BookRatingResponse(result));
     }
 
 //    @PostMapping("/{slug}/img/save")

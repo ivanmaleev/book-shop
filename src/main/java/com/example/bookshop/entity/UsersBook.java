@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +32,19 @@ public class UsersBook extends AbstractEntity {
         this.user = user;
         this.bookId = bookId;
         this.archived = archived;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        UsersBook usersBook = (UsersBook) o;
+        return archived == usersBook.archived && Objects.equals(user, usersBook.user) && Objects.equals(bookId, usersBook.bookId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), user, bookId, archived);
     }
 }

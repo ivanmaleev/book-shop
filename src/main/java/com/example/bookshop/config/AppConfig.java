@@ -5,7 +5,7 @@ import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.BookStatusService;
-import com.example.bookshop.service.BookStatusServiceImpl;
+import com.example.bookshop.service.impl.BookStatusServiceImpl;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;

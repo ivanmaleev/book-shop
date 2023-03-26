@@ -27,21 +27,23 @@ public class BookCommentController {
     @ResponseBody
     public BookCommentResponse rateBook(@RequestBody BookCommentRequest bookCommentRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        boolean result = false;
         if (!currentUser.isAnonymousUser()) {
             bookCommentService.saveBookComment(currentUser, bookCommentRequest);
-            return new BookCommentResponse(true);
+            result = true;
         }
-        return new BookCommentResponse(false);
+        return new BookCommentResponse(result);
     }
 
     @PostMapping("/rateBookComment")
     @ResponseBody
     public CommentRatingResponse rateBook(@RequestBody CommentRatingRequest commentRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
+        boolean result = false;
         if (!currentUser.isAnonymousUser()) {
             bookCommentRatingService.saveBookCommentRating(currentUser, commentRatingRequest);
-            return new CommentRatingResponse(true);
+            result = true;
         }
-        return new CommentRatingResponse(false);
+        return new CommentRatingResponse(result);
     }
 }
