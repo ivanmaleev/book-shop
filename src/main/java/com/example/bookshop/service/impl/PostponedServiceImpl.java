@@ -8,6 +8,7 @@ import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.BookStatusService;
 import com.example.bookshop.service.PostponedService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
@@ -21,6 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class PostponedServiceImpl implements PostponedService {
 
     @Autowired
@@ -37,7 +39,15 @@ public class PostponedServiceImpl implements PostponedService {
                 postponedContents;
         String[] cookieSlugs = postponedContents.split("/");
         List<Book> books = Arrays.stream(cookieSlugs)
-                .map(slug -> bookService.getBook(slug))
+                .map(slug -> {
+                    try {
+                        return bookService.getBook(slug);
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         Map<String, BookRatingDto> bookRatings = new HashMap<>();
         bookRatingService.getBooksRating(books

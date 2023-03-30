@@ -41,7 +41,7 @@ public class GenresController {
     @GetMapping({"", "/"})
     public String getGenresPage(Model model) {
         model.addAttribute("genres", genreService.findGenres(defaultLocale));
-        model.addAttribute("topbarActive", new TopBar(false, true, false, false, false));
+        model.addAttribute("topbarActive", new TopBar().setGenresActive());
         return "genres/index";
     }
 

@@ -31,7 +31,7 @@ public class PopularPageController {
     @GetMapping({"", "/"})
     public String popularBooksPage(Model model) {
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 20));
-        model.addAttribute("topbarActive", new TopBar(false, false, false, true, false));
+        model.addAttribute("topbarActive", new TopBar().setPopularActive());
         return "books/popular";
     }
 }

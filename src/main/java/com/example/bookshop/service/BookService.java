@@ -22,7 +22,7 @@ public interface BookService {
 
     List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
-    Book getBook(String slug);
+    Book getBook(String slug) throws Exception;
 
     List<? extends Book> getBooks(Collection<String> slugList);
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
 @Repository
@@ -25,7 +26,7 @@ public interface BookRepository extends JpaRepository<BookLocal, Long> {
 
     Page<BookLocal> findAllByPubDateBetween(Date fromDate, Date toDate, Pageable pageable);
 
-    BookLocal findTopBySlug(String slug);
+    Optional<BookLocal> findTopBySlug(String slug);
 
     List<BookLocal> findAllBySlugIn(Collection<String> slugList);
 }

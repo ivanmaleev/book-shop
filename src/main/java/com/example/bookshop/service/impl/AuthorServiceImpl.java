@@ -45,7 +45,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Cacheable("author")
-    public Author findById(long id) {
-        return authorsRepository.findById(id);
+    public Author findById(long id) throws Exception {
+        return authorsRepository.findById(id)
+                .orElseThrow(() -> new Exception("Не найден автор с id = " + id));
     }
 }

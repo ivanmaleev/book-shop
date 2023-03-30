@@ -39,7 +39,7 @@ public class MainPageController {
         model.addAttribute("recommendedBooks", bookService.getPageofRecommendedBooks(0, 6));
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6, fromDate, endDate));
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));
-        model.addAttribute("topbarActive", new TopBar(true, false, false, false, false));
+        model.addAttribute("topbarActive", new TopBar().setMainActive());
         return "index";
     }
 }

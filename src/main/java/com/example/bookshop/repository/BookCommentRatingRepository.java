@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface BookCommentRatingRepository extends JpaRepository<BookCommentRating, Long> {
 
-    Optional<BookCommentRating> findAllByUserIdAndAndCommentId(Long userId, Long commentId);
+    Optional<BookCommentRating> findTopByUserIdAndAndCommentId(Long userId, Long commentId);
 }

@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -127,7 +128,7 @@ public class LoadGenresService {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (Objects.nonNull(item.getVolumeInfo())) {
 
-            if (Objects.nonNull(bookRepository.findTopBySlug(item.getId()))) {
+            if (Objects.nonNull(bookRepository.findTopBySlug(item.getId()).get())) {
                 return null;
             }
             if (item.getVolumeInfo().getAuthors() != null) {
@@ -153,9 +154,9 @@ public class LoadGenresService {
             if (item.getVolumeInfo().getCategories() != null
                     && !item.getVolumeInfo().getCategories().isEmpty()) {
                 String genreName = item.getVolumeInfo().getCategories().get(0);
-                Genre genre = genreRepository.findByName(genreName, EN);
-                if (genre != null) {
-                    book.setGenre(genre);
+                Optional<Genre> optGenre = genreRepository.findByName(genreName, EN);
+                if (optGenre.isPresent()) {
+                    book.setGenre(optGenre.get());
                 } else {
                     return null;
                 }

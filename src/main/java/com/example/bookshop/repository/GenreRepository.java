@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
@@ -21,5 +22,5 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
                     "FROM book_shop.genre(?2) AS g \n" +
                     "WHERE lower(?1) LIKE concat('%', lower(g.name), '%') \n" +
                     "LIMIT 1")
-    Genre findByName(String name, String lang);
+    Optional<Genre> findByName(String name, String lang);
 }

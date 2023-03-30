@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,8 +57,9 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public Book getBook(String slug) {
-        return bookRepository.findTopBySlug(slug);
+    public Book getBook(String slug) throws Exception {
+        return bookRepository.findTopBySlug(slug)
+                .orElseThrow(() -> new Exception("Книга с id = " + Objects.toString(slug) + " не найдена"));
     }
 
     @Override

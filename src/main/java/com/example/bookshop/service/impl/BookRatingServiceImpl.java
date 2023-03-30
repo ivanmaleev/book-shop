@@ -19,8 +19,7 @@ public class BookRatingServiceImpl implements BookRatingService {
 
     @Override
     public BookRatingDto getBookRating(String bookId) {
-        Optional<BookRatingDto> bookRating = bookRatingRepository.findBookRating(bookId);
-        return bookRating.orElseGet(() -> new BookRatingDto(bookId, 0, 0));
+        return bookRatingRepository.findBookRating(bookId).orElseGet(() -> new BookRatingDto(bookId, 0, 0));
     }
 
     @Override

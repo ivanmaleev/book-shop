@@ -67,10 +67,9 @@ public class BooksController {
     }
 
     @GetMapping("/slug/{slug}")
-    //public String bookPage(@ModelAttribute Book slugBook,
     public String bookPage(
             @ModelAttribute BookRatingDto bookRating,
-            @PathVariable("slug") String slug, Model model) {
+            @PathVariable("slug") String slug, Model model) throws Exception {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
 
         Book book = bookService.getBook(slug);
@@ -136,7 +135,7 @@ public class BooksController {
     public String getAuthorsBooksPage(@PathVariable("id") long id,
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                       @RequestParam(value = "limit", defaultValue = "6") Integer limit,
-                                      Model model) {
+                                      Model model) throws Exception {
         Author author = authorService.findById(id);
         model.addAttribute("author", author);
         model.addAttribute("authorBooks", bookService.getBooksByAuthor(author, offset, limit));

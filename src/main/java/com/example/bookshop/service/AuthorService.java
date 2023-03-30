@@ -15,5 +15,5 @@ public interface AuthorService {
 
     Map<String, List<Author>> getAuthorsMap();
 
-    Author findById(long id);
+    Author findById(long id) throws Exception;
 }

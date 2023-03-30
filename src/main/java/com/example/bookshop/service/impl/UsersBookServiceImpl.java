@@ -69,15 +69,13 @@ public class UsersBookServiceImpl implements UsersBookService {
 
     @Override
     public BookStatus getBookStatus(Long userId, String bookSlug) {
-        UsersBook usersBook = usersBookRepository.findTopByUserIdAndBookId(userId, bookSlug);
-        if (Objects.nonNull(usersBook)) {
-            if (usersBook.isArchived()) {
-                return BookStatus.ARCHIVED;
-            } else {
-                return BookStatus.KEPT;
-            }
-        }
-        return null;
+        return usersBookRepository.findTopByUserIdAndBookId(userId, bookSlug)
+                .map(usersBook -> {
+                    if (usersBook.isArchived()) {
+                        return BookStatus.ARCHIVED;
+                    }
+                    return BookStatus.KEPT;
+                }).orElse(null);
     }
 
     @Override

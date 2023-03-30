@@ -4,6 +4,7 @@ import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.dto.request.CommentRatingRequest;
 import com.example.bookshop.dto.response.BookCommentResponse;
 import com.example.bookshop.dto.response.CommentRatingResponse;
+import com.example.bookshop.entity.BookCommentRating;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookCommentRatingService;

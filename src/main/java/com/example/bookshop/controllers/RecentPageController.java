@@ -35,7 +35,7 @@ public class RecentPageController {
         Date fromDate = Date.from(Instant.now().minus(1068, ChronoUnit.DAYS));
         Date toDate = Date.from(Instant.now());
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 20, fromDate, toDate));
-        model.addAttribute("topbarActive", new TopBar(false, false, true, false, false));
+        model.addAttribute("topbarActive", new TopBar().setRecentActive());
         return "/books/recent";
     }
 }

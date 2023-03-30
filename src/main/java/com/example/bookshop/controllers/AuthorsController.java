@@ -35,12 +35,12 @@ public class AuthorsController {
     @GetMapping({"", "/"})
     public String authorsPage(Model model) {
         model.addAttribute("authorsMap", authorService.getAuthorsMap());
-        model.addAttribute("topbarActive", new TopBar(false, false, false, false, true));
+        model.addAttribute("topbarActive", new TopBar().setAuthorsActive());
         return "/authors/index";
     }
 
     @GetMapping("/slug/{id}")
-    public String authorPage(@PathVariable("id") long id, Model model) {
+    public String authorPage(@PathVariable("id") long id, Model model) throws Exception {
         Author author = authorService.findById(id);
         model.addAttribute("author", author);
         model.addAttribute("authorBooks", bookService.getBooksByAuthor(author, 0, 20));
