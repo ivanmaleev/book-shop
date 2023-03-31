@@ -12,23 +12,22 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ConditionalOnProperty(value="google.books.api.enable", havingValue = "true")
+@ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
 public class BookGoogleApi extends Book implements Serializable {
     private static final long serialVersionUID = -328587793115176643L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-    private Date pubDate;
+    private LocalDate pubDate;
     @JsonIgnore
     private Author author = new Author();
 

@@ -31,11 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.Objects;
 
 @Controller
@@ -43,9 +41,8 @@ import java.util.Objects;
 @NoArgsConstructor
 public class BooksController {
 
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    //    @Autowired
-//    private ResourceStorage storage;
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     @Autowired
     private BookService bookService;
     @Autowired
@@ -97,22 +94,8 @@ public class BooksController {
                                                            @RequestParam(value = "to", required = false) String to,
                                                            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        Date fromDate = null;
-        Date toDate = null;
-        if (StringUtils.isNotBlank(from) && StringUtils.isNotBlank(to)) {
-            try {
-                fromDate = sdf.parse(from);
-                toDate = sdf.parse(to);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (Objects.isNull(fromDate)) {
-            fromDate = Date.from(Instant.now().minus(1068, ChronoUnit.DAYS));
-        }
-        if (Objects.isNull(toDate)) {
-            toDate = Date.from(Instant.now());
-        }
+        LocalDate fromDate = StringUtils.isNotBlank(from) ? LocalDate.parse(from, dtf) : LocalDate.now().minus(1068, ChronoUnit.DAYS);
+        LocalDate toDate = StringUtils.isNotBlank(to) ? LocalDate.parse(to, dtf) : LocalDate.now();
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
     }
 

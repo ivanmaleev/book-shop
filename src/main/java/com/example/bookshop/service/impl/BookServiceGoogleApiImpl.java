@@ -11,7 +11,6 @@ import com.example.bookshop.entity.redis.BookRedis;
 import com.example.bookshop.entity.redis.BookRequestRedis;
 import com.example.bookshop.repository.BookRedisRepository;
 import com.example.bookshop.repository.BookRequestRepository;
-import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.UsersBookService;
@@ -27,11 +26,11 @@ import org.springframework.web.client.RestTemplate;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,7 +42,7 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
 public class BookServiceGoogleApiImpl implements BookService {
 
-    private final SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     @Value("${google.books.api.attempts}")
     private Integer attempts;
     @Value("${google.books.api.key}")
@@ -75,10 +74,8 @@ public class BookServiceGoogleApiImpl implements BookService {
     }
 
     @Override
-    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date fromDate, Date endDate) {
-        String from = sdf.format(fromDate);
-        String to = sdf.format(endDate);
-        return getBooks(null, from, to, offset, limit);
+    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
+        return getBooks(null, fromDate.format(dtf), endDate.format(dtf), offset, limit);
     }
 
     @Override

@@ -24,6 +24,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -125,7 +127,7 @@ public class LoadGenresService {
     private BookLocal getBook(Item item) {
         final Random random = new Random();
         BookLocal book = new BookLocal();
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if (Objects.nonNull(item.getVolumeInfo())) {
 
             if (Objects.nonNull(bookRepository.findTopBySlug(item.getId()).get())) {
@@ -173,7 +175,7 @@ public class LoadGenresService {
             try {
                 String publishedDate = item.getVolumeInfo().getPublishedDate();
                 if (publishedDate != null) {
-                    book.setPubDate(simpleDateFormat.parse(publishedDate));
+                    book.setPubDate(LocalDate.parse(publishedDate, dtf));
                 }
             } catch (Exception e) {
                 System.out.println(e.toString());

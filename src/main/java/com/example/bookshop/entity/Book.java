@@ -8,14 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -25,7 +20,7 @@ public abstract class Book implements Serializable {
 //    private static final long serialVersionUID = -328587793115176643L;
 
     private String id;
-    private Date pubDate;
+    private LocalDate pubDate;
     @JsonIgnore
     private Author author = new Author();
 

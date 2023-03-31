@@ -5,7 +5,6 @@ import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.Genre;
 import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.repository.BookRepository;
-import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
 import lombok.NoArgsConstructor;
@@ -14,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,7 +41,7 @@ public class BookServiceLocalImpl implements BookService {
     }
 
     @Override
-    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end) {
+    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
         return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent();
     }
 

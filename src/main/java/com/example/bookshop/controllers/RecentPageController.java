@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 @Controller
 @NoArgsConstructor
@@ -26,14 +25,16 @@ public class RecentPageController {
     private BookService bookService;
     @Autowired
     private CommonService commonService;
+
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
         return commonService.getCommonPageData(request, false);
     }
+
     @GetMapping({"", "/"})
     public String recentBooksPage(Model model) {
-        Date fromDate = Date.from(Instant.now().minus(1068, ChronoUnit.DAYS));
-        Date toDate = Date.from(Instant.now());
+        LocalDate fromDate = LocalDate.now().minus(1068, ChronoUnit.DAYS);
+        LocalDate toDate = LocalDate.now();
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 20, fromDate, toDate));
         model.addAttribute("topbarActive", new TopBar().setRecentActive());
         return "/books/recent";

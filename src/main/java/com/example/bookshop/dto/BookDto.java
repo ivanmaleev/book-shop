@@ -2,24 +2,19 @@ package com.example.bookshop.dto;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.entity.BookFile;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDto {
     private String id;
-    private Date pubDate;
+    private LocalDate pubDate;
     private Author author = new Author();
     private Integer isBestseller = 0;
     private String slug;

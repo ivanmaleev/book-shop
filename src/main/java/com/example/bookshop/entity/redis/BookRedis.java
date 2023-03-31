@@ -2,14 +2,13 @@ package com.example.bookshop.entity.redis;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import liquibase.pro.packaged.I;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,7 @@ import java.util.Date;
 public class BookRedis {
     @Id
     private String id;
-    private Date pubDate;
+    private LocalDate pubDate;
     private Author author;
     private Integer isBestseller = 0;
     private String slug;

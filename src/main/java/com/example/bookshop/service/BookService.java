@@ -2,11 +2,10 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,7 +15,7 @@ public interface BookService {
 
     List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit);
 
-    List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, Date from, Date end);
+    List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
 
     List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit);
 
