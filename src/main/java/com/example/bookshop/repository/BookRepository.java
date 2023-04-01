@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий книг
+ */
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
 @Repository
 public interface BookRepository extends JpaRepository<BookLocal, Long> {

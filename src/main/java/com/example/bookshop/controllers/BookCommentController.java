@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Контроллер комментариев книг
+ */
 @Controller
 public class BookCommentController {
     @Autowired

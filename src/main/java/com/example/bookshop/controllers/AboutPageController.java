@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Контроллер страницы About
+ */
 @Controller
 public class AboutPageController {
 

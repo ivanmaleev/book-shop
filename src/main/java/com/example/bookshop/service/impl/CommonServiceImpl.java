@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса управления статусами книг
+ */
 public class CommonServiceImpl implements CommonService {
 
     @Autowired
@@ -20,6 +23,13 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private UsersBookService usersBookService;
 
+    /**
+     * Возвращает общие данные страниц
+     *
+     * @param request   Входящий Http запрос
+     * @param usersPage Признак пользовательской страницы
+     * @return Обюие данные страницы
+     */
     @Override
     public CommonPageData getCommonPageData(HttpServletRequest request, boolean usersPage) {
         CommonPageData commonPageData = new CommonPageData(0, 0, 0);

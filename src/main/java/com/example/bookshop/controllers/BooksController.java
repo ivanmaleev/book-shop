@@ -36,6 +36,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+/**
+ * Контроллер страниц книг
+ */
 @Controller
 @RequestMapping("/books")
 @NoArgsConstructor
@@ -85,7 +88,7 @@ public class BooksController {
     @ResponseBody
     public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                                 @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
-        return ResponseEntity.ok(new BooksPageDto(bookService.getPageofRecommendedBooks(offset, limit)));
+        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit)));
     }
 
     @GetMapping("/recent")

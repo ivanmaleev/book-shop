@@ -22,6 +22,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса управления статусами книг
+ */
 public class CartServiceImpl implements CartService {
 
     static final private String CART_DELIMITER = "/";
@@ -32,6 +35,12 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private BookService bookService;
 
+    /**
+     * Возвращает данных по суммам в карзине
+     *
+     * @param bookDtos Список книг
+     * @return Суммовые данные для корзины
+     */
     public CartData getCartData(List<BookDto> bookDtos) {
         return new CartData(bookDtos
                 .stream()
@@ -45,6 +54,12 @@ public class CartServiceImpl implements CartService {
                         .orElse(0));
     }
 
+    /**
+     * Возвращает список книг из корзины
+     *
+     * @param cartContents Содерживое корзины куки
+     * @return Список книг
+     */
     @Override
     public List<BookDto> getCartBooks(String cartContents) {
         cartContents = cartContents.startsWith(CART_DELIMITER) ? cartContents.substring(1) : cartContents;
@@ -71,12 +86,28 @@ public class CartServiceImpl implements CartService {
                 }).collect(Collectors.toList());
     }
 
+    /**
+     * Добавляет книгу в корзину
+     *
+     * @param bookCartRequest Книга для добавления
+     * @param cookies         Куки
+     * @param response        Исходящий http ответ
+     * @param model           Модель страницы
+     */
     @Override
     public void addBookToCart(BookCartRequest bookCartRequest, Cookie[] cookies,
                                HttpServletResponse response, Model model) {
         bookStatusService.acceptRequestBookIdsToCookie("Cart", bookCartRequest, cookies, response, model, Set::addAll);
     }
 
+    /**
+     * Удаляет книгу из корзины
+     *
+     * @param bookCartRequest Книга для удаления
+     * @param cookies         Куки
+     * @param response        Исходящий http ответ
+     * @param model           Модель страницы
+     */
     @Override
     public void removeBookFromCart(BookCartRequest bookCartRequest, Cookie[] cookies,
                                     HttpServletResponse response, Model model) {

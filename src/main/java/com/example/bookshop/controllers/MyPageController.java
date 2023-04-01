@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Контроллер страницы пользователя
+ */
 @Controller
 public class MyPageController {
 

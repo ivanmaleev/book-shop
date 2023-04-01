@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Контроллер страницы поиска книг
+ */
 @Controller
 @NoArgsConstructor
 public class SearchPageController {

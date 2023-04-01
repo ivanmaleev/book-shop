@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
+/**
+ * Базовый класс для сущностей, хранящихся в БД
+ */
 @Data
 @MappedSuperclass
 @EqualsAndHashCode

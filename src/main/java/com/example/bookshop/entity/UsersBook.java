@@ -12,6 +12,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
+/**
+ * Сущность пользовательской книги
+ */
 @Data
 @NoArgsConstructor
 @Entity

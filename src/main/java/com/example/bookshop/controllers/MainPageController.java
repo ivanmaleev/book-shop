@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Контроллер главной страницы
+ */
 @Controller
 @NoArgsConstructor
 public class MainPageController {
@@ -31,7 +34,7 @@ public class MainPageController {
 
     @GetMapping({"/", "/index"})
     public String mainPage(Model model) {
-        model.addAttribute("recommendedBooks", bookService.getPageofRecommendedBooks(0, 6));
+        model.addAttribute("recommendedBooks", bookService.getPageOfRecommendedBooks(0, 6));
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6,
                 LocalDate.now().minus(1068, ChronoUnit.DAYS), LocalDate.now()));
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));

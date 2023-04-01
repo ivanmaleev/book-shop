@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * Сущность комментария книги
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -28,6 +31,7 @@ public class BookComment extends AbstractEntity {
     @CreationTimestamp
     @Column(name = "date")
     private LocalDateTime date;
+
     public BookComment(String text, BookstoreUser user, String bookId) {
         this.text = text;
         this.user = user;

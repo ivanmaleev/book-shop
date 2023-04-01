@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Контроллер страницы контактов
+ */
 @Controller
 public class ContactsPageController {
 

@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * Контроллер корзины
+ */
 @Controller
 @NoArgsConstructor
 public class CartController {

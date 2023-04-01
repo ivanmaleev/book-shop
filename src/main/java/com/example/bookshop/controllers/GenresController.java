@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Контроллер страницы жанров
+ */
 @Controller
 @NoArgsConstructor
 @RequestMapping("/genres")

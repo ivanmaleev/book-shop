@@ -37,6 +37,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса книг через Google API
+ */
 @NoArgsConstructor
 @Slf4j
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
@@ -62,32 +65,78 @@ public class BookServiceGoogleApiImpl implements BookService {
     @Autowired
     private UsersBookService usersBookService;
 
+    /**
+     * Возвращает страницу книг автора
+     *
+     * @param author Автор
+     * @param offset Оффсет для страницы
+     * @param limit  Лимит для страницы
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() + "\"";
         return getBooks(searchString, null, null, offset, limit);
     }
 
+    /**
+     * Возвращает страницу рекомендованных книг
+     *
+     * @param offset Оффсет для страницы
+     * @param limit  Лимит для страницы
+     * @return Список книг
+     */
     @Override
-    public List<? extends Book> getPageofRecommendedBooks(Integer offset, Integer limit) {
+    public List<? extends Book> getPageOfRecommendedBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
+    /**
+     * Возвращает страницу недавних книг
+     *
+     * @param offset Оффсет для страницы
+     * @param limit  Лимит для страницы
+     * @param from   Начало периода поиска
+     * @param end    Конец периода поиска
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
         return getBooks(null, fromDate.format(dtf), endDate.format(dtf), offset, limit);
     }
 
+    /**
+     * Возвращает страницу популярных книг
+     *
+     * @param offset Оффсет для страницы
+     * @param limit  Лимит для страницы
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
+    /**
+     * Возвращает страницу книг по поиску слова
+     *
+     * @param searchWord Слово для поиска
+     * @param offset     Оффсет для страницы
+     * @param limit      Лимит для страницы
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return getBooks(searchWord, null, null, offset, limit);
     }
 
+    /**
+     * Возвращает книгу по идентификатору книги
+     *
+     * @param slug Идентификатор кинги
+     * @return Книга
+     * @throws Exception Если книга не найдена
+     */
     @Override
     public Book getBook(String slug) {
         Optional<BookRedis> bookRedisOptional = bookRedisRepository.findById(slug);
@@ -98,6 +147,12 @@ public class BookServiceGoogleApiImpl implements BookService {
         return getBookFromGoogleRoot(root);
     }
 
+    /**
+     * Возвращает список книг по списку идентификаторов
+     *
+     * @param slugList Список идентификаторов
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getBooks(Collection<String> slugList) {
         if (Objects.isNull(slugList)) {
@@ -109,6 +164,14 @@ public class BookServiceGoogleApiImpl implements BookService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Возвращает страницу книг по жанру
+     *
+     * @param genreId id жанра
+     * @param offset  Оффсет для страницы
+     * @param limit   Лимит для страницы
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
@@ -116,6 +179,13 @@ public class BookServiceGoogleApiImpl implements BookService {
         return getBooks(searchString, null, null, offset, limit);
     }
 
+    /**
+     * Вовзращает список книг пользователя
+     *
+     * @param userId   Пользователь
+     * @param archived Флаг указания на то, что кнгиа находится в архиве пользователя
+     * @return Список книг
+     */
     @Override
     public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
         return usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)

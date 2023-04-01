@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 
+/**
+ * Сущность Жанр книги
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

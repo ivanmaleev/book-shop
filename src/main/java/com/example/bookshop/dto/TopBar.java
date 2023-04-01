@@ -3,6 +3,9 @@ package com.example.bookshop.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO активной страницы
+ */
 @NoArgsConstructor
 @Getter
 public class TopBar {

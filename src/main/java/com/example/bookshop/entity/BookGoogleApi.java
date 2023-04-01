@@ -17,6 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сущность книги из Google Api
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

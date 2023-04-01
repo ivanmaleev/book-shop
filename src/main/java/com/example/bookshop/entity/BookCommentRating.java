@@ -11,6 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
+/**
+ * Сущность комментария книги
+ */
 @Data
 @NoArgsConstructor
 @Entity

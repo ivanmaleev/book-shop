@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса авторов книг
+ */
 @Service
 @NoArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
@@ -28,6 +31,11 @@ public class AuthorServiceImpl implements AuthorService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Возвращает мапу Первая буква фамилии - Автор
+     *
+     * @return мапа авторов
+     */
     @Override
     @Cacheable("authorsMap")
     public Map<String, List<Author>> getAuthorsMap() {
@@ -43,6 +51,13 @@ public class AuthorServiceImpl implements AuthorService {
                 .collect(Collectors.groupingBy((Author a) -> a.getLastName().substring(0, 1)));
     }
 
+    /**
+     * Ищет автора по id
+     *
+     * @param id id автора
+     * @return Автор
+     * @throws Exception Если не найден автор
+     */
     @Override
     @Cacheable("author")
     public Author findById(long id) throws Exception {

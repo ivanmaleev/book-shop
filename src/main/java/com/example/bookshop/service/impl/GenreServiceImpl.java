@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса управления статусами книг
+ */
 @NoArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
@@ -27,6 +30,12 @@ public class GenreServiceImpl implements GenreService {
     @Autowired
     private EntityManager entityManager;
 
+    /**
+     * Возвращает список жанров
+     *
+     * @param lang - локаль
+     * @return - список {@link GenreDto}
+     */
     @Override
     public List<GenreDto> findGenres(String lang) {
         return getGenreMap(lang).entrySet()
@@ -35,7 +44,13 @@ public class GenreServiceImpl implements GenreService {
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Возвращает жанр по id
+     *
+     * @param id   id жанра
+     * @param lang Локаль
+     * @return Жанр
+     */
     @Override
     public GenreDto findGenreById(long id, String lang) {
         return getGenreMap(lang).get(id);

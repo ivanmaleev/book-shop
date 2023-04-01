@@ -1,18 +1,14 @@
 package com.example.bookshop.dto;
 
-import com.example.bookshop.entity.AbstractEntity;
 import com.example.bookshop.security.BookstoreUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * DTO комментария на книгу
+ */
 @Data
 @NoArgsConstructor
 public class BookCommentDto {

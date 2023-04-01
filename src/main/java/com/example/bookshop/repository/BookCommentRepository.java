@@ -4,11 +4,22 @@ import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.entity.BookComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Репозиторий комментариев
+ */
+@Repository
 public interface BookCommentRepository extends JpaRepository<BookComment, Long> {
 
+    /**
+     * Возвращает комментрии на книгу по индентификатору книги
+     *
+     * @param bookId Идентификатор книги
+     * @return Комментарии книги
+     */
     @Query(value = "SELECT new com.example.bookshop.dto.BookCommentDto(bc.id, bc.text, bc.user, bc.date, \n" +
             "sum(case when bcr.rating = 1 then 1 else 0 end), \n" +
             "sum(case when bcr.rating = -1 then 1 else 0 end)) \n" +

@@ -10,16 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/**
+ * Реализация сервиса комментариев на книги
+ */
 public class BookCommentServiceImpl implements BookCommentService {
 
     @Autowired
     private BookCommentRepository bookCommentRepository;
 
+    /**
+     * Сохраняет комментрий на книгу
+     *
+     * @param user               Пользователь
+     * @param bookCommentRequest Комментрий на книгу
+     * @return Результат сохранения
+     */
     @Override
-    public BookComment saveBookComment(BookstoreUser currentUser, BookCommentRequest bookCommentRequest) {
-        return bookCommentRepository.save(new BookComment(bookCommentRequest.getText(), currentUser, bookCommentRequest.getBookId()));
+    public BookComment saveBookComment(BookstoreUser user, BookCommentRequest bookCommentRequest) {
+        return bookCommentRepository.save(new BookComment(bookCommentRequest.getText(), user, bookCommentRequest.getBookId()));
     }
 
+    /**
+     * Возвращает комментрии на книгу
+     *
+     * @param bookId Идентификатор книги
+     * @return Список комментриев на книгу
+     */
     @Override
     public List<BookCommentDto> getBookComments(String bookId) {
         return bookCommentRepository.findAllByBookId(bookId);

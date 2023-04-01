@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Контроллер страницы новых книг
+ */
 @Controller
 @NoArgsConstructor
 @RequestMapping("/recent")

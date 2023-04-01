@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * DTO книги
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -7,6 +7,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.logging.Logger;
 
+/**
+ * Обработчик исключений
+ */
 @ControllerAdvice
 public class GlobalExceptionHandlerController {
 

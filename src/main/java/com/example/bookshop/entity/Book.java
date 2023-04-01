@@ -13,11 +13,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Базовая сущность книг
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Book implements Serializable {
-//    private static final long serialVersionUID = -328587793115176643L;
 
     private String id;
     private LocalDate pubDate;

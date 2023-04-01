@@ -38,6 +38,9 @@ import java.util.stream.Collectors;
 
 import static com.example.bookshop.constants.Langs.EN;
 
+/**
+ * Вспомогательный сервис загрузки данных из GoogleApi
+ */
 @NoArgsConstructor
 @Component
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")

@@ -12,21 +12,43 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса рейтинга книг
+ */
 public class BookRatingServiceImpl implements BookRatingService {
 
     @Autowired
     private BookRatingRepository bookRatingRepository;
 
+    /**
+     * Возвращает рейтинг книги
+     *
+     * @param bookId Id книги
+     * @return Рейтинг книги
+     */
     @Override
     public BookRatingDto getBookRating(String bookId) {
         return bookRatingRepository.findBookRating(bookId).orElseGet(() -> new BookRatingDto(bookId, 0, 0));
     }
 
+    /**
+     * Возвращает рейтинги книнг для списка id
+     *
+     * @param bookIds Список id кинг
+     * @return Рейтинг книг
+     */
     @Override
     public List<BookRatingDto> getBooksRating(List<String> bookIds) {
         return bookRatingRepository.findBooksRating(bookIds);
     }
 
+    /**
+     * Сохраняет рейтинг книги
+     *
+     * @param currentUser       Пользователь
+     * @param bookRatingRequest Рейтинг книги для сохранения
+     * @return Сохранённый рейтинг книги
+     */
     @Transactional
     @Override
     public BookRating saveBookRating(BookstoreUser currentUser, BookRatingRequest bookRatingRequest) {

@@ -19,6 +19,9 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса пользовательских книг
+ */
 @NoArgsConstructor
 @Service
 public class UsersBookServiceImpl implements UsersBookService {
@@ -28,6 +31,13 @@ public class UsersBookServiceImpl implements UsersBookService {
     @Autowired
     private BookRepository bookRepository;
 
+    /**
+     * Добавляет книги пользовтелю
+     *
+     * @param bookSlugList Список идентификаторов книг для добавления
+     * @param user         Пользователь
+     * @param bookStatus   Статус книг
+     */
     @Transactional
     @Override
     public void addBooksToUser(List<String> bookSlugList, BookstoreUser user, BookStatus bookStatus) {
@@ -53,6 +63,14 @@ public class UsersBookServiceImpl implements UsersBookService {
         }
     }
 
+    /**
+     * Найти список книг пользователя
+     *
+     * @param userId       id пользовтеля
+     * @param bookSlugList Список идентификаторов
+     * @param archived     Флаг указания на то, что кнгиа находится в архиве пользователя
+     * @return Список пользовтальских книг
+     */
     @Override
     public List<UsersBook> findUsersBooks(Long userId, List<String> bookSlugList, Boolean archived) {
         if (Objects.nonNull(bookSlugList) && !bookSlugList.isEmpty()) {
@@ -67,6 +85,13 @@ public class UsersBookServiceImpl implements UsersBookService {
         return usersBookRepository.findAllByUserId(userId);
     }
 
+    /**
+     * Возвращает статус книги пользователя
+     *
+     * @param userId   id пользователя
+     * @param bookSlug Идентификатор книги
+     * @return Статус книги
+     */
     @Override
     public BookStatus getBookStatus(Long userId, String bookSlug) {
         return usersBookRepository.findTopByUserIdAndBookId(userId, bookSlug)
@@ -78,6 +103,12 @@ public class UsersBookServiceImpl implements UsersBookService {
                 }).orElse(null);
     }
 
+    /**
+     * Возвращает количество книг пользователя
+     *
+     * @param userId id пользователя
+     * @return Количество книг пользователя
+     */
     @Override
     public int getCount(Long userId) {
         return usersBookRepository.getCount(userId);

@@ -22,6 +22,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса отложенных книг
+ */
 @Slf4j
 public class PostponedServiceImpl implements PostponedService {
 
@@ -32,6 +35,12 @@ public class PostponedServiceImpl implements PostponedService {
     @Autowired
     private BookService bookService;
 
+    /**
+     * Возвращает списк отложенных кнги
+     *
+     * @param postponedContents Данные куки
+     * @return Список книг
+     */
     @Override
     public List<BookDto> getPostponedBooks(String postponedContents) {
         postponedContents = postponedContents.startsWith("/") ? postponedContents.substring(1) : postponedContents;
@@ -67,11 +76,27 @@ public class PostponedServiceImpl implements PostponedService {
                 }).collect(Collectors.toList());
     }
 
+    /**
+     * Добавляает книгу в отложенные
+     *
+     * @param bookCartRequest Книга для добавления
+     * @param cookies         Куки
+     * @param response        Исходящий http ответ
+     * @param model           Модель страницы
+     */
     @Override
     public void addBookToPostponed(BookCartRequest bookCartRequest, Cookie[] cookies, HttpServletResponse response, Model model) {
         bookStatusService.acceptRequestBookIdsToCookie("Postponed", bookCartRequest, cookies, response, model, Set::addAll);
     }
 
+    /**
+     * Удаляет книгу из отложенных
+     *
+     * @param bookCartRequest Книга для удаления
+     * @param cookies         Куки
+     * @param response        Исходящий http ответ
+     * @param model           Модель страницы
+     */
     @Override
     public void removeBookFromPostponed(BookCartRequest bookCartRequest, Cookie[] cookies, HttpServletResponse response, Model model) {
         bookStatusService.acceptRequestBookIdsToCookie("Postponed", bookCartRequest, cookies, response, model, Set::removeAll);

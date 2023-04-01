@@ -1,6 +1,5 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.constants.BookStatus;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
@@ -27,6 +26,9 @@ import java.util.function.BiConsumer;
 
 import static com.example.bookshop.constants.BookStatus.ARCHIVED;
 
+/**
+ * Реализация сервиса управления статусами книг
+ */
 public class BookStatusServiceImpl implements BookStatusService {
 
     static final private String CART_DELIMITER = "/";
@@ -39,6 +41,14 @@ public class BookStatusServiceImpl implements BookStatusService {
     @Autowired
     private BookstoreUserRegister userRegister;
 
+    /**
+     * Меняет статус книги
+     *
+     * @param bookCartRequest Статус книги для изменения
+     * @param request         Входящий Http запрос
+     * @param response        Исходящий http ответ
+     * @param model           Модель страницы
+     */
     @Override
     public void changeBookStatus(BookCartRequest bookCartRequest, HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
@@ -71,6 +81,16 @@ public class BookStatusServiceImpl implements BookStatusService {
         }
     }
 
+    /**
+     * Шаблонный метод для изменения списка книг в пользовательских куки
+     *
+     * @param cookieName            Название куки
+     * @param bookCartRequest       Статус книги для изменения
+     * @param cookies               Куки
+     * @param response              Исходящий http ответ
+     * @param model                 Модель страницы
+     * @param resultBookIdsConsumer Консьюмер для изменения результата
+     */
     @Override
     public void acceptRequestBookIdsToCookie(String cookieName, BookCartRequest bookCartRequest, Cookie[] cookies,
                                              HttpServletResponse response, Model model,

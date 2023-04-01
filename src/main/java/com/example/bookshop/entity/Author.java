@@ -2,28 +2,28 @@ package com.example.bookshop.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
+/**
+ * Сущность авторов книг
+ */
 @Entity
 @Table(name = "author", schema = "book_shop")
 @Data
 public class Author extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -8510159208698888882L;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
-
-
-//    @OneToMany(mappedBy = "author")
-//    @JsonIgnore
-//    private List<Book> bookList = new ArrayList<>();
 
     public Author(List<String> authors) {
         if (Objects.nonNull(authors)) {
@@ -37,16 +37,8 @@ public class Author extends AbstractEntity implements Serializable {
         this.lastName = "";
     }
 
-//    public List<Book> getBookList() {
-//        return bookList;
-//    }
-//
-//    public void setBookList(List<Book> bookList) {
-//        this.bookList = bookList;
-//    }
-
     @Override
     public String toString() {
-        return lastName + " " + firstName;
+        return String.format("%s %s", lastName, firstName);
     }
 }

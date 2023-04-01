@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Контроллер страницы отложенных книг пользователя
+ */
 @Controller
 public class PostponedPageController {
 
