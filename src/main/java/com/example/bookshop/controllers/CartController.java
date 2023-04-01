@@ -6,6 +6,9 @@ import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.service.CartService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import java.util.List;
  */
 @Controller
 @NoArgsConstructor
+@Api(description = "Контроллер корзины")
 public class CartController {
 
     @Autowired
@@ -38,6 +42,8 @@ public class CartController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы корзины")
+    @ApiResponse(responseCode = "200", description = "Страница корзины")
     @GetMapping("/books/cart")
     public String cartPage(@CookieValue(value = "cartContents", required = false) String cartContents,
                            Model model) {

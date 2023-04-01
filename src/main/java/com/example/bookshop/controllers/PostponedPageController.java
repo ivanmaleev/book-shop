@@ -4,6 +4,9 @@ import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.PostponedService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
  * Контроллер страницы отложенных книг пользователя
  */
 @Controller
+@Api(description = "Контроллер страницы отложенных книг пользователя")
 public class PostponedPageController {
 
     @Autowired
@@ -33,6 +37,8 @@ public class PostponedPageController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы отложенных книг")
+    @ApiResponse(responseCode = "200", description = "Страница отложенных книг")
     @GetMapping("/books/postponed")
     public String postponedPage(@CookieValue(value = "postponedContents", required = false) String postponedContents,
                                 Model model) {

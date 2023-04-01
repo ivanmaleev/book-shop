@@ -2,6 +2,9 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.service.BookStatusService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +20,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @NoArgsConstructor
+@Api(description = "Контроллер смены статуса книг")
 public class BookStatusController {
 
     @Autowired
     private BookStatusService bookStatusService;
 
+    @ApiOperation("Метод изменения статуса книги")
     @PostMapping("/books/changeBookStatus")
     public void handleChangeBookStatus(@RequestBody BookCartRequest bookCartRequest,
                                        HttpServletRequest request,

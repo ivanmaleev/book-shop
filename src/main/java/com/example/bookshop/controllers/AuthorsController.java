@@ -6,6 +6,9 @@ import com.example.bookshop.entity.Author;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/authors")
+@Api(description = "Контроллер авторов книг")
 public class AuthorsController {
 
     @Autowired
@@ -35,6 +39,8 @@ public class AuthorsController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы списка авторов")
+    @ApiResponse(responseCode = "200", description = "Страница списка авторов")
     @GetMapping({"", "/"})
     public String authorsPage(Model model) {
         model.addAttribute("authorsMap", authorService.getAuthorsMap());
@@ -42,6 +48,8 @@ public class AuthorsController {
         return "/authors/index";
     }
 
+    @ApiOperation("Получение страницы автора")
+    @ApiResponse(responseCode = "200", description = "Страница автора")
     @GetMapping("/slug/{id}")
     public String authorPage(@PathVariable("id") long id, Model model) throws Exception {
         Author author = authorService.findById(id);

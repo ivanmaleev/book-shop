@@ -7,6 +7,9 @@ import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/genres")
+@Api(description = "Контроллер страницы жанров")
 public class GenresController {
 
     @Value("${locale.default}")
@@ -41,6 +45,8 @@ public class GenresController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы жанров")
+    @ApiResponse(responseCode = "200", description = "Страница жанров")
     @GetMapping({"", "/"})
     public String getGenresPage(Model model) {
         model.addAttribute("genres", genreService.findGenres(defaultLocale));
@@ -48,9 +54,11 @@ public class GenresController {
         return "genres/index";
     }
 
+    @ApiOperation("Получение страницы жанра")
+    @ApiResponse(responseCode = "200", description = "Страница жанра")
     @GetMapping("/slug/{id}")
-    public String bookPage(@PathVariable("id") long id, Model model) {
-        GenreDto genreDto = genreService.findGenreById(id, Langs.RU);
+    public String bookPage(@PathVariable("id") long genreId, Model model) {
+        GenreDto genreDto = genreService.findGenreById(genreId, Langs.RU);
         model.addAttribute("genre", genreDto);
         model.addAttribute("booksByGenre", bookService.getBooksByGenreId(genreDto.getId(), 0, 20));
         return "/genres/slug";

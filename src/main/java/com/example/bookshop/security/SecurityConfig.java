@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/my","/profile","/myarchive").hasRole("USER")//.authenticated()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/**", "/swagger-ui/**").permitAll()
                 .and().formLogin()
                 .loginPage("/signin").failureUrl("/signin")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token");

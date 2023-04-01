@@ -3,6 +3,9 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * Контроллер страницы профиля пользователя
  */
 @Controller
+@Api(description = "Контроллер страницы профиля пользователя")
 public class ProfilePageController {
 
     @Autowired
@@ -26,6 +30,8 @@ public class ProfilePageController {
         return commonService.getCommonPageData(request, true);
     }
 
+    @ApiOperation("Получение страницы профиля пользователя")
+    @ApiResponse(responseCode = "200", description = "Страница профиля пользователя")
     @GetMapping("/profile")
     public String profilePage(Model model) {
         model.addAttribute("curUsr", userRegister.getCurrentUser());

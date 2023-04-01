@@ -5,6 +5,9 @@ import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * Контроллер страницы пользователя
  */
 @Controller
+@Api(description = "Контроллер страницы пользователя")
 public class MyPageController {
 
     @Autowired
@@ -29,6 +33,9 @@ public class MyPageController {
     public CommonPageData commonPageData(HttpServletRequest request) {
         return commonService.getCommonPageData(request, true);
     }
+
+    @ApiOperation("Получение страницы книг пользователя")
+    @ApiResponse(responseCode = "200", description = "Страница книг пользователя")
     @GetMapping("/my")
     public String myPage(Model model) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();

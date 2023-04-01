@@ -4,6 +4,7 @@ import com.example.bookshop.data.ApiResponse;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.errs.BookstoreApiWrongParameterException;
 import com.example.bookshop.service.BookService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@Api(description = "Рест-контроллер книг")
 public class BooksRestApiController {
 
     private final BookService bookService;

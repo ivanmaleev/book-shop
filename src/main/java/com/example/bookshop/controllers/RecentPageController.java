@@ -4,6 +4,9 @@ import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/recent")
+@Api(description = "Контроллер страницы новых книг")
 public class RecentPageController {
 
     @Autowired
@@ -34,6 +38,8 @@ public class RecentPageController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы новых книг")
+    @ApiResponse(responseCode = "200", description = "Страница новых книг")
     @GetMapping({"", "/"})
     public String recentBooksPage(Model model) {
         LocalDate fromDate = LocalDate.now().minus(1068, ChronoUnit.DAYS);

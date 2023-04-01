@@ -8,6 +8,9 @@ import com.example.bookshop.security.ContactConfirmationResponse;
 import com.example.bookshop.security.RegistrationForm;
 import com.example.bookshop.security.SmsService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -29,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequiredArgsConstructor
+@Api(description = "Контроллер авторизации")
 public class AuthUserController {
 
     private final BookstoreUserRegister userRegister;
@@ -42,17 +46,23 @@ public class AuthUserController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы авторизации")
+    @ApiResponse(responseCode = "200", description = "Страница авторизации")
     @GetMapping("/signin")
-    public String signinPage() {
+    public String signInPage() {
         return "signin";
     }
 
+    @ApiOperation("Получение страницы регистрации")
+    @ApiResponse(responseCode = "200", description = "Страница регистрации")
     @GetMapping("/signup")
     public String handleSignUp(Model model) {
         model.addAttribute("regForm", new RegistrationForm());
         return "signup";
     }
 
+    @ApiOperation("Подтверждение регистрации по e-mail")
+    @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
     public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
@@ -67,12 +77,14 @@ public class AuthUserController {
         }
     }
 
+    @ApiOperation("Подтверждение регистрации по e-mail")
+    @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestEmailConfirmation")
     @ResponseBody
     public ContactConfirmationResponse handleRequestEmailConfirmation(ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("bookstore00@mail.ru");
+        message.setFrom("book-shop@mail.ru");
         message.setTo(payload.getContact());
         SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
         smsService.saveNewCode(smsCode);

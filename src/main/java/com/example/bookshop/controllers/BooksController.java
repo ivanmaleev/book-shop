@@ -15,6 +15,9 @@ import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.UsersBookService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,7 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/books")
 @NoArgsConstructor
+@Api(description = "Контроллер книг")
 public class BooksController {
 
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -66,6 +70,8 @@ public class BooksController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Метод получения страницы книги")
+    @ApiResponse(responseCode = "200", description = "Страница книги")
     @GetMapping("/slug/{slug}")
     public String bookPage(
             @ModelAttribute BookRatingDto bookRating,
@@ -84,6 +90,9 @@ public class BooksController {
         return "/books/slug";
     }
 
+    @ApiOperation("Метод получения списка рекоммендованных книг с пагинацией")
+    @ApiResponse(responseCode = "200",
+            description = "Список книг")
     @GetMapping("/recommended")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
@@ -91,6 +100,9 @@ public class BooksController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit)));
     }
 
+    @ApiOperation("Метод получения списка недавних книг с пагинацией")
+    @ApiResponse(responseCode = "200",
+            description = "Список книг")
     @GetMapping("/recent")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getRecentBooksPage(@RequestParam(value = "from", required = false) String from,
@@ -102,6 +114,9 @@ public class BooksController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
     }
 
+    @ApiOperation("Метод получения списка популярных книг с пагинацией")
+    @ApiResponse(responseCode = "200",
+            description = "Список книг")
     @GetMapping("/popular")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getPopularBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
@@ -109,14 +124,20 @@ public class BooksController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit)));
     }
 
+    @ApiOperation("Метод получения списка книг по жанру")
+    @ApiResponse(responseCode = "200",
+            description = "Список книг")
     @GetMapping("/genre/{id}")
     @ResponseBody
-    public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long id,
+    public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long genreId,
                                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(id, offset, limit)));
+        return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(genreId, offset, limit)));
     }
 
+    @ApiOperation("Метод получения списка книг по автору")
+    @ApiResponse(responseCode = "200",
+            description = "Список книг")
     @GetMapping("/author/{id}")
     public String getAuthorsBooksPage(@PathVariable("id") long id,
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
@@ -128,6 +149,9 @@ public class BooksController {
         return "books/author";
     }
 
+    @ApiOperation("Сохранить рейтинг книги")
+    @ApiResponse(responseCode = "200",
+            description = "Реузльтат изменения рейтинга книги")
     @PostMapping("/rateBook")
     @ResponseBody
     public ResponseEntity<BookRatingResponse> rateBook(@RequestBody BookRatingRequest bookRatingRequest) {

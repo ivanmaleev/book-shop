@@ -6,6 +6,9 @@ import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.errs.EmptySearchException;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @NoArgsConstructor
+@Api(description = "Контроллер страницы поиска книг")
 public class SearchPageController {
 
     @Autowired
@@ -37,6 +41,8 @@ public class SearchPageController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение поиска книг")
+    @ApiResponse(responseCode = "200", description = "Страница с результатом поиска книг")
     @GetMapping(value = {"/search", "/search/{SearchWord}"})
     public String getSearchResultBooks(@PathVariable(value = "SearchWord", required = false) String searchWord,
                                        Model model) throws EmptySearchException {
@@ -50,6 +56,8 @@ public class SearchPageController {
         }
     }
 
+    @ApiOperation("Метод поиска книг с пагинацией")
+    @ApiResponse(responseCode = "200", description = "Спискок книг")
     @GetMapping("/searchPage/{SearchWord}")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getSearchResultBooksPage(

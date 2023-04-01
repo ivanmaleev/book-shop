@@ -4,6 +4,9 @@ import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/popular")
+@Api(description = "Контроллер страницы популярных книг")
 public class PopularPageController {
 
     @Autowired
@@ -31,6 +35,8 @@ public class PopularPageController {
         return commonService.getCommonPageData(request, false);
     }
 
+    @ApiOperation("Получение страницы популярных книг")
+    @ApiResponse(responseCode = "200", description = "Страница популярных книг")
     @GetMapping({"", "/"})
     public String popularBooksPage(Model model) {
         model.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 20));
