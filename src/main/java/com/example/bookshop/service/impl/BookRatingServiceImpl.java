@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Реализация сервиса рейтинга книг
@@ -52,7 +51,7 @@ public class BookRatingServiceImpl implements BookRatingService {
     @Transactional
     @Override
     public BookRating saveBookRating(BookstoreUser currentUser, BookRatingRequest bookRatingRequest) {
-        List<BookRating> bookRating = bookRatingRepository.findAllByUserAndAndBookId(currentUser, bookRatingRequest.getBookId());
+        List<BookRating> bookRating = bookRatingRepository.findAllByUserAndBookId(currentUser, bookRatingRequest.getBookId());
         if (!bookRating.isEmpty()) {
             bookRating.get(0).setRating(bookRatingRequest.getValue());
             return bookRating.get(0);

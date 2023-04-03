@@ -23,13 +23,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorsRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public AuthorServiceImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     /**
      * Возвращает мапу Первая буква фамилии - Автор
@@ -39,14 +32,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Cacheable("authorsMap")
     public Map<String, List<Author>> getAuthorsMap() {
-        List<Author> authorList = jdbcTemplate.query("SELECT * FROM book_shop.author", (ResultSet rs, int rownum) -> {
-            Author author = new Author();
-            author.setId(rs.getLong("id"));
-            author.setFirstName(rs.getString("first_name"));
-            author.setLastName(rs.getString("last_name"));
-            return author;
-        });
-        return authorList
+        return authorsRepository.findAll()
                 .stream()
                 .collect(Collectors.groupingBy((Author a) -> a.getLastName().substring(0, 1)));
     }

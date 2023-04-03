@@ -5,6 +5,7 @@ import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.UsersBookRepository;
 import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,6 @@ public class UsersBookServiceImpl implements UsersBookService {
 
     @Autowired
     private UsersBookRepository usersBookRepository;
-    @Autowired
-    private BookRepository bookRepository;
 
     /**
      * Добавляет книги пользовтелю

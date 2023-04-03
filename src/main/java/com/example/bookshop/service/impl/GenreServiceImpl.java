@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +39,7 @@ public class GenreServiceImpl implements GenreService {
      */
     @Override
     public List<GenreDto> findGenres(String lang) {
-        return getGenreMap(lang).entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+        return new ArrayList<>(getGenreMap(lang).values());
     }
 
     /**

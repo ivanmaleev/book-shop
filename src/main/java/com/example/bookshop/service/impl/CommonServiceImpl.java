@@ -5,6 +5,7 @@ import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.UsersBookService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;
@@ -39,19 +40,27 @@ public class CommonServiceImpl implements CommonService {
         }
 
         if (Objects.nonNull(request.getCookies())) {
-            Optional<Cookie> cartContents = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals("cartContents"))
-                    .findFirst();
-            if (cartContents.isPresent() && !cartContents.get().getValue().equals("")) {
-                commonPageData.setCartBooksCounter(Arrays.asList(cartContents.get().getValue().split("/")).size());
-            }
-            Optional<Cookie> postponedContents = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals("postponedContents"))
-                    .findFirst();
-            if (postponedContents.isPresent() && !postponedContents.get().getValue().equals("")) {
-                commonPageData.setPostponedBooksCounter(Arrays.asList(postponedContents.get().getValue().split("/")).size());
-            }
+            setCartBooksCounter(request, commonPageData);
+            setPostponedBooksCounter(request, commonPageData);
         }
         return commonPageData;
+    }
+
+    private void setCartBooksCounter(HttpServletRequest request, CommonPageData commonPageData) {
+        commonPageData.setCartBooksCounter(getContentBooksCounter(request, "cartContents"));
+    }
+
+    private void setPostponedBooksCounter(HttpServletRequest request, CommonPageData commonPageData) {
+        commonPageData.setPostponedBooksCounter(getContentBooksCounter(request, "postponedContents"));
+    }
+
+    private Integer getContentBooksCounter(HttpServletRequest request, String contentName) {
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(contentName))
+                .findFirst()
+                .map(Cookie::getValue)
+                .filter(StringUtils::isNotBlank)
+                .map(contentValue -> contentValue.split("/").length)
+                .orElse(0);
     }
 }

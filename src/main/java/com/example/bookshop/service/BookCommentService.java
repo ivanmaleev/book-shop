@@ -16,7 +16,7 @@ import java.util.List;
 public interface BookCommentService {
 
     /**
-     * Сохраняет комментрий на книгу
+     * Сохраняет комментарий на книгу
      *
      * @param user               Пользователь
      * @param bookCommentRequest Комментрий на книгу
@@ -26,7 +26,7 @@ public interface BookCommentService {
     BookComment saveBookComment(BookstoreUser user, BookCommentRequest bookCommentRequest);
 
     /**
-     * Возвращает комментрии на книгу
+     * Возвращает комментарии на книгу
      *
      * @param bookId Идентификатор книги
      * @return Список комментриев на книгу

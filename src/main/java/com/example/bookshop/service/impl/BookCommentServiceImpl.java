@@ -19,7 +19,7 @@ public class BookCommentServiceImpl implements BookCommentService {
     private BookCommentRepository bookCommentRepository;
 
     /**
-     * Сохраняет комментрий на книгу
+     * Сохраняет комментарий на книгу
      *
      * @param user               Пользователь
      * @param bookCommentRequest Комментрий на книгу

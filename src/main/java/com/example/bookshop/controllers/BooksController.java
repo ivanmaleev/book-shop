@@ -109,7 +109,7 @@ public class BooksController {
                                                            @RequestParam(value = "to", required = false) String to,
                                                            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                                            @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
-        LocalDate fromDate = StringUtils.isNotBlank(from) ? LocalDate.parse(from, dtf) : LocalDate.now().minus(1068, ChronoUnit.DAYS);
+        LocalDate fromDate = StringUtils.isNotBlank(from) ? LocalDate.parse(from, dtf) : LocalDate.now().minus(3, ChronoUnit.YEARS);
         LocalDate toDate = StringUtils.isNotBlank(to) ? LocalDate.parse(to, dtf) : LocalDate.now();
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
     }

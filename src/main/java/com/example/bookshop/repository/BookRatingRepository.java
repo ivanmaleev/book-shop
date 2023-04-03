@@ -43,11 +43,11 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
     List<BookRatingDto> findBooksRating(List<String> bookIds);
 
     /**
-     * Возвращает список рейтингов кинг пользователя
+     * Возвращает список рейтингов книг пользователя
      *
      * @param user   Пользователь
      * @param bookId Идентификатор книги
      * @return Список рейтингов книг
      */
-    List<BookRating> findAllByUserAndAndBookId(BookstoreUser user, String bookId);
+    List<BookRating> findAllByUserAndBookId(BookstoreUser user, String bookId);
 }

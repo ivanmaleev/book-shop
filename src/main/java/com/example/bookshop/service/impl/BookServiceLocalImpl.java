@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -94,6 +93,7 @@ public class BookServiceLocalImpl implements BookService {
      */
     @Override
     public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+        //TODO
         return Collections.emptyList();
     }
 
@@ -107,7 +107,7 @@ public class BookServiceLocalImpl implements BookService {
     @Override
     public Book getBook(String slug) throws Exception {
         return bookRepository.findTopBySlug(slug)
-                .orElseThrow(() -> new Exception("Книга с id = " + Objects.toString(slug) + " не найдена"));
+                .orElseThrow(() -> new Exception(String.format("%s %s %s", "Книга с id =", slug, "не найдена")));
     }
 
     /**

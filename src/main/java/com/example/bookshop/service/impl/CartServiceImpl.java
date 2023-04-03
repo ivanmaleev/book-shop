@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
     private BookService bookService;
 
     /**
-     * Возвращает данных по суммам в карзине
+     * Возвращает данные по суммам в карзине
      *
      * @param bookDtos Список книг
      * @return Суммовые данные для корзины
@@ -96,7 +96,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void addBookToCart(BookCartRequest bookCartRequest, Cookie[] cookies,
-                               HttpServletResponse response, Model model) {
+                              HttpServletResponse response, Model model) {
         bookStatusService.acceptRequestBookIdsToCookie("Cart", bookCartRequest, cookies, response, model, Set::addAll);
     }
 
@@ -110,7 +110,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void removeBookFromCart(BookCartRequest bookCartRequest, Cookie[] cookies,
-                                    HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
         bookStatusService.acceptRequestBookIdsToCookie("Cart", bookCartRequest, cookies, response, model, Set::removeAll);
     }
 }

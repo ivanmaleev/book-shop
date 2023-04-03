@@ -42,7 +42,7 @@ public class RecentPageController {
     @ApiResponse(responseCode = "200", description = "Страница новых книг")
     @GetMapping({"", "/"})
     public String recentBooksPage(Model model) {
-        LocalDate fromDate = LocalDate.now().minus(1068, ChronoUnit.DAYS);
+        LocalDate fromDate = LocalDate.now().minus(3, ChronoUnit.YEARS);
         LocalDate toDate = LocalDate.now();
         model.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 20, fromDate, toDate));
         model.addAttribute("topbarActive", new TopBar().setRecentActive());

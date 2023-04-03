@@ -1,6 +1,7 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.constants.Langs;
+import com.example.bookshop.data.book.SaleInfo;
 import com.example.bookshop.data.google.api.books.Root;
 import com.example.bookshop.dto.AlphabetObject;
 import com.example.bookshop.dto.GenreDto;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -75,7 +77,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      */
     @Override
     public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
-        String searchString = "+inauthor:\"" + author.getLastName() + " " + author.getFirstName() + "\"";
+        String searchString = String.format("%s\"%s %s\"", "+inauthor:", author.getLastName(), author.getFirstName());
         return getBooks(searchString, null, null, offset, limit);
     }
 
@@ -94,10 +96,10 @@ public class BookServiceGoogleApiImpl implements BookService {
     /**
      * Возвращает страницу недавних книг
      *
-     * @param offset Оффсет для страницы
-     * @param limit  Лимит для страницы
-     * @param from   Начало периода поиска
-     * @param end    Конец периода поиска
+     * @param offset   Оффсет для страницы
+     * @param limit    Лимит для страницы
+     * @param fromDate Начало периода поиска
+     * @param endDate  Конец периода поиска
      * @return Список книг
      */
     @Override
@@ -139,12 +141,13 @@ public class BookServiceGoogleApiImpl implements BookService {
      */
     @Override
     public Book getBook(String slug) {
-        Optional<BookRedis> bookRedisOptional = bookRedisRepository.findById(slug);
-        if (bookRedisOptional.isPresent()) {
-            return new BookGoogleApi(bookRedisOptional.get());
-        }
-        com.example.bookshop.data.book.Root root = restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
-        return getBookFromGoogleRoot(root);
+        return bookRedisRepository.findById(slug)
+                .map(BookGoogleApi::new)
+                .orElseGet(() -> {
+                    com.example.bookshop.data.book.Root root =
+                            restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
+                    return (BookGoogleApi) getBookFromGoogleRoot(root);
+                });
     }
 
     /**
@@ -159,7 +162,7 @@ public class BookServiceGoogleApiImpl implements BookService {
             return Collections.emptyList();
         }
         return slugList
-                .stream()
+                .parallelStream()
                 .map(this::getBook)
                 .collect(Collectors.toList());
     }
@@ -175,7 +178,7 @@ public class BookServiceGoogleApiImpl implements BookService {
     @Override
     public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
-        String searchString = "+subject:\"" + genreDto.getName() + "\"";
+        String searchString = String.format("%s\"%s\"", "+subject:", genreDto.getName());
         return getBooks(searchString, null, null, offset, limit);
     }
 
@@ -189,7 +192,7 @@ public class BookServiceGoogleApiImpl implements BookService {
     @Override
     public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
         return usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
-                .stream()
+                .parallelStream()
                 .map(usersBook -> getBook(usersBook.getBookId()))
                 .collect(Collectors.toList());
     }
@@ -242,53 +245,54 @@ public class BookServiceGoogleApiImpl implements BookService {
         ArrayList<BookGoogleApi> books = new ArrayList<>();
         List<String> statuses = List.of("PAID", "CART", "KEPT", "");
         final Random random = new Random();
-        if (Objects.nonNull(root) && Objects.nonNull(root.getItems())) {
-            root.getItems()
-                    .forEach(item -> {
-                        BookGoogleApi book = new BookGoogleApi();
-                        if (Objects.nonNull(item.getVolumeInfo())) {
-                            if (Objects.nonNull(item.getVolumeInfo().getAuthors())) {
-                                book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
-                            }
-                            book.setTitle(item.getVolumeInfo().getTitle());
-                            book.setImage(item.getVolumeInfo().getImageLinks().getThumbnail());
+        Optional.ofNullable(root)
+                .map(Root::getItems)
+                .ifPresent(itemsNotNull ->
+                        itemsNotNull.forEach(item -> {
+                            BookGoogleApi book = new BookGoogleApi();
+
                             book.setSlug(item.getId());
                             book.setId(item.getId());
-                        }
-                        if (Objects.nonNull(item.getSaleInfo()) && Objects.nonNull(item.getSaleInfo().getRetailPrice())) {
-                            book.setPrice((int) item.getSaleInfo().getRetailPrice().getAmount());
-                            Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
-                            book.setPriceOld(oldPrice.intValue());
-                        }
-                        //TODO бестселлер и стутус книги
-                        int i = random.nextInt(10);
-                        if (i > 7) {
-                            book.setIsBestseller(1);
-                        }
-                        book.setStatus(statuses.get(random.nextInt(4)));
-                        log.debug("Load book " + book);
-                        books.add(book);
-                    });
-        }
+                            Optional.ofNullable(item.getVolumeInfo())
+                                    .ifPresent(volumeInfoNotNull -> {
+                                        book.setAuthor(new Author(volumeInfoNotNull.getAuthors()));
+                                        book.setTitle(volumeInfoNotNull.getTitle());
+                                        book.setImage(volumeInfoNotNull.getImageLinks().getThumbnail());
+                                    });
+                            Optional<com.example.bookshop.data.google.api.books.SaleInfo> saleInfo = Optional.ofNullable(item.getSaleInfo());
+                            book.setPrice(saleInfo.map(com.example.bookshop.data.google.api.books.SaleInfo::getRetailPrice)
+                                    .map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
+                            book.setPriceOld(saleInfo.map(com.example.bookshop.data.google.api.books.SaleInfo::getListPrice)
+                                    .map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
+                            //TODO бестселлер и стутус книги
+                            int i = random.nextInt(10);
+                            if (i > 7) {
+                                book.setIsBestseller(1);
+                            }
+                            book.setStatus(statuses.get(random.nextInt(4)));
+                            log.debug("Load book " + book);
+                            books.add(book);
+                        }));
         return books;
     }
 
     private Book getBookFromGoogleRoot(com.example.bookshop.data.book.Root root) {
         Book book = new BookGoogleApi();
-        if (Objects.nonNull(root)) {
-            if (Objects.nonNull(root.getVolumeInfo())) {
-                book.setAuthor(new Author(root.getVolumeInfo().getAuthors()));
-                book.setTitle(root.getVolumeInfo().getTitle());
-                book.setImage(root.getVolumeInfo().getImageLinks().getThumbnail());
-                book.setSlug(root.getId());
-                book.setId(root.getId());
-            }
-            if (Objects.nonNull(root.getSaleInfo())) {
-                book.setPrice((int) root.getSaleInfo().getRetailPrice().getAmount());
-                Double oldPrice = root.getSaleInfo().getListPrice().getAmount();
-                book.setPriceOld(oldPrice.intValue());
-            }
-        }
+
+        Optional.ofNullable(root)
+                .ifPresent(rootNotNull -> {
+                    book.setSlug(rootNotNull.getId());
+                    book.setId(rootNotNull.getId());
+                    Optional.ofNullable(rootNotNull.getVolumeInfo())
+                            .ifPresent(volumeInfoNotNull -> {
+                                book.setAuthor(new Author(volumeInfoNotNull.getAuthors()));
+                                book.setTitle(volumeInfoNotNull.getTitle());
+                                book.setImage(volumeInfoNotNull.getImageLinks().getThumbnail());
+                            });
+                    Optional<SaleInfo> saleInfo = Optional.ofNullable(rootNotNull.getSaleInfo());
+                    book.setPrice(saleInfo.map(SaleInfo::getRetailPrice).map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
+                    book.setPriceOld(saleInfo.map(SaleInfo::getListPrice).map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
+                });
         bookRedisRepository.save(new BookRedis(book));
         log.debug("Load book " + book);
         return book;
@@ -327,7 +331,7 @@ public class BookServiceGoogleApiImpl implements BookService {
             }
         }
         final List<BookGoogleApi> books = getBooksFromGoogleRoot(root);
-        if (!"".equals(requestUrl)) {
+        if (StringUtils.isNotBlank(requestUrl)) {
             bookRequestRepository.save(new BookRequestRedis(requestUrl, books
                     .stream()
                     .map(BookRedis::new)

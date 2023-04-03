@@ -108,16 +108,14 @@ public class BookStatusServiceImpl implements BookStatusService {
         StringJoiner bookIdsJoiner = new StringJoiner(CART_DELIMITER);
         resultBookIds.forEach(bookIdsJoiner::add);
         String cookieValue = bookIdsJoiner.toString();
-        if (StringUtils.isNotBlank(cookieValue)) {
-            Cookie cookie = new Cookie(cookieNameContent, cookieValue);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        }
+        Cookie cookie = new Cookie(cookieNameContent, cookieValue);
+        cookie.setPath("/");
+        response.addCookie(cookie);
         model.addAttribute(getCookieNameEmpty(cookieName), StringUtils.isBlank(cookieValue));
     }
 
     private String getCookieNameEmpty(String cookieName) {
-        return "is".concat(cookieName).concat("Empty");
+        return String.format("%s%s%s", "is", cookieName, "Empty");
     }
 
     private String getCookieNameContent(String cookieName) {
@@ -125,23 +123,18 @@ public class BookStatusServiceImpl implements BookStatusService {
     }
 
     private String getCookieContentValue(Cookie[] cookies, String cookieNameContent) {
-        Optional<Cookie> cookieContentOptional = getCookieContentOptional(cookies, cookieNameContent);
-        String cartValueCurrent = "";
-        if (cookieContentOptional.isPresent() &&
-                StringUtils.isNotBlank(cookieContentOptional.get().getValue())) {
-            cartValueCurrent = cookieContentOptional.get().getValue();
-        }
-        return cartValueCurrent;
+        return getCookieContentOptional(cookies, cookieNameContent)
+                .map(Cookie::getValue)
+                .orElse("");
     }
 
     private Optional<Cookie> getCookieContentOptional(Cookie[] cookies, String cookieNameContent) {
-        Optional<Cookie> cartContentsOptional = Optional.empty();
-        if (Objects.nonNull(cookies)) {
-            cartContentsOptional = Arrays.stream(cookies)
-                    .filter(cookie -> cookie.getName().equals(cookieNameContent))
-                    .findFirst();
-        }
-        return cartContentsOptional;
+        return Optional.ofNullable(cookies)
+                .map(cookiesNotNull ->
+                        Arrays.stream(cookiesNotNull)
+                                .filter(cookie -> cookie.getName().equals(cookieNameContent))
+                                .findAny()
+                ).flatMap(cookieNotNull -> cookieNotNull);
     }
 
     private List<String> getRequestBookIds(BookCartRequest bookCartRequest) {
