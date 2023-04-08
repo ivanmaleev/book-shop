@@ -4,7 +4,6 @@ import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.dto.request.CommentRatingRequest;
 import com.example.bookshop.dto.response.BookCommentResponse;
 import com.example.bookshop.dto.response.CommentRatingResponse;
-import com.example.bookshop.entity.BookCommentRating;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookCommentRatingService;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Контроллер комментариев книг
@@ -39,7 +40,7 @@ public class BookCommentController {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {
-            bookCommentService.saveBookComment(currentUser, bookCommentRequest);
+            CompletableFuture.runAsync(() -> bookCommentService.saveBookComment(currentUser, bookCommentRequest));
             result = true;
         }
         return new BookCommentResponse(result);
@@ -53,7 +54,7 @@ public class BookCommentController {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {
-            bookCommentRatingService.saveBookCommentRating(currentUser, commentRatingRequest);
+            CompletableFuture.runAsync(() -> bookCommentRatingService.saveBookCommentRating(currentUser, commentRatingRequest));
             result = true;
         }
         return new CommentRatingResponse(result);

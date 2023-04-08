@@ -1,6 +1,7 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.BooksPageDto;
+import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.request.BookRatingRequest;
@@ -19,8 +20,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +40,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Контроллер страниц книг
@@ -46,10 +52,12 @@ import java.util.Objects;
 @RequestMapping("/books")
 @NoArgsConstructor
 @Api(description = "Контроллер книг")
+@Slf4j
 public class BooksController {
 
+    @Value("${requests.timout}")
+    private Integer timeoutMillis;
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
     @Autowired
     private BookService bookService;
     @Autowired
@@ -78,11 +86,21 @@ public class BooksController {
             @PathVariable("slug") String slug, Model model) throws Exception {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
 
-        Book book = bookService.getBook(slug);
-        book.setStatus(Objects.toString(usersBookService.getBookStatus(currentUser.getId(), slug)));
-        model.addAttribute("slugBook", book);
-        model.addAttribute("bookRating", bookRatingService.getBookRating(slug));
-        model.addAttribute("bookComments", bookCommentService.getBookComments(slug));
+        CompletableFuture<Book> slugBookFuture = CompletableFuture.supplyAsync(() -> {
+            Book book = null;
+            try {
+                book = bookService.getBook(slug);
+                book.setStatus(Objects.toString(usersBookService.getBookStatus(currentUser.getId(), slug)));
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+            return book;
+        });
+        CompletableFuture<BookRatingDto> bookRatingFuture = CompletableFuture.supplyAsync(() -> bookRatingService.getBookRating(slug));
+        CompletableFuture<List<BookCommentDto>> bookCommentsFuture = CompletableFuture.supplyAsync(() -> bookCommentService.getBookComments(slug));
+        model.addAttribute("slugBook", slugBookFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("bookRating", bookRatingFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("bookComments", bookCommentsFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
 
         if (!currentUser.isAnonymousUser()) {
             return "/books/slugmy";
@@ -143,22 +161,34 @@ public class BooksController {
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                       @RequestParam(value = "limit", defaultValue = "6") Integer limit,
                                       Model model) throws Exception {
+        CompletableFuture<Author> authorFuture = CompletableFuture.supplyAsync(() -> {
+            Author author = null;
+            try {
+                author = authorService.findById(id);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+            return author;
+        });
+        CompletableFuture<? extends List<? extends Book>> authorBooksFuture =
+                authorFuture.thenApplyAsync((author) -> bookService.getBooksByAuthor(author, offset, limit));
+
         Author author = authorService.findById(id);
-        model.addAttribute("author", author);
-        model.addAttribute("authorBooks", bookService.getBooksByAuthor(author, offset, limit));
+        model.addAttribute("author", authorFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("authorBooks", authorBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         return "books/author";
     }
 
     @ApiOperation("Сохранить рейтинг книги")
     @ApiResponse(responseCode = "200",
-            description = "Реузльтат изменения рейтинга книги")
+            description = "Результат изменения рейтинга книги")
     @PostMapping("/rateBook")
     @ResponseBody
     public ResponseEntity<BookRatingResponse> rateBook(@RequestBody BookRatingRequest bookRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {
-            bookRatingService.saveBookRating(currentUser, bookRatingRequest);
+            CompletableFuture.runAsync(() -> bookRatingService.saveBookRating(currentUser, bookRatingRequest));
             result = true;
         }
         return ResponseEntity.ok(new BookRatingResponse(result));

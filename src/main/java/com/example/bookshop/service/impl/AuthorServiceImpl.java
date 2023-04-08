@@ -6,10 +6,8 @@ import com.example.bookshop.service.AuthorService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +46,6 @@ public class AuthorServiceImpl implements AuthorService {
     @Cacheable("author")
     public Author findById(long id) throws Exception {
         return authorsRepository.findById(id)
-                .orElseThrow(() -> new Exception("Не найден автор с id = " + id));
+                .orElseThrow(() -> new Exception(String.format("%s %s", "Не найден автор с id = ", id)));
     }
 }

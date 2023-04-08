@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,8 @@ import java.util.concurrent.TimeoutException;
 @Api(description = "Контроллер главной страницы")
 public class MainPageController {
 
+    @Value("${requests.timout}")
+    private Integer timeoutMillis;
     @Autowired
     private BookService bookService;
     @Autowired
@@ -46,14 +49,14 @@ public class MainPageController {
     @ApiResponse(responseCode = "200", description = "Главная страница")
     @GetMapping({"/", "/index"})
     public String mainPage(Model model) throws ExecutionException, InterruptedException, TimeoutException {
-        final CompletableFuture<? extends List<? extends Book>> recommendedBooksFuture =
+        CompletableFuture<? extends List<? extends Book>> recommendedBooksFuture =
                 CompletableFuture.supplyAsync(() -> bookService.getPageOfRecommendedBooks(0, 6));
-        final CompletableFuture<? extends List<? extends Book>> recentBooksFuture = CompletableFuture.supplyAsync(() -> bookService.getPageOfRecentBooks(0, 6,
+        CompletableFuture<? extends List<? extends Book>> recentBooksFuture = CompletableFuture.supplyAsync(() -> bookService.getPageOfRecentBooks(0, 6,
                 LocalDate.now().minus(3, ChronoUnit.YEARS), LocalDate.now()));
-        final CompletableFuture<? extends List<? extends Book>> popularBooksFuture = CompletableFuture.supplyAsync(() -> bookService.getPageOfPopularBooks(0, 6));
-        model.addAttribute("recommendedBooks", recommendedBooksFuture.get(3, TimeUnit.SECONDS));
-        model.addAttribute("recentBooks", recentBooksFuture.get(3, TimeUnit.SECONDS));
-        model.addAttribute("popularBooks", popularBooksFuture.get(3, TimeUnit.SECONDS));
+        CompletableFuture<? extends List<? extends Book>> popularBooksFuture = CompletableFuture.supplyAsync(() -> bookService.getPageOfPopularBooks(0, 6));
+        model.addAttribute("recommendedBooks", recommendedBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("recentBooks", recentBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("popularBooks", popularBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("topbarActive", new TopBar().setMainActive());
         return "index";
     }

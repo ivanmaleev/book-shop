@@ -4,6 +4,7 @@ import com.example.bookshop.constants.Langs;
 import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.dto.TopBar;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.GenreService;
@@ -20,8 +21,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Контроллер страницы жанров
@@ -32,6 +37,8 @@ import javax.servlet.http.HttpServletRequest;
 @Api(description = "Контроллер страницы жанров")
 public class GenresController {
 
+    @Value("${requests.timout}")
+    private Integer timeoutMillis;
     @Value("${locale.default}")
     private String defaultLocale;
     @Autowired
@@ -40,6 +47,7 @@ public class GenresController {
     private BookService bookService;
     @Autowired
     private CommonService commonService;
+
     @ModelAttribute("commonData")
     public CommonPageData commonPageData(HttpServletRequest request) {
         return commonService.getCommonPageData(request, false);
@@ -57,10 +65,13 @@ public class GenresController {
     @ApiOperation("Получение страницы жанра")
     @ApiResponse(responseCode = "200", description = "Страница жанра")
     @GetMapping("/slug/{id}")
-    public String bookPage(@PathVariable("id") long genreId, Model model) {
-        GenreDto genreDto = genreService.findGenreById(genreId, Langs.RU);
-        model.addAttribute("genre", genreDto);
-        model.addAttribute("booksByGenre", bookService.getBooksByGenreId(genreDto.getId(), 0, 20));
+    public String bookPage(@PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {
+        CompletableFuture<GenreDto> genreFuture = CompletableFuture.supplyAsync(() -> genreService.findGenreById(genreId, Langs.RU));
+        CompletableFuture<? extends List<? extends Book>> booksByGenreFuture =
+                CompletableFuture.supplyAsync(() -> bookService.getBooksByGenreId(genreId, 0, 20));
+
+        model.addAttribute("genre", genreFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
+        model.addAttribute("booksByGenre", booksByGenreFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         return "/genres/slug";
     }
 }
