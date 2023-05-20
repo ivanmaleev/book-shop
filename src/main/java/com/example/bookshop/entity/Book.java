@@ -55,7 +55,7 @@ public abstract class Book implements Serializable {
     @JsonProperty("price")
     private Integer price = 0;
 
-    public Book(BookRedis bookRedis) {
+    protected Book(BookRedis bookRedis) {
         this.id = bookRedis.getId();
         this.pubDate = bookRedis.getPubDate();
         this.author = bookRedis.getAuthor();
@@ -71,8 +71,7 @@ public abstract class Book implements Serializable {
 
     @JsonProperty("discount")
     public Integer getDiscount() {
-        Integer discount = priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
-        return discount;
+        return priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
     }
 
     @Override

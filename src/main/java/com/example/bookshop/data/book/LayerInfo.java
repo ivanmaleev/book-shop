@@ -3,10 +3,11 @@ package com.example.bookshop.data.book;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LayerInfo {
     @JsonProperty("layers")
-    public ArrayList<Layer> getLayers() {
+    public List<Layer> getLayers() {
         return this.layers;
     }
 

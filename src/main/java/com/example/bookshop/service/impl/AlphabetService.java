@@ -14,7 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class AlphabetService {
 
-    public static final Map<String, List<AlphabetObject>> alphabetLangMap;
+    private AlphabetService() {
+    }
+
+    protected static final Map<String, List<AlphabetObject>> alphabetLangMap;
 
     static {
         alphabetLangMap = new HashMap<>();

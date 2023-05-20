@@ -31,7 +31,7 @@ import static com.example.bookshop.constants.BookStatus.ARCHIVED;
  */
 public class BookStatusServiceImpl implements BookStatusService {
 
-    static final private String CART_DELIMITER = "/";
+    private static final String CART_DELIMITER = "/";
     @Autowired
     private CartService cartService;
     @Autowired

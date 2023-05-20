@@ -26,7 +26,7 @@ public class MyArchivePageController extends CommonController {
     @ApiOperation("Получение страницы архивных книг пользователя")
     @ApiResponse(responseCode = "200", description = "Страница архивных книг")
     @GetMapping("/myarchive")
-    public String myarchivePage(Model model) {
+    public String myArchivePage(Model model) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         model.addAttribute("usersArchivedBooks", bookService.findUsersBooks(currentUser.getId(), true));
         return "/myarchive";

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -46,8 +45,7 @@ public class BookDto {
 
     @JsonProperty("discount")
     public Integer getDiscount() {
-        Integer discount = priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
-        return discount;
+        return priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
     }
 
     @Override

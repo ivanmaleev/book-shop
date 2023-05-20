@@ -1,7 +1,6 @@
 package com.example.bookshop.entity;
 
 import com.example.bookshop.entity.redis.BookRedis;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -33,11 +32,6 @@ public class BookGoogleApi extends Book implements Serializable {
     private LocalDate pubDate;
     @JsonIgnore
     private Author author = new Author();
-
-    @JsonGetter("authors")
-    public String authorsFullName() {
-        return author.toString();
-    }
 
     private Integer isBestseller = 0;
     private String slug;
@@ -77,21 +71,4 @@ public class BookGoogleApi extends Book implements Serializable {
         this.price = bookRedis.getPrice();
     }
 
-    @JsonProperty("discount")
-    public Integer getDiscount() {
-        Integer discount = priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
-        return discount;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", author=" + author +
-                ", title='" + title + '\'' +
-                ", priceOld=" + priceOld +
-                ", price=" + price +
-                ", status=" + status +
-                '}';
-    }
 }

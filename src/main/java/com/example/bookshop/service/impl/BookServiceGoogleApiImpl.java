@@ -36,8 +36,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Flow;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +44,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Slf4j
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "true")
-public class BookServiceGoogleApiImpl implements BookService {
+public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
 
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     @Value("${google.books.api.attempts}")
@@ -77,7 +75,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public List<BookGoogleApi> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         String searchString = String.format("%s\"%s %s\"", "+inauthor:", author.getLastName(), author.getFirstName());
         return getBooks(searchString, null, null, offset, limit);
     }
@@ -90,7 +88,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+    public List<BookGoogleApi> getPageOfRecommendedBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
@@ -104,7 +102,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
+    public List<BookGoogleApi> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
         return getBooks(null, fromDate.format(dtf), endDate.format(dtf), offset, limit);
     }
 
@@ -116,7 +114,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public List<BookGoogleApi> getPageOfPopularBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
@@ -129,7 +127,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public List<BookGoogleApi> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return getBooks(searchWord, null, null, offset, limit);
     }
 
@@ -141,7 +139,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @throws Exception Если книга не найдена
      */
     @Override
-    public Book getBook(String slug) {
+    public BookGoogleApi getBook(String slug) {
         return bookRedisRepository.findById(slug)
                 .map(BookGoogleApi::new)
                 .orElseGet(() -> {
@@ -158,7 +156,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooks(Collection<String> slugList) {
+    public List<BookGoogleApi> getBooks(Collection<String> slugList) {
         if (Objects.isNull(slugList)) {
             return Collections.emptyList();
         }
@@ -177,7 +175,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public List<BookGoogleApi> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
         String searchString = String.format("%s\"%s\"", "+subject:", genreDto.getName());
         return getBooks(searchString, null, null, offset, limit);
@@ -191,7 +189,7 @@ public class BookServiceGoogleApiImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
+    public List<BookGoogleApi> findUsersBooks(Long userId, boolean archived) {
         return usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .parallelStream()
                 .map(usersBook -> getBook(usersBook.getBookId()))

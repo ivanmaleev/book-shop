@@ -2,10 +2,8 @@ package com.example.bookshop.service.impl;
 
 import com.example.bookshop.constants.BookStatus;
 import com.example.bookshop.entity.UsersBook;
-import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.UsersBookRepository;
 import com.example.bookshop.security.BookstoreUser;
-import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

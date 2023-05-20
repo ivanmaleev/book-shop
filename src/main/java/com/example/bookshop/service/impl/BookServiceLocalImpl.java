@@ -1,7 +1,7 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.entity.Author;
-import com.example.bookshop.entity.Book;
+import com.example.bookshop.entity.BookLocal;
 import com.example.bookshop.entity.Genre;
 import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.repository.BookRepository;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @NoArgsConstructor
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
-public class BookServiceLocalImpl implements BookService {
+public class BookServiceLocalImpl implements BookService<BookLocal> {
 
     @Autowired
     private BookRepository bookRepository;
@@ -41,7 +41,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public List<BookLocal> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -53,7 +53,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+    public List<BookLocal> getPageOfRecommendedBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -67,7 +67,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
+    public List<BookLocal> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
         return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -79,7 +79,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public List<BookLocal> getPageOfPopularBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -92,7 +92,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public List<BookLocal> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         //TODO
         return Collections.emptyList();
     }
@@ -105,7 +105,7 @@ public class BookServiceLocalImpl implements BookService {
      * @throws Exception Если книга не найдена
      */
     @Override
-    public Book getBook(String slug) throws Exception {
+    public BookLocal getBook(String slug) throws Exception {
         return bookRepository.findTopBySlug(slug)
                 .orElseThrow(() -> new Exception(String.format("%s %s %s", "Книга с id =", slug, "не найдена")));
     }
@@ -117,7 +117,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooks(Collection<String> slugList) {
+    public List<BookLocal> getBooks(Collection<String> slugList) {
         return bookRepository.findAllBySlugIn(slugList);
     }
 
@@ -130,7 +130,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public List<BookLocal> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         Genre genre = new Genre();
         genre.setId(genreId);
         return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent();
@@ -144,7 +144,7 @@ public class BookServiceLocalImpl implements BookService {
      * @return Список книг
      */
     @Override
-    public List<? extends Book> findUsersBooks(Long userId, boolean archived) {
+    public List<BookLocal> findUsersBooks(Long userId, boolean archived) {
         List<String> bookIds = usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .stream()
                 .map(UsersBook::getBookId)

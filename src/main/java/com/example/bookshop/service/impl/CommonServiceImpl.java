@@ -12,7 +12,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Реализация сервиса управления статусами книг

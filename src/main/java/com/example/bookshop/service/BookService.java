@@ -12,7 +12,7 @@ import java.util.List;
  * Интерфейс сервиса книг
  */
 @Service
-public interface BookService {
+public interface BookService<T extends Book> {
 
     /**
      * Возвращает страницу книг автора
@@ -22,7 +22,7 @@ public interface BookService {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<? extends Book> getBooksByAuthor(Author author, Integer offset, Integer limit);
+    List<T> getBooksByAuthor(Author author, Integer offset, Integer limit);
 
     /**
      * Возвращает страницу рекомендованных книг
@@ -31,7 +31,7 @@ public interface BookService {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<? extends Book> getPageOfRecommendedBooks(Integer offset, Integer limit);
+    List<T> getPageOfRecommendedBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу недавних книг
@@ -42,7 +42,7 @@ public interface BookService {
      * @param end    Конец периода поиска
      * @return Список книг
      */
-    List<? extends Book> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
+    List<T> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
 
     /**
      * Возвращает страницу популярных книг
@@ -51,7 +51,7 @@ public interface BookService {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<? extends Book> getPageOfPopularBooks(Integer offset, Integer limit);
+    List<T> getPageOfPopularBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу книг по поиску слова
@@ -61,7 +61,7 @@ public interface BookService {
      * @param limit      Лимит для страницы
      * @return Список книг
      */
-    List<? extends Book> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
+    List<T> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
     /**
      * Возвращает книгу по идентификатору книги
@@ -70,7 +70,7 @@ public interface BookService {
      * @return Книга
      * @throws Exception Если книга не найдена
      */
-    Book getBook(String slug) throws Exception;
+    T getBook(String slug) throws Exception;
 
     /**
      * Возвращает список книг по списку идентификаторов
@@ -78,7 +78,7 @@ public interface BookService {
      * @param slugList Список идентификаторов
      * @return Список книг
      */
-    List<? extends Book> getBooks(Collection<String> slugList);
+    List<T> getBooks(Collection<String> slugList);
 
     /**
      * Возвращает страницу книг по жанру
@@ -88,7 +88,7 @@ public interface BookService {
      * @param limit   Лимит для страницы
      * @return Список книг
      */
-    List<? extends Book> getBooksByGenreId(long genreId, Integer offset, Integer limit);
+    List<T> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 
     /**
      * Вовзращает список книг пользователя
@@ -97,5 +97,5 @@ public interface BookService {
      * @param archived Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список книг
      */
-    List<? extends Book> findUsersBooks(Long userId, boolean archived);
+    List<T> findUsersBooks(Long userId, boolean archived);
 }

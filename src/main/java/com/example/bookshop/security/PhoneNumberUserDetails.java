@@ -1,7 +1,5 @@
 package com.example.bookshop.security;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 public class PhoneNumberUserDetails extends BookstoreUserDetails {
 
 

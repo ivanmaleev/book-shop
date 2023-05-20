@@ -1,6 +1,5 @@
 package com.example.bookshop.entity;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -43,11 +42,6 @@ public class BookLocal extends Book implements Serializable {
     @ManyToOne
     private Genre genre;
 
-    @JsonGetter("authors")
-    public String authorsFullName() {
-        return author.toString();
-    }
-
     @Column(name = "is_bestseller")
     private Integer isBestseller = 0;
     @Column(name = "slug")
@@ -69,36 +63,4 @@ public class BookLocal extends Book implements Serializable {
     @Column(name = "price")
     @JsonProperty("price")
     private Integer price = 0;
-
-//    public BookLocal(BookRedis bookRedis) {
-//        this.id = bookRedis.getId();
-//        this.pubDate = bookRedis.getPubDate();
-//        this.author = bookRedis.getAuthor();
-//        this.isBestseller = bookRedis.getIsBestseller();
-//        this.slug = bookRedis.getSlug();
-//        this.title = bookRedis.getTitle();
-//        this.image = bookRedis.getImage();
-//        this.status = bookRedis.getStatus();
-//        this.description = bookRedis.getDescription();
-//        this.priceOld = bookRedis.getPriceOld();
-//        this.price = bookRedis.getPrice();
-//    }
-
-    @JsonProperty("discount")
-    public Integer getDiscount() {
-        Integer discount = priceOld.equals(0) ? 0 : 100 - (price * 100 / priceOld);
-        return discount;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", author=" + author +
-                ", title='" + title + '\'' +
-                ", priceOld=" + priceOld +
-                ", price=" + price +
-                ", status=" + status +
-                '}';
-    }
 }

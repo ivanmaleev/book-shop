@@ -1,7 +1,6 @@
 package com.example.bookshop.entity;
 
 import com.example.bookshop.security.BookstoreUser;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

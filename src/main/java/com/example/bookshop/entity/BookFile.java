@@ -1,10 +1,6 @@
 package com.example.bookshop.entity;
 
 import com.example.bookshop.data.BookFileType;
-import com.example.bookshop.entity.Book;
-import lombok.Data;
-
-import javax.persistence.*;
 
 public class BookFile {
 

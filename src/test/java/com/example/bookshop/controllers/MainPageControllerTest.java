@@ -27,7 +27,7 @@ class MainPageControllerTest {
     }
 
     @Test
-    public void mainPageAccessTest() throws Exception {
+    void mainPageAccessTest() throws Exception {
         mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(content().string(containsString("")))
@@ -35,7 +35,7 @@ class MainPageControllerTest {
     }
 
     @Test
-    public void accessOnlyAuthorizedPageFailTest() throws Exception {
+    void accessOnlyAuthorizedPageFailTest() throws Exception {
         mockMvc.perform(get("/my"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -43,7 +43,7 @@ class MainPageControllerTest {
     }
 
     @Test
-    public void correctLoginTest() throws Exception {
+    void correctLoginTest() throws Exception {
         mockMvc.perform(formLogin("/signin").user("A@a.ru").password("123456"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())

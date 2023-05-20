@@ -160,8 +160,8 @@ public class BooksController extends CommonController {
             }
             return author;
         });
-        CompletableFuture<? extends List<? extends Book>> authorBooksFuture =
-                authorFuture.thenApplyAsync((author) -> bookService.getBooksByAuthor(author, offset, limit));
+        CompletableFuture<List<? extends Book>> authorBooksFuture = authorFuture.
+                thenApplyAsync((author) -> bookService.getBooksByAuthor(author, offset, limit));
         model.addAttribute("author", authorFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("authorBooks", authorBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         return "books/author";
