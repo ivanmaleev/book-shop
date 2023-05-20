@@ -51,10 +51,11 @@ public class BookRatingServiceImpl implements BookRatingService {
     @Transactional
     @Override
     public BookRating saveBookRating(BookstoreUser currentUser, BookRatingRequest bookRatingRequest) {
-        List<BookRating> bookRating = bookRatingRepository.findAllByUserAndBookId(currentUser, bookRatingRequest.getBookId());
-        if (!bookRating.isEmpty()) {
-            bookRating.get(0).setRating(bookRatingRequest.getValue());
-            return bookRating.get(0);
+        List<BookRating> bookRatings = bookRatingRepository.findAllByUserAndBookId(currentUser, bookRatingRequest.getBookId());
+        if (!bookRatings.isEmpty()) {
+            BookRating bookRating = bookRatings.get(0);
+            bookRating.setRating(bookRatingRequest.getValue());
+            return bookRating;
         } else {
             return bookRatingRepository.save(new BookRating(currentUser, bookRatingRequest.getBookId(), bookRatingRequest.getValue()));
         }

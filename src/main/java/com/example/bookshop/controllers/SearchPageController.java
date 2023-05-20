@@ -2,10 +2,8 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.data.SearchWordDto;
-import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.errs.EmptySearchException;
 import com.example.bookshop.service.BookService;
-import com.example.bookshop.service.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,12 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Контроллер страницы поиска книг
@@ -29,17 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @NoArgsConstructor
 @Api(description = "Контроллер страницы поиска книг")
-public class SearchPageController {
+public class SearchPageController extends CommonController {
 
     @Autowired
     private BookService bookService;
-    @Autowired
-    private CommonService commonService;
-
-    @ModelAttribute("commonData")
-    public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request, false);
-    }
 
     @ApiOperation("Получение поиска книг")
     @ApiResponse(responseCode = "200", description = "Страница с результатом поиска книг")

@@ -19,16 +19,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @Api(description = "Контроллер страницы профиля пользователя")
-public class ProfilePageController {
+public class ProfilePageController extends CommonController {
 
     @Autowired
     private BookstoreUserRegister userRegister;
-    @Autowired
-    private CommonService commonService;
-    @ModelAttribute("commonData")
-    public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request, true);
-    }
 
     @ApiOperation("Получение страницы профиля пользователя")
     @ApiResponse(responseCode = "200", description = "Страница профиля пользователя")
@@ -36,5 +30,10 @@ public class ProfilePageController {
     public String profilePage(Model model) {
         model.addAttribute("curUsr", userRegister.getCurrentUser());
         return "profile";
+    }
+
+    @Override
+    public boolean isUsersPage() {
+        return true;
     }
 }

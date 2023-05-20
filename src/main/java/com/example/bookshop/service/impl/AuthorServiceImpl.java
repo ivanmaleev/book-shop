@@ -38,14 +38,14 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Ищет автора по id
      *
-     * @param id id автора
+     * @param authorId id автора
      * @return Автор
      * @throws Exception Если не найден автор
      */
     @Override
     @Cacheable("author")
-    public Author findById(long id) throws Exception {
-        return authorsRepository.findById(id)
-                .orElseThrow(() -> new Exception(String.format("%s %s", "Не найден автор с id = ", id)));
+    public Author findById(long authorId) throws Exception {
+        return authorsRepository.findById(authorId)
+                .orElseThrow(() -> new Exception(String.format("%s %s", "Не найден автор с id = ", authorId)));
     }
 }

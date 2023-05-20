@@ -3,7 +3,6 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.BookRatingDto;
-import com.example.bookshop.dto.CommonPageData;
 import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.dto.response.BookRatingResponse;
 import com.example.bookshop.entity.Author;
@@ -14,7 +13,6 @@ import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
-import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.UsersBookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -53,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor
 @Api(description = "Контроллер книг")
 @Slf4j
-public class BooksController {
+public class BooksController extends CommonController {
 
     @Value("${requests.timout}")
     private Integer timeoutMillis;
@@ -65,18 +62,11 @@ public class BooksController {
     @Autowired
     private AuthorService authorService;
     @Autowired
-    private CommonService commonService;
-    @Autowired
     private BookRatingService bookRatingService;
     @Autowired
     private BookCommentService bookCommentService;
     @Autowired
     private BookstoreUserRegister userRegister;
-
-    @ModelAttribute("commonData")
-    public CommonPageData commonPageData(HttpServletRequest request) {
-        return commonService.getCommonPageData(request, false);
-    }
 
     @ApiOperation("Метод получения страницы книги")
     @ApiResponse(responseCode = "200", description = "Страница книги")
@@ -157,14 +147,14 @@ public class BooksController {
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/author/{id}")
-    public String getAuthorsBooksPage(@PathVariable("id") long id,
+    public String getAuthorsBooksPage(@PathVariable("id") long authorId,
                                       @RequestParam(value = "offset", defaultValue = "0") Integer offset,
                                       @RequestParam(value = "limit", defaultValue = "6") Integer limit,
                                       Model model) throws Exception {
         CompletableFuture<Author> authorFuture = CompletableFuture.supplyAsync(() -> {
             Author author = null;
             try {
-                author = authorService.findById(id);
+                author = authorService.findById(authorId);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -172,8 +162,6 @@ public class BooksController {
         });
         CompletableFuture<? extends List<? extends Book>> authorBooksFuture =
                 authorFuture.thenApplyAsync((author) -> bookService.getBooksByAuthor(author, offset, limit));
-
-        Author author = authorService.findById(id);
         model.addAttribute("author", authorFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("authorBooks", authorBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         return "books/author";

@@ -14,16 +14,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Контроллер страницы About
+ * Базовый котроллер с общими данными
  */
 @Controller
-@Api(description = "Контроллер страницы 'О компании'")
-public class AboutPageController extends CommonController {
+public class CommonController {
 
-    @ApiOperation("Получение страницы информации о компании")
-    @ApiResponse(responseCode = "200", description = "Страница информации о компнии")
-    @GetMapping("/about")
-    public String aboutPage(Model model) {
-        return "/about";
+    @Autowired
+    private CommonService commonService;
+
+    @ModelAttribute("commonData")
+    public CommonPageData commonPageData(HttpServletRequest request) {
+        return commonService.getCommonPageData(request, isUsersPage());
+    }
+
+    public boolean isUsersPage() {
+        return false;
     }
 }

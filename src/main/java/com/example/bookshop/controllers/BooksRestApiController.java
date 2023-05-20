@@ -23,7 +23,6 @@ public class BooksRestApiController {
 
     private final BookService bookService;
 
-
     @Autowired
     public BooksRestApiController(BookService bookService) {
         this.bookService = bookService;
