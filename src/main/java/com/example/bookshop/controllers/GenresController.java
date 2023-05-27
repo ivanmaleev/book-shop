@@ -40,7 +40,7 @@ public class GenresController extends CommonController {
     @Autowired
     private GenreService genreService;
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение страницы жанров")
     @ApiResponse(responseCode = "200", description = "Страница жанров")

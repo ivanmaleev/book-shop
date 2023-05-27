@@ -56,7 +56,7 @@ public class BooksController extends CommonController {
     private Integer timeoutMillis;
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
     @Autowired
     private UsersBookService usersBookService;
     @Autowired
@@ -161,7 +161,7 @@ public class BooksController extends CommonController {
             return author;
         });
         CompletableFuture<List<? extends Book>> authorBooksFuture = authorFuture.
-                thenApplyAsync((author) -> bookService.getBooksByAuthor(author, offset, limit));
+                thenApplyAsync(author -> bookService.getBooksByAuthor(author, offset, limit));
         model.addAttribute("author", authorFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("authorBooks", authorBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         return "books/author";

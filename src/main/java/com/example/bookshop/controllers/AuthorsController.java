@@ -2,6 +2,7 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Author;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookService;
 import io.swagger.annotations.Api;
@@ -25,7 +26,7 @@ public class AuthorsController extends CommonController {
     @Autowired
     private AuthorService authorService;
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение страницы списка авторов")
     @ApiResponse(responseCode = "200", description = "Страница списка авторов")

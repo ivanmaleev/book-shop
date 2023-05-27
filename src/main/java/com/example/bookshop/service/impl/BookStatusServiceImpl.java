@@ -9,6 +9,7 @@ import com.example.bookshop.service.PostponedService;
 import com.example.bookshop.service.UsersBookService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
@@ -32,10 +33,12 @@ import static com.example.bookshop.constants.BookStatus.ARCHIVED;
 public class BookStatusServiceImpl implements BookStatusService {
 
     private static final String CART_DELIMITER = "/";
+    @Lazy
     @Autowired
     private CartService cartService;
     @Autowired
     private UsersBookService usersBookService;
+    @Lazy
     @Autowired
     private PostponedService postponedService;
     @Autowired

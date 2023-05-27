@@ -33,7 +33,7 @@ public class PostponedServiceImpl implements PostponedService {
     @Autowired
     private BookRatingService bookRatingService;
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     /**
      * Возвращает списк отложенных кнги

@@ -32,7 +32,7 @@ public class MainPageController extends CommonController {
     @Value("${requests.timout}")
     private Integer timeoutMillis;
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение страницы главной страницы")
     @ApiResponse(responseCode = "200", description = "Главная страница")

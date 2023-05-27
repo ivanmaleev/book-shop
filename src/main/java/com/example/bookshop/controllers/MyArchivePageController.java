@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers;
 
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookService;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MyArchivePageController extends CommonController {
 
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
     @Autowired
     private BookstoreUserRegister userRegister;
 

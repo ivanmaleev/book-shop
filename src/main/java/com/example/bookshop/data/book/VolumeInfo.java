@@ -3,6 +3,7 @@ package com.example.bookshop.data.book;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VolumeInfo {
     @JsonProperty("title")
@@ -17,15 +18,15 @@ public class VolumeInfo {
     String title;
 
     @JsonProperty("authors")
-    public ArrayList<String> getAuthors() {
+    public List<String> getAuthors() {
         return this.authors;
     }
 
-    public void setAuthors(ArrayList<String> authors) {
+    public void setAuthors(List<String> authors) {
         this.authors = authors;
     }
 
-    ArrayList<String> authors;
+    List<String> authors;
 
     @JsonProperty("publisher")
     public String getPublisher() {

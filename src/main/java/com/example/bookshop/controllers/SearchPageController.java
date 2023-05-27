@@ -2,6 +2,7 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.BooksPageDto;
 import com.example.bookshop.data.SearchWordDto;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.errs.EmptySearchException;
 import com.example.bookshop.service.BookService;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SearchPageController extends CommonController {
 
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение поиска книг")
     @ApiResponse(responseCode = "200", description = "Страница с результатом поиска книг")

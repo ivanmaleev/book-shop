@@ -1,6 +1,7 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.TopBar;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 public class RecentPageController extends CommonController {
 
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение страницы новых книг")
     @ApiResponse(responseCode = "200", description = "Страница новых книг")

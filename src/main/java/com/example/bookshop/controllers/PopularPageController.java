@@ -1,6 +1,7 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.TopBar;
+import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PopularPageController extends CommonController {
 
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     @ApiOperation("Получение страницы популярных книг")
     @ApiResponse(responseCode = "200", description = "Страница популярных книг")

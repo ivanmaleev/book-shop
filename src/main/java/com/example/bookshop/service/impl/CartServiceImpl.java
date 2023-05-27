@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
  */
 public class CartServiceImpl implements CartService {
 
-    static final private String CART_DELIMITER = "/";
+    private static final String CART_DELIMITER = "/";
     @Autowired
     private BookStatusService bookStatusService;
     @Autowired
     private BookRatingService bookRatingService;
     @Autowired
-    private BookService bookService;
+    private BookService<? extends Book> bookService;
 
     /**
      * Возвращает данные по суммам в карзине
