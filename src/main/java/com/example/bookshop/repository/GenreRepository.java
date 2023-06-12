@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -24,7 +24,7 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
             value = "SELECT g.* \n" +
                     "FROM book_shop.genre(?1) AS g \n" +
                     "ORDER BY g.ord")
-    List<Genre> findAllByLang(String lang);
+    Collection<Genre> findAllByLang(String lang);
 
     /**
      * Возвращает жанр по наименованию

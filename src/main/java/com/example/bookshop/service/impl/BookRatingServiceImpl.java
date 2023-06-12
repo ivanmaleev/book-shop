@@ -9,6 +9,7 @@ import com.example.bookshop.service.BookRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class BookRatingServiceImpl implements BookRatingService {
      * @return Рейтинг книг
      */
     @Override
-    public List<BookRatingDto> getBooksRating(List<String> bookIds) {
+    public Collection<BookRatingDto> getBooksRating(Collection<String> bookIds) {
         return bookRatingRepository.findBooksRating(bookIds);
     }
 
@@ -51,7 +52,7 @@ public class BookRatingServiceImpl implements BookRatingService {
     @Transactional
     @Override
     public BookRating saveBookRating(BookstoreUser currentUser, BookRatingRequest bookRatingRequest) {
-        List<BookRating> bookRatings = bookRatingRepository.findAllByUserAndBookId(currentUser, bookRatingRequest.getBookId());
+        List<BookRating> bookRatings = (List<BookRating>) bookRatingRepository.findAllByUserAndBookId(currentUser, bookRatingRequest.getBookId());
         if (!bookRatings.isEmpty()) {
             BookRating bookRating = bookRatings.get(0);
             bookRating.setRating(bookRatingRequest.getValue());

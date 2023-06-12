@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Репозиторий комментариев
@@ -30,5 +30,5 @@ public interface BookCommentRepository extends JpaRepository<BookComment, Long> 
             "GROUP BY bc.id, bc.user, bc.text, bc.date \n" +
             "ORDER BY bc.date"
     )
-    List<BookCommentDto> findAllByBookId(String bookId);
+    Collection<BookCommentDto> findAllByBookId(String bookId);
 }

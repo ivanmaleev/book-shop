@@ -135,7 +135,7 @@ public class BookStatusServiceImpl implements BookStatusService {
         return Optional.ofNullable(cookies)
                 .map(cookiesNotNull ->
                         Arrays.stream(cookiesNotNull)
-                                .filter(cookie -> cookie.getName().equals(cookieNameContent))
+                                .filter(cookie -> Objects.nonNull(cookie) && Objects.equals(cookie.getName(), cookieNameContent))
                                 .findAny()
                 ).flatMap(cookieNotNull -> cookieNotNull);
     }

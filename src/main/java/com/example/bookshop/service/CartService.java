@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса управления корзиной
@@ -22,7 +22,7 @@ public interface CartService {
      * @param cartContents Содерживое корзины куки
      * @return Список книг
      */
-    List<BookDto> getCartBooks(String cartContents);
+    Collection<BookDto> getCartBooks(String cartContents);
 
     /**
      * Возвращает данных по суммам в карзине
@@ -30,7 +30,7 @@ public interface CartService {
      * @param bookDtos Список книг
      * @return Суммовые данные для корзины
      */
-    CartData getCartData(List<BookDto> bookDtos);
+    CartData getCartData(Collection<BookDto> bookDtos);
 
     /**
      * Добавляет книгу в корзину

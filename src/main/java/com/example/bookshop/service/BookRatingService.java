@@ -7,7 +7,7 @@ import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса рейтинга книг
@@ -29,7 +29,7 @@ public interface BookRatingService {
      * @param bookIds Список id кинг
      * @return Рейтинг книг
      */
-    List<BookRatingDto> getBooksRating(List<String> bookIds);
+    Collection<BookRatingDto> getBooksRating(Collection<String> bookIds);
 
     /**
      * Сохраняет рейтинг книги

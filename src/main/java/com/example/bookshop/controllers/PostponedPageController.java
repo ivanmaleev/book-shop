@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +33,7 @@ public class PostponedPageController extends CommonController {
         if (StringUtils.isBlank(postponedContents)) {
             model.addAttribute("isPostponedEmpty", true);
         } else {
-            List<BookDto> postponedBooks = postponedService.getPostponedBooks(postponedContents);
+            Collection<BookDto> postponedBooks = postponedService.getPostponedBooks(postponedContents);
             model.addAttribute("isPostponedEmpty", false);
             model.addAttribute("booksPostponed", postponedBooks);
             model.addAttribute("bookIdsPostponed", postponedBooks

@@ -7,7 +7,7 @@ import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса комментариев на книги
@@ -31,5 +31,5 @@ public interface BookCommentService {
      * @param bookId Идентификатор книги
      * @return Список комментриев на книгу
      */
-    List<BookCommentDto> getBookComments(String bookId);
+    Collection<BookCommentDto> getBookComments(String bookId);
 }

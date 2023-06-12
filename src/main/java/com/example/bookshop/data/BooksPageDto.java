@@ -2,14 +2,15 @@ package com.example.bookshop.data;
 
 import com.example.bookshop.entity.Book;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BooksPageDto {
 
     private Integer count;
-    private List<? extends Book> books;
+    private Collection<? extends Book> books;
 
-    public BooksPageDto(List<? extends Book> books) {
+    public BooksPageDto(Collection<? extends Book> books) {
         this.count = books.size();
         this.books = books;
     }
@@ -22,7 +23,7 @@ public class BooksPageDto {
         this.count = count;
     }
 
-    public List<? extends Book> getBooks() {
+    public Collection<? extends Book> getBooks() {
         return books;
     }
 

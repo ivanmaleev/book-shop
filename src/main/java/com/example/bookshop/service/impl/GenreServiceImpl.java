@@ -27,7 +27,6 @@ public class GenreServiceImpl implements GenreService {
     private Map<String, Map<Long, GenreDto>> langGenreMap = new HashMap<>();
     @Autowired
     private GenreRepository genreRepository;
-
     @Autowired
     private EntityManager entityManager;
 

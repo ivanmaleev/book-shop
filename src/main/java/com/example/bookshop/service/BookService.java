@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Интерфейс сервиса книг
@@ -22,7 +21,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<T> getBooksByAuthor(Author author, Integer offset, Integer limit);
+    Collection<T> getBooksByAuthor(Author author, Integer offset, Integer limit);
 
     /**
      * Возвращает страницу рекомендованных книг
@@ -31,7 +30,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<T> getPageOfRecommendedBooks(Integer offset, Integer limit);
+    Collection<T> getPageOfRecommendedBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу недавних книг
@@ -42,7 +41,7 @@ public interface BookService<T extends Book> {
      * @param end    Конец периода поиска
      * @return Список книг
      */
-    List<T> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
+    Collection<T> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
 
     /**
      * Возвращает страницу популярных книг
@@ -51,7 +50,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    List<T> getPageOfPopularBooks(Integer offset, Integer limit);
+    Collection<T> getPageOfPopularBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу книг по поиску слова
@@ -61,7 +60,7 @@ public interface BookService<T extends Book> {
      * @param limit      Лимит для страницы
      * @return Список книг
      */
-    List<T> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
+    Collection<T> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
     /**
      * Возвращает книгу по идентификатору книги
@@ -78,7 +77,7 @@ public interface BookService<T extends Book> {
      * @param slugList Список идентификаторов
      * @return Список книг
      */
-    List<T> getBooks(Collection<String> slugList);
+    Collection<T> getBooks(Collection<String> slugList);
 
     /**
      * Возвращает страницу книг по жанру
@@ -88,7 +87,7 @@ public interface BookService<T extends Book> {
      * @param limit   Лимит для страницы
      * @return Список книг
      */
-    List<T> getBooksByGenreId(long genreId, Integer offset, Integer limit);
+    Collection<T> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 
     /**
      * Вовзращает список книг пользователя
@@ -97,5 +96,5 @@ public interface BookService<T extends Book> {
      * @param archived Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список книг
      */
-    List<T> findUsersBooks(Long userId, boolean archived);
+    Collection<T> findUsersBooks(Long userId, boolean archived);
 }

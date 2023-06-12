@@ -41,7 +41,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public Collection<BookLocal> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -53,7 +53,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+    public Collection<BookLocal> getPageOfRecommendedBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -67,7 +67,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
+    public Collection<BookLocal> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
         return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -79,7 +79,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public Collection<BookLocal> getPageOfPopularBooks(Integer offset, Integer limit) {
         return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
     }
 
@@ -92,7 +92,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public Collection<BookLocal> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         //TODO
         return Collections.emptyList();
     }
@@ -117,7 +117,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getBooks(Collection<String> slugList) {
+    public Collection<BookLocal> getBooks(Collection<String> slugList) {
         return bookRepository.findAllBySlugIn(slugList);
     }
 
@@ -130,7 +130,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public Collection<BookLocal> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         Genre genre = new Genre();
         genre.setId(genreId);
         return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent();
@@ -144,8 +144,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public List<BookLocal> findUsersBooks(Long userId, boolean archived) {
-        List<String> bookIds = usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
+    public Collection<BookLocal> findUsersBooks(Long userId, boolean archived) {
+        Collection<String> bookIds = usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .stream()
                 .map(UsersBook::getBookId)
                 .collect(Collectors.toList());

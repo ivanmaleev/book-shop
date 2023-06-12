@@ -5,7 +5,7 @@ import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.security.BookstoreUser;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса пользовательских книг
@@ -20,7 +20,7 @@ public interface UsersBookService {
      * @param user         Пользователь
      * @param bookStatus   Статус книг
      */
-    void addBooksToUser(List<String> bookSlugList, BookstoreUser user, BookStatus bookStatus);
+    void addBooksToUser(Collection<String> bookSlugList, BookstoreUser user, BookStatus bookStatus);
 
     /**
      * Найти список книг пользователя
@@ -30,7 +30,7 @@ public interface UsersBookService {
      * @param archived     Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список пользовтальских книг
      */
-    List<UsersBook> findUsersBooks(Long userId, List<String> bookSlugList, Boolean archived);
+    Collection<UsersBook> findUsersBooks(Long userId, Collection<String> bookSlugList, Boolean archived);
 
     /**
      * Возвращает статус книги пользователя

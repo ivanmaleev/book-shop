@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -22,7 +22,7 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
      * @param archived Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список пользовательских книг
      */
-    List<UsersBook> findAllByUserIdAndAndArchived(Long userId, boolean archived);
+    Collection<UsersBook> findAllByUserIdAndAndArchived(Long userId, boolean archived);
 
     /**
      * Возвращает список пользовательских книг
@@ -30,7 +30,7 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
      * @param userId id пользователя
      * @return Список пользовательских книг
      */
-    List<UsersBook> findAllByUserId(Long userId);
+    Collection<UsersBook> findAllByUserId(Long userId);
 
     /**
      * Возвращает список пользовательских книг
@@ -39,7 +39,7 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
      * @param bookSlugList Список идентификаторов книг
      * @return Список пользовательских книг
      */
-    List<UsersBook> findAllByUserIdAndBookIdIn(Long userId, List<String> bookSlugList);
+    Collection<UsersBook> findAllByUserIdAndBookIdIn(Long userId, Collection<String> bookSlugList);
 
     /**
      * Возвращает список пользовательских книг
@@ -49,7 +49,7 @@ public interface UsersBookRepository extends JpaRepository<UsersBook, Long> {
      * @param archived     Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список пользовательских книг
      */
-    List<UsersBook> findAllByUserIdAndBookIdInAndArchived(Long userId, List<String> bookSlugList, boolean archived);
+    Collection<UsersBook> findAllByUserIdAndBookIdInAndArchived(Long userId, Collection<String> bookSlugList, boolean archived);
 
     /**
      * Возвращает количество пользовательских книг

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,5 +30,5 @@ public interface BookRepository extends JpaRepository<BookLocal, Long> {
 
     Optional<BookLocal> findTopBySlug(String slug);
 
-    List<BookLocal> findAllBySlugIn(Collection<String> slugList);
+    Collection<BookLocal> findAllBySlugIn(Collection<String> slugList);
 }

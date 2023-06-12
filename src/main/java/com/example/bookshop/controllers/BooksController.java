@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -87,7 +87,7 @@ public class BooksController extends CommonController {
             return book;
         });
         CompletableFuture<BookRatingDto> bookRatingFuture = CompletableFuture.supplyAsync(() -> bookRatingService.getBookRating(slug));
-        CompletableFuture<List<BookCommentDto>> bookCommentsFuture = CompletableFuture.supplyAsync(() -> bookCommentService.getBookComments(slug));
+        CompletableFuture<Collection<BookCommentDto>> bookCommentsFuture = CompletableFuture.supplyAsync(() -> bookCommentService.getBookComments(slug));
         model.addAttribute("slugBook", slugBookFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("bookRating", bookRatingFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("bookComments", bookCommentsFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
@@ -160,7 +160,7 @@ public class BooksController extends CommonController {
             }
             return author;
         });
-        CompletableFuture<List<? extends Book>> authorBooksFuture = authorFuture.
+        CompletableFuture<Collection<? extends Book>> authorBooksFuture = authorFuture.
                 thenApplyAsync(author -> bookService.getBooksByAuthor(author, offset, limit));
         model.addAttribute("author", authorFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));
         model.addAttribute("authorBooks", authorBooksFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));

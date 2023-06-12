@@ -15,8 +15,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService {
      * @param bookDtos Список книг
      * @return Суммовые данные для корзины
      */
-    public CartData getCartData(List<BookDto> bookDtos) {
+    public CartData getCartData(Collection<BookDto> bookDtos) {
         return new CartData(bookDtos
                 .stream()
                 .map(BookDto::getPrice)
@@ -61,12 +61,12 @@ public class CartServiceImpl implements CartService {
      * @return Список книг
      */
     @Override
-    public List<BookDto> getCartBooks(String cartContents) {
+    public Collection<BookDto> getCartBooks(String cartContents) {
         cartContents = cartContents.startsWith(CART_DELIMITER) ? cartContents.substring(1) : cartContents;
         cartContents = cartContents.endsWith(CART_DELIMITER) ? cartContents.substring(0, cartContents.length() - 1) :
                 cartContents;
         String[] cookieSlugs = cartContents.split(CART_DELIMITER);
-        List<? extends Book> books = bookService.getBooks(Arrays.asList(cookieSlugs));
+        Collection<? extends Book> books = bookService.getBooks(Arrays.asList(cookieSlugs));
 
         Map<String, BookRatingDto> bookRatings = new HashMap<>();
         bookRatingService.getBooksRating(books

@@ -3,7 +3,7 @@ package com.example.bookshop.service;
 import com.example.bookshop.dto.GenreDto;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса жанров
@@ -17,7 +17,7 @@ public interface GenreService {
      * @param lang - локаль
      * @return - список {@link GenreDto}
      */
-    List<GenreDto> findGenres(String lang);
+    Collection<GenreDto> findGenres(String lang);
 
     /**
      * Возвращает жанр по id

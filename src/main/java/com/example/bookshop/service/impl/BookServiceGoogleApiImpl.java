@@ -75,7 +75,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getBooksByAuthor(Author author, Integer offset, Integer limit) {
+    public Collection<BookGoogleApi> getBooksByAuthor(Author author, Integer offset, Integer limit) {
         String searchString = String.format("%s\"%s %s\"", "+inauthor:", author.getLastName(), author.getFirstName());
         return getBooks(searchString, null, null, offset, limit);
     }
@@ -88,7 +88,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+    public Collection<BookGoogleApi> getPageOfRecommendedBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
@@ -102,7 +102,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
+    public Collection<BookGoogleApi> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate fromDate, LocalDate endDate) {
         return getBooks(null, fromDate.format(dtf), endDate.format(dtf), offset, limit);
     }
 
@@ -114,7 +114,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getPageOfPopularBooks(Integer offset, Integer limit) {
+    public Collection<BookGoogleApi> getPageOfPopularBooks(Integer offset, Integer limit) {
         return getBooks(null, null, null, offset, limit);
     }
 
@@ -127,7 +127,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+    public Collection<BookGoogleApi> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
         return getBooks(searchWord, null, null, offset, limit);
     }
 
@@ -156,7 +156,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getBooks(Collection<String> slugList) {
+    public Collection<BookGoogleApi> getBooks(Collection<String> slugList) {
         if (Objects.isNull(slugList)) {
             return Collections.emptyList();
         }
@@ -175,7 +175,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public Collection<BookGoogleApi> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         GenreDto genreDto = genreService.findGenreById(genreId, Langs.EN);
         String searchString = String.format("%s\"%s\"", "+subject:", genreDto.getName());
         return getBooks(searchString, null, null, offset, limit);
@@ -189,7 +189,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      * @return Список книг
      */
     @Override
-    public List<BookGoogleApi> findUsersBooks(Long userId, boolean archived) {
+    public Collection<BookGoogleApi> findUsersBooks(Long userId, boolean archived) {
         return usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .parallelStream()
                 .map(usersBook -> getBook(usersBook.getBookId()))
@@ -240,7 +240,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
         }
     }
 
-    private List<BookGoogleApi> getBooksFromGoogleRoot(Root root) {
+    private Collection<BookGoogleApi> getBooksFromGoogleRoot(Root root) {
         ArrayList<BookGoogleApi> books = new ArrayList<>();
         List<String> statuses = List.of("PAID", "CART", "KEPT", "");
         final Random random = new Random();
@@ -305,7 +305,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
         return String.valueOf(letter);
     }
 
-    private List<BookGoogleApi> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
+    private Collection<BookGoogleApi> getBooks(String searchString, String from, String to, Integer offset, Integer limit) {
         Root root = null;
         List<AlphabetObject> alphabetObjects = AlphabetService.getAlphabet(defaultLocale);
         String requestUrl = "";
@@ -329,7 +329,7 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
                 break;
             }
         }
-        final List<BookGoogleApi> books = getBooksFromGoogleRoot(root);
+        final Collection<BookGoogleApi> books = getBooksFromGoogleRoot(root);
         if (StringUtils.isNotBlank(requestUrl)) {
             bookRequestRepository.save(new BookRequestRedis(requestUrl, books
                     .stream()

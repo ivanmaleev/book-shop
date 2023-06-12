@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class UsersBookServiceImpl implements UsersBookService {
      */
     @Transactional
     @Override
-    public void addBooksToUser(List<String> bookSlugList, BookstoreUser user, BookStatus bookStatus) {
+    public void addBooksToUser(Collection<String> bookSlugList, BookstoreUser user, BookStatus bookStatus) {
         Map<String, UsersBook> usersBooksMap = findUsersBooks(user.getId(), bookSlugList, null)
                 .stream()
                 .collect(Collectors.toMap(UsersBook::getBookId, Function.identity(), BinaryOperator.maxBy(Comparator.comparingInt(UsersBook::hashCode))));
@@ -69,7 +70,7 @@ public class UsersBookServiceImpl implements UsersBookService {
      * @return Список пользовтальских книг
      */
     @Override
-    public List<UsersBook> findUsersBooks(Long userId, List<String> bookSlugList, Boolean archived) {
+    public Collection<UsersBook> findUsersBooks(Long userId, Collection<String> bookSlugList, Boolean archived) {
         if (Objects.nonNull(bookSlugList) && !bookSlugList.isEmpty()) {
             if (Objects.nonNull(archived)) {
                 return usersBookRepository.findAllByUserIdAndBookIdInAndArchived(userId, bookSlugList, archived);

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -40,7 +40,7 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
             "WHERE br.bookId IN (?1) \n" +
             "GROUP BY br.bookId"
     )
-    List<BookRatingDto> findBooksRating(List<String> bookIds);
+    Collection<BookRatingDto> findBooksRating(Collection<String> bookIds);
 
     /**
      * Возвращает список рейтингов книг пользователя
@@ -49,5 +49,5 @@ public interface BookRatingRepository extends JpaRepository<BookRating, Long> {
      * @param bookId Идентификатор книги
      * @return Список рейтингов книг
      */
-    List<BookRating> findAllByUserAndBookId(BookstoreUser user, String bookId);
+    Collection<BookRating> findAllByUserAndBookId(BookstoreUser user, String bookId);
 }

@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Контроллер корзины
@@ -36,7 +36,7 @@ public class CartController extends CommonController {
             model.addAttribute("isCartEmpty", true);
             model.addAttribute("cartData", new CartData(0, 0));
         } else {
-            List<BookDto> bookDtos = cartService.getCartBooks(cartContents);
+            Collection<BookDto> bookDtos = cartService.getCartBooks(cartContents);
             model.addAttribute("isCartEmpty", false);
             model.addAttribute("bookCart", bookDtos);
             model.addAttribute("cartData", cartService.getCartData(bookDtos));

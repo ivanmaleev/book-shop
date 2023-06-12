@@ -8,7 +8,7 @@ import com.example.bookshop.security.BookstoreUser;
 import com.example.bookshop.service.BookCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Реализация сервиса комментариев на книги
@@ -37,7 +37,7 @@ public class BookCommentServiceImpl implements BookCommentService {
      * @return Список комментриев на книгу
      */
     @Override
-    public List<BookCommentDto> getBookComments(String bookId) {
+    public Collection<BookCommentDto> getBookComments(String bookId) {
         return bookCommentRepository.findAllByBookId(bookId);
     }
 }

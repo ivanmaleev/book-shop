@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +56,7 @@ public class GenresController extends CommonController {
     @GetMapping("/slug/{id}")
     public String bookPage(@PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {
         CompletableFuture<GenreDto> genreFuture = CompletableFuture.supplyAsync(() -> genreService.findGenreById(genreId, Langs.RU));
-        CompletableFuture<? extends List<? extends Book>> booksByGenreFuture =
+        CompletableFuture<? extends Collection<? extends Book>> booksByGenreFuture =
                 CompletableFuture.supplyAsync(() -> bookService.getBooksByGenreId(genreId, 0, 20));
 
         model.addAttribute("genre", genreFuture.get(timeoutMillis, TimeUnit.MILLISECONDS));

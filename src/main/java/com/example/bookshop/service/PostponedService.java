@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Интерфейс сервиса отложенных книг
@@ -21,7 +21,7 @@ public interface PostponedService {
      * @param postponedContents Данные куки
      * @return Список книг
      */
-    List<BookDto> getPostponedBooks(String postponedContents);
+    Collection<BookDto> getPostponedBooks(String postponedContents);
 
     /**
      * Добавляает книгу в отложенные

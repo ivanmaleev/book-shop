@@ -15,8 +15,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,12 +42,12 @@ public class PostponedServiceImpl implements PostponedService {
      * @return Список книг
      */
     @Override
-    public List<BookDto> getPostponedBooks(String postponedContents) {
+    public Collection<BookDto> getPostponedBooks(String postponedContents) {
         postponedContents = postponedContents.startsWith("/") ? postponedContents.substring(1) : postponedContents;
         postponedContents = postponedContents.endsWith("/") ? postponedContents.substring(0, postponedContents.length() - 1) :
                 postponedContents;
         String[] cookieSlugs = postponedContents.split("/");
-        List<? extends Book> books = bookService.getBooks(Arrays.asList(cookieSlugs));
+        Collection<? extends Book> books = bookService.getBooks(Arrays.asList(cookieSlugs));
 
         Map<String, BookRatingDto> bookRatings = new HashMap<>();
         bookRatingService.getBooksRating(books
