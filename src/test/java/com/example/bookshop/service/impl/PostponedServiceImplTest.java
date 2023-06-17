@@ -1,14 +1,12 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.dto.BookDto;
-import com.example.bookshop.dto.CartData;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookLocal;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.BookStatusService;
-import com.example.bookshop.service.CartService;
+import com.example.bookshop.service.PostponedService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,11 +27,11 @@ import java.util.Collection;
 import java.util.List;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(CartServiceImplTest.TestConfig.class)
-class CartServiceImplTest {
+@SpringJUnitConfig(PostponedServiceImplTest.TestConfig.class)
+class PostponedServiceImplTest {
 
     @Autowired
-    private CartService cartService;
+    private PostponedService service;
     @MockBean
     private BookStatusService bookStatusService;
     @MockBean
@@ -44,34 +42,22 @@ class CartServiceImplTest {
     private Model model = new ExtendedModelMap();
 
     @Test
-    void getCartData() {
-        int price = 100;
-        int priceOld = 150;
-        final BookDto bookDto = new BookDto();
-        bookDto.setPrice(price);
-        bookDto.setPriceOld(priceOld);
-        final CartData cartData = cartService.getCartData(List.of(bookDto));
-        Assertions.assertEquals(price, cartData.getSumPrice());
-        Assertions.assertEquals(priceOld, cartData.getSumOldPrice());
-    }
-
-    @Test
-    void getCartBooks() {
+    void getPostponedBooks() {
         BookLocal book = new BookLocal();
         book.setSlug("slug");
         Collection<? extends Book> books = List.of(book);
         Mockito.doReturn(books).when(bookService).getBooks(Mockito.anyList());
-        Assertions.assertFalse( cartService.getCartBooks("/content/").isEmpty());
+        Assertions.assertFalse(service.getPostponedBooks("/content/").isEmpty());
     }
 
     @Test
-    void addBookToCart() {
-        Assertions.assertDoesNotThrow(() -> cartService.addBookToCart(new BookCartRequest(), new Cookie[1], httpServletResponse, model));
+    void addBookToPostponed() {
+        Assertions.assertDoesNotThrow(() -> service.addBookToPostponed(new BookCartRequest(), new Cookie[1], httpServletResponse, model));
     }
 
     @Test
-    void removeBookFromCart() {
-        Assertions.assertDoesNotThrow(() -> cartService.removeBookFromCart(new BookCartRequest(), new Cookie[1], httpServletResponse, model));
+    void removeBookFromPostponed() {
+        Assertions.assertDoesNotThrow(() -> service.removeBookFromPostponed(new BookCartRequest(), new Cookie[1], httpServletResponse, model));
     }
 
     @Profile("test")
@@ -79,8 +65,8 @@ class CartServiceImplTest {
     public static class TestConfig {
 
         @Bean
-        public CartService cartService() {
-            return new CartServiceImpl();
+        public PostponedService postponedService() {
+            return new PostponedServiceImpl();
         }
     }
 }
