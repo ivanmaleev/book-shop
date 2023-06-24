@@ -16,13 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Контроллер комментариев книг
  */
-@Controller
+@RestController
 @Api(description = "Контроллер комментариев книг")
 public class BookCommentController {
     @Autowired
@@ -35,7 +36,6 @@ public class BookCommentController {
     @ApiOperation("Сохранение комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения комментария книги")
     @PostMapping("/bookComment")
-    @ResponseBody
     public BookCommentResponse rateBook(@RequestBody BookCommentRequest bookCommentRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
@@ -49,7 +49,6 @@ public class BookCommentController {
     @ApiOperation("Сохранение рейтинга комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения рейтинга комментария книги")
     @PostMapping("/rateBookComment")
-    @ResponseBody
     public CommentRatingResponse rateBook(@RequestBody CommentRatingRequest commentRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
