@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -36,7 +37,7 @@ public class BookCommentController {
     @ApiOperation("Сохранение комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения комментария книги")
     @PostMapping("/bookComment")
-    public BookCommentResponse rateBook(@RequestBody BookCommentRequest bookCommentRequest) {
+    public BookCommentResponse rateBook(@Valid @RequestBody BookCommentRequest bookCommentRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {
@@ -49,7 +50,7 @@ public class BookCommentController {
     @ApiOperation("Сохранение рейтинга комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения рейтинга комментария книги")
     @PostMapping("/rateBookComment")
-    public CommentRatingResponse rateBook(@RequestBody CommentRatingRequest commentRatingRequest) {
+    public CommentRatingResponse rateBook(@Valid @RequestBody CommentRatingRequest commentRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {

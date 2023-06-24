@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.constraints.Min;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -54,7 +55,7 @@ public class GenresController extends CommonController {
     @ApiOperation("Получение страницы жанра")
     @ApiResponse(responseCode = "200", description = "Страница жанра")
     @GetMapping("/slug/{id}")
-    public String bookPage(@PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {
+    public String bookPage(@Min(value = 1) @PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {
         CompletableFuture<GenreDto> genreFuture = CompletableFuture.supplyAsync(() -> genreService.findGenreById(genreId, Langs.RU));
         CompletableFuture<? extends Collection<? extends Book>> booksByGenreFuture =
                 CompletableFuture.supplyAsync(() -> bookService.getBooksByGenreId(genreId, 0, 20));

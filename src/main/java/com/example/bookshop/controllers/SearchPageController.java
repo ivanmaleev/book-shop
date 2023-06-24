@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 /**
  * Контроллер страницы поиска книг
  */
@@ -37,8 +40,7 @@ public class SearchPageController extends CommonController {
                                        Model model) throws EmptySearchException {
         if (StringUtils.isNotBlank(searchWord)) {
             model.addAttribute("searchWordDto", new SearchWordDto(searchWord));
-            model.addAttribute("searchResultBooks",
-                    bookService.getPageOfSearchResult(searchWord, 0, 20));
+            model.addAttribute("searchResultBooks", bookService.getPageOfSearchResult(searchWord, 0, 20));
             return "/search/index";
         } else {
             throw new EmptySearchException("Поиск по пустой строке невозможен");
@@ -50,9 +52,12 @@ public class SearchPageController extends CommonController {
     @GetMapping("/searchPage/{SearchWord}")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getSearchResultBooksPage(
-            @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-            @RequestParam(value = "limit", defaultValue = "20") Integer limit,
-            @PathVariable(value = "SearchWord", required = false) String searchWord) {
-        return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfSearchResult(searchWord, offset, limit)));
+            @Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+            @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "20") Integer limit,
+            @PathVariable(value = "SearchWord", required = false) String searchWord) throws EmptySearchException {
+        if (StringUtils.isNotBlank(searchWord)) {
+            return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfSearchResult(searchWord, offset, limit)));
+        }
+        throw new EmptySearchException("Поиск по пустой строке невозможен");
     }
 }

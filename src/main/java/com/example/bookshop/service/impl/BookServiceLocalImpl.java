@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -93,8 +92,7 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      */
     @Override
     public Collection<BookLocal> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
-        //TODO
-        return Collections.emptyList();
+        return bookRepository.findAllByTitleLikeIgnoreCase(searchWord, PageRequest.of(offset, limit)).getContent();
     }
 
     /**

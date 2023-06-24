@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * Контроллер смены статуса книг
@@ -27,7 +28,7 @@ public class BookStatusController {
 
     @ApiOperation("Метод изменения статуса книги")
     @PostMapping("/books/changeBookStatus")
-    public void handleChangeBookStatus(@RequestBody BookCartRequest bookCartRequest,
+    public void handleChangeBookStatus(@Valid @RequestBody BookCartRequest bookCartRequest,
                                        HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
         bookStatusService.changeBookStatus(bookCartRequest, request, response, model);

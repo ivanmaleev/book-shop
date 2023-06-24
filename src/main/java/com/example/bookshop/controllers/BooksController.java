@@ -34,6 +34,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -103,8 +106,8 @@ public class BooksController extends CommonController {
             description = "Список книг")
     @GetMapping("/recommended")
     @ResponseBody
-    public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                                @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
+    public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                                @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit)));
     }
 
@@ -115,8 +118,8 @@ public class BooksController extends CommonController {
     @ResponseBody
     public ResponseEntity<BooksPageDto> getRecentBooksPage(@RequestParam(value = "from", required = false) String from,
                                                            @RequestParam(value = "to", required = false) String to,
-                                                           @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                           @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+                                                           @Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                           @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         LocalDate fromDate = StringUtils.isNotBlank(from) ? LocalDate.parse(from, dtf) : LocalDate.now().minus(3, ChronoUnit.YEARS);
         LocalDate toDate = StringUtils.isNotBlank(to) ? LocalDate.parse(to, dtf) : LocalDate.now();
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
@@ -127,8 +130,8 @@ public class BooksController extends CommonController {
             description = "Список книг")
     @GetMapping("/popular")
     @ResponseBody
-    public ResponseEntity<BooksPageDto> getPopularBooksPage(@RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                            @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
+    public ResponseEntity<BooksPageDto> getPopularBooksPage(@Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                            @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit)));
     }
 
@@ -137,9 +140,9 @@ public class BooksController extends CommonController {
             description = "Список книг")
     @GetMapping("/genre/{id}")
     @ResponseBody
-    public ResponseEntity<BooksPageDto> getGenreBooksPage(@PathVariable("id") long genreId,
-                                                          @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                          @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
+    public ResponseEntity<BooksPageDto> getGenreBooksPage(@Min(value = 1) @PathVariable("id") long genreId,
+                                                          @Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                                          @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "20") Integer limit) {
         return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(genreId, offset, limit)));
     }
 
@@ -147,9 +150,9 @@ public class BooksController extends CommonController {
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/author/{id}")
-    public String getAuthorsBooksPage(@PathVariable("id") long authorId,
-                                      @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                      @RequestParam(value = "limit", defaultValue = "6") Integer limit,
+    public String getAuthorsBooksPage(@Min(value = 1) @PathVariable("id") long authorId,
+                                      @Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                      @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "6") Integer limit,
                                       Model model) throws Exception {
         CompletableFuture<Author> authorFuture = CompletableFuture.supplyAsync(() -> {
             Author author = null;
@@ -172,7 +175,7 @@ public class BooksController extends CommonController {
             description = "Результат изменения рейтинга книги")
     @PostMapping("/rateBook")
     @ResponseBody
-    public ResponseEntity<BookRatingResponse> rateBook(@RequestBody BookRatingRequest bookRatingRequest) {
+    public ResponseEntity<BookRatingResponse> rateBook(@Valid @RequestBody BookRatingRequest bookRatingRequest) {
         BookstoreUser currentUser = (BookstoreUser) userRegister.getCurrentUser();
         boolean result = false;
         if (!currentUser.isAnonymousUser()) {

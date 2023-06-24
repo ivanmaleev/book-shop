@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * Контроллер авторизации
@@ -53,7 +54,7 @@ public class AuthUserController extends CommonController {
     @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestContactConfirmation(@Valid @RequestBody ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         response.setResult("true");
         if (payload.getContact().contains("@")) {
@@ -69,7 +70,7 @@ public class AuthUserController extends CommonController {
     @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestEmailConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestEmailConfirmation(ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestEmailConfirmation(@Valid ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("book-shop@mail.ru");
@@ -85,7 +86,7 @@ public class AuthUserController extends CommonController {
 
     @PostMapping("/approveContact")
     @ResponseBody
-    public ContactConfirmationResponse handleApproveContact(ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleApproveContact(@Valid ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
 
         // if(smsService.verifyCode(payload.getCode())){
@@ -104,7 +105,7 @@ public class AuthUserController extends CommonController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ContactConfirmationResponse handleLogin(@RequestBody ContactConfirmationPayload payload,
+    public ContactConfirmationResponse handleLogin(@Valid @RequestBody ContactConfirmationPayload payload,
                                                    HttpServletResponse httpServletResponse) {
         ContactConfirmationResponse loginResponse = userRegister.jwtLogin(payload);
         Cookie cookie = new Cookie("token", loginResponse.getResult());
@@ -114,7 +115,7 @@ public class AuthUserController extends CommonController {
 
     @PostMapping("/login-by-phone-number")
     @ResponseBody
-    public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody ContactConfirmationPayload payload,
+    public ContactConfirmationResponse handleLoginByPhoneNumber(@Valid @RequestBody ContactConfirmationPayload payload,
                                                                 HttpServletResponse httpServletResponse) {
 //        if(smsService.verifyCode(payload.getCode())) {
 //            ContactConfirmationResponse loginResponse = userRegister.jwtLoginByPhoneNumber(payload);
