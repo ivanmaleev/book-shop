@@ -3,6 +3,7 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.security.ContactConfirmationPayload;
 import com.example.bookshop.security.ContactConfirmationResponse;
+import com.example.bookshop.security.JwtInfo;
 import com.example.bookshop.security.RegistrationForm;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import static com.example.bookshop.security.SecurityConstants.ACCESS_TOKEN;
+import static com.example.bookshop.security.SecurityConstants.REFRESH_TOKEN;
 
 /**
  * Контроллер авторизации
@@ -86,13 +90,7 @@ public class AuthUserController extends CommonController {
     @PostMapping("/approveContact")
     @ResponseBody
     public ContactConfirmationResponse handleApproveContact(@Valid ContactConfirmationPayload payload) {
-        ContactConfirmationResponse response = new ContactConfirmationResponse();
-
-        // if(smsService.verifyCode(payload.getCode())){
-        response.setResult("true");
-        //   }
-
-        return response;
+        return new ContactConfirmationResponse("true");
     }
 
     @PostMapping("/reg")
@@ -106,10 +104,10 @@ public class AuthUserController extends CommonController {
     @ResponseBody
     public ContactConfirmationResponse handleLogin(@Valid @RequestBody ContactConfirmationPayload payload,
                                                    HttpServletResponse httpServletResponse) {
-        ContactConfirmationResponse loginResponse = userRegister.jwtLogin(payload);
-        Cookie cookie = new Cookie("token", loginResponse.getResult());
-        httpServletResponse.addCookie(cookie);
-        return loginResponse;
+        JwtInfo jwtInfo = userRegister.jwtLogin(payload);
+        httpServletResponse.addCookie(new Cookie(ACCESS_TOKEN, jwtInfo.getAccessToken()));
+        httpServletResponse.addCookie(new Cookie(REFRESH_TOKEN, jwtInfo.getRefreshToken()));
+        return new ContactConfirmationResponse("true");
     }
 
     @PostMapping("/login-by-phone-number")

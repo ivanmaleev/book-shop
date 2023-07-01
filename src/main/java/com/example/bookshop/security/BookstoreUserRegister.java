@@ -5,7 +5,6 @@ import com.example.bookshop.security.jwt.JWTUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,23 +34,14 @@ public class BookstoreUserRegister {
         }
     }
 
-    public ContactConfirmationResponse login(ContactConfirmationPayload payload) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getContact(),
-                        payload.getCode()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        ContactConfirmationResponse response = new ContactConfirmationResponse();
-        response.setResult("true");
-        return response;
-    }
-
-    public ContactConfirmationResponse jwtLogin(ContactConfirmationPayload payload) {
+    public JwtInfo jwtLogin(ContactConfirmationPayload payload) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getContact(), payload.getCode()));
         UserDetails userDetails = bookstoreUserDetailsService.loadUserByUsername(payload.getContact());
-        String jwtToken = jwtUtil.generateToken(userDetails);
-        ContactConfirmationResponse response = new ContactConfirmationResponse();
-        response.setResult(jwtToken);
-        return response;
+        JwtInfo jwtInfo = new JwtInfo();
+        jwtInfo.setUsername(userDetails.getUsername());
+        jwtInfo.setAccessToken(jwtUtil.createAccessToken(userDetails));
+        jwtInfo.setRefreshToken(jwtUtil.createRefreshToken(userDetails));
+        return jwtInfo;
     }
 
     public Object getCurrentUser() {
