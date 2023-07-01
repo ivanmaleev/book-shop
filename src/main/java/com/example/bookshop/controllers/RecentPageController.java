@@ -3,9 +3,9 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +22,13 @@ import java.time.temporal.ChronoUnit;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/recent")
-@Api(description = "Контроллер страницы новых книг")
+@Tag(name = "", description = "Контроллер страницы новых книг")
 public class RecentPageController extends CommonController {
 
     @Autowired
     private BookService<? extends Book> bookService;
 
-    @ApiOperation("Получение страницы новых книг")
+    @Operation(description = "Получение страницы новых книг")
     @ApiResponse(responseCode = "200", description = "Страница новых книг")
     @GetMapping({"", "/"})
     public String recentBooksPage(Model model) {

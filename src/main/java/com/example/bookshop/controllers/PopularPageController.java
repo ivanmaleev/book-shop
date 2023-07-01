@@ -3,9 +3,9 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/popular")
-@Api(description = "Контроллер страницы популярных книг")
+@Tag(name = "", description = "Контроллер страницы популярных книг")
 public class PopularPageController extends CommonController {
 
     @Autowired
     private BookService<? extends Book> bookService;
 
-    @ApiOperation("Получение страницы популярных книг")
+    @Operation(description = "Получение страницы популярных книг")
     @ApiResponse(responseCode = "200", description = "Страница популярных книг")
     @GetMapping({"", "/"})
     public String popularBooksPage(Model model) {

@@ -3,7 +3,7 @@ package com.example.bookshop.service;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.entity.BookRating;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

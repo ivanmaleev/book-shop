@@ -5,15 +5,16 @@ import com.example.bookshop.data.SearchWordDto;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.errs.EmptySearchException;
 import com.example.bookshop.service.BookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,13 +28,14 @@ import javax.validation.constraints.Min;
  */
 @Controller
 @NoArgsConstructor
-@Api(description = "Контроллер страницы поиска книг")
+@Tag(name = "", description = "Контроллер страницы поиска книг")
+@Validated
 public class SearchPageController extends CommonController {
 
     @Autowired
     private BookService<? extends Book> bookService;
 
-    @ApiOperation("Получение поиска книг")
+    @Operation(description = "Получение поиска книг")
     @ApiResponse(responseCode = "200", description = "Страница с результатом поиска книг")
     @GetMapping(value = {"/search", "/search/{SearchWord}"})
     public String getSearchResultBooks(@PathVariable(value = "SearchWord", required = false) String searchWord,
@@ -47,7 +49,7 @@ public class SearchPageController extends CommonController {
         }
     }
 
-    @ApiOperation("Метод поиска книг с пагинацией")
+    @Operation(description = "Метод поиска книг с пагинацией")
     @ApiResponse(responseCode = "200", description = "Спискок книг")
     @GetMapping("/searchPage/{SearchWord}")
     @ResponseBody

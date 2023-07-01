@@ -4,18 +4,17 @@ import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.dto.request.CommentRatingRequest;
 import com.example.bookshop.dto.response.BookCommentResponse;
 import com.example.bookshop.dto.response.CommentRatingResponse;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookCommentRatingService;
 import com.example.bookshop.service.BookCommentService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -25,7 +24,8 @@ import java.util.concurrent.CompletableFuture;
  * Контроллер комментариев книг
  */
 @RestController
-@Api(description = "Контроллер комментариев книг")
+@Tag(name = "", description = "Контроллер комментариев книг")
+@Validated
 public class BookCommentController {
     @Autowired
     private BookCommentService bookCommentService;
@@ -34,7 +34,7 @@ public class BookCommentController {
     @Autowired
     private BookCommentRatingService bookCommentRatingService;
 
-    @ApiOperation("Сохранение комментария книги")
+    @Operation(description = "Сохранение комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения комментария книги")
     @PostMapping("/bookComment")
     public BookCommentResponse rateBook(@Valid @RequestBody BookCommentRequest bookCommentRequest) {
@@ -47,7 +47,7 @@ public class BookCommentController {
         return new BookCommentResponse(result);
     }
 
-    @ApiOperation("Сохранение рейтинга комментария книги")
+    @Operation(description = "Сохранение рейтинга комментария книги")
     @ApiResponse(responseCode = "200", description = "Результат сохранения рейтинга комментария книги")
     @PostMapping("/rateBookComment")
     public CommentRatingResponse rateBook(@Valid @RequestBody CommentRatingRequest commentRatingRequest) {

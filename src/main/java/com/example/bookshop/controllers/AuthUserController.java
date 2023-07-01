@@ -1,19 +1,18 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.entity.SmsCode;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.security.ContactConfirmationPayload;
 import com.example.bookshop.security.ContactConfirmationResponse;
 import com.example.bookshop.security.RegistrationForm;
-import com.example.bookshop.security.SmsService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,21 +27,21 @@ import javax.validation.Valid;
  */
 @Controller
 @RequiredArgsConstructor
-@Api(description = "Контроллер авторизации")
+@Tag(name = "", description = "Контроллер авторизации")
+@Validated
 public class AuthUserController extends CommonController {
 
     private final BookstoreUserRegister userRegister;
-    private final SmsService smsService;
     private final JavaMailSender javaMailSender;
 
-    @ApiOperation("Получение страницы авторизации")
+    @Operation(description = "Получение страницы авторизации")
     @ApiResponse(responseCode = "200", description = "Страница авторизации")
     @GetMapping("/signin")
     public String signInPage() {
         return "signin";
     }
 
-    @ApiOperation("Получение страницы регистрации")
+    @Operation(description = "Получение страницы регистрации")
     @ApiResponse(responseCode = "200", description = "Страница регистрации")
     @GetMapping("/signup")
     public String handleSignUp(Model model) {
@@ -50,7 +49,7 @@ public class AuthUserController extends CommonController {
         return "signup";
     }
 
-    @ApiOperation("Подтверждение регистрации по e-mail")
+    @Operation(description = "Подтверждение регистрации по e-mail")
     @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
@@ -60,13 +59,13 @@ public class AuthUserController extends CommonController {
         if (payload.getContact().contains("@")) {
             return response;
         } else {
-            String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
-            smsService.saveNewCode(new SmsCode(smsCodeString, 60)); //expires in 1 min.
+//            String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
+//            smsService.saveNewCode(new SmsCode(smsCodeString, 60)); //expires in 1 min.
             return response;
         }
     }
 
-    @ApiOperation("Подтверждение регистрации по e-mail")
+    @Operation(description = "Подтверждение регистрации по e-mail")
     @ApiResponse(responseCode = "200", description = "Подтверждение регистрации по e-mail")
     @PostMapping("/requestEmailConfirmation")
     @ResponseBody
@@ -75,10 +74,10 @@ public class AuthUserController extends CommonController {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("book-shop@mail.ru");
         message.setTo(payload.getContact());
-        SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
-        smsService.saveNewCode(smsCode);
+//        SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
+//        smsService.saveNewCode(smsCode);
         message.setSubject("Bookstore email verification!");
-        message.setText("Verification code is: " + smsCode.getCode());
+//        message.setText("Verification code is: " + smsCode.getCode());
         javaMailSender.send(message);
         response.setResult("true");
         return response;

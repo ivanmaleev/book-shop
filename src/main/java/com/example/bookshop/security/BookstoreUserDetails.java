@@ -1,5 +1,8 @@
 package com.example.bookshop.security;
 
+import com.example.bookshop.security.entity.BookstoreUser;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,17 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 
+@AllArgsConstructor
+@Data
 public class BookstoreUserDetails implements UserDetails {
 
     private final BookstoreUser bookstoreUser;
-
-    public BookstoreUserDetails(BookstoreUser bookstoreUser) {
-        this.bookstoreUser = bookstoreUser;
-    }
-
-    public BookstoreUser getBookstoreUser() {
-        return bookstoreUser;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -4,7 +4,7 @@ import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.entity.BookRating;
 import com.example.bookshop.repository.BookRatingRepository;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.service.BookRatingService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

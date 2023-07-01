@@ -2,10 +2,9 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.BookRatingDto;
-import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookLocal;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserDetailsService;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.security.jwt.JWTRequestFilter;
@@ -22,16 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.example.bookshop.constants.BookStatus.CART;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;

@@ -1,12 +1,12 @@
 package com.example.bookshop.controllers;
 
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * Контроллер страницы архива пользователя
  */
 @Controller
-@Api(description = "Контроллер страницы архива пользователя")
+@Tag(name = "", description = "Контроллер страницы архива пользователя")
 public class MyArchivePageController extends CommonController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class MyArchivePageController extends CommonController {
     @Autowired
     private BookstoreUserRegister userRegister;
 
-    @ApiOperation("Получение страницы архивных книг пользователя")
+    @Operation(description = "Получение страницы архивных книг пользователя")
     @ApiResponse(responseCode = "200", description = "Страница архивных книг")
     @GetMapping("/myarchive")
     public String myArchivePage(Model model) {

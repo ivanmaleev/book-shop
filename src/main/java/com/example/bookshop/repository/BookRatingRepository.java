@@ -2,7 +2,7 @@ package com.example.bookshop.repository;
 
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.entity.BookRating;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

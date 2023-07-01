@@ -1,6 +1,6 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.CommonService;
 import com.example.bookshop.service.UsersBookService;

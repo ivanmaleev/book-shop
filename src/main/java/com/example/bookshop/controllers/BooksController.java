@@ -7,16 +7,16 @@ import com.example.bookshop.dto.request.BookRatingRequest;
 import com.example.bookshop.dto.response.BookRatingResponse;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.AuthorService;
 import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,8 +52,9 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequestMapping("/books")
 @NoArgsConstructor
-@Api(description = "Контроллер книг")
+@Tag(name = "", description = "Контроллер книг")
 @Slf4j
+@Validated
 public class BooksController extends CommonController {
 
     @Value("${requests.timout}")
@@ -71,7 +73,7 @@ public class BooksController extends CommonController {
     @Autowired
     private BookstoreUserRegister userRegister;
 
-    @ApiOperation("Метод получения страницы книги")
+    @Operation(description = "Метод получения страницы книги")
     @ApiResponse(responseCode = "200", description = "Страница книги")
     @GetMapping("/slug/{slug}")
     public String bookPage(
@@ -101,17 +103,17 @@ public class BooksController extends CommonController {
         return "/books/slug";
     }
 
-    @ApiOperation("Метод получения списка рекоммендованных книг с пагинацией")
+    @Operation(description = "Метод получения списка рекоммендованных книг с пагинацией")
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/recommended")
     @ResponseBody
     public ResponseEntity<BooksPageDto> getRecommendedBooksPage(@Min(value = 0) @Max(value = 10000) @RequestParam(value = "offset", defaultValue = "0") Integer offset,
-                                                                @Min(value = 1) @Max(value = 20) @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
+                                                                @Min(value = 1) @Max(value = 20, message = "Ошибка") @RequestParam(value = "limit", defaultValue = "6") Integer limit) {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit)));
     }
 
-    @ApiOperation("Метод получения списка недавних книг с пагинацией")
+    @Operation(description = "Метод получения списка недавних книг с пагинацией")
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/recent")
@@ -125,7 +127,7 @@ public class BooksController extends CommonController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit, fromDate, toDate)));
     }
 
-    @ApiOperation("Метод получения списка популярных книг с пагинацией")
+    @Operation(description = "Метод получения списка популярных книг с пагинацией")
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/popular")
@@ -135,7 +137,7 @@ public class BooksController extends CommonController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit)));
     }
 
-    @ApiOperation("Метод получения списка книг по жанру")
+    @Operation(description = "Метод получения списка книг по жанру")
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/genre/{id}")
@@ -146,7 +148,7 @@ public class BooksController extends CommonController {
         return ResponseEntity.ok(new BooksPageDto(bookService.getBooksByGenreId(genreId, offset, limit)));
     }
 
-    @ApiOperation("Метод получения списка книг по автору")
+    @Operation(description = "Метод получения списка книг по автору")
     @ApiResponse(responseCode = "200",
             description = "Список книг")
     @GetMapping("/author/{id}")
@@ -170,7 +172,7 @@ public class BooksController extends CommonController {
         return "books/author";
     }
 
-    @ApiOperation("Сохранить рейтинг книги")
+    @Operation(description = "Сохранить рейтинг книги")
     @ApiResponse(responseCode = "200",
             description = "Результат изменения рейтинга книги")
     @PostMapping("/rateBook")

@@ -3,7 +3,7 @@ package com.example.bookshop.service.impl;
 import com.example.bookshop.constants.BookStatus;
 import com.example.bookshop.entity.UsersBook;
 import com.example.bookshop.repository.UsersBookRepository;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.service.UsersBookService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

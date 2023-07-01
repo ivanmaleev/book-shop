@@ -2,7 +2,7 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.constants.BookStatus;
 import com.example.bookshop.entity.UsersBook;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

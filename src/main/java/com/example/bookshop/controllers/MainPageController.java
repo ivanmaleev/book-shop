@@ -3,9 +3,9 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException;
  */
 @Controller
 @NoArgsConstructor
-@Api(description = "Контроллер главной страницы")
+@Tag(name = "", description = "Контроллер главной страницы")
 public class MainPageController extends CommonController {
 
     @Value("${requests.timout}")
@@ -34,7 +34,7 @@ public class MainPageController extends CommonController {
     @Autowired
     private BookService<? extends Book> bookService;
 
-    @ApiOperation("Получение страницы главной страницы")
+    @Operation(description = "Получение страницы главной страницы")
     @ApiResponse(responseCode = "200", description = "Главная страница")
     @GetMapping({"/", "/index"})
     public String mainPage(Model model) throws ExecutionException, InterruptedException, TimeoutException {

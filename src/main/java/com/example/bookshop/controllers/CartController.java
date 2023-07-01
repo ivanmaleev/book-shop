@@ -3,9 +3,9 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.CartData;
 import com.example.bookshop.service.CartService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ import java.util.Collection;
  */
 @Controller
 @NoArgsConstructor
-@Api(description = "Контроллер корзины")
+@Tag(name = "", description = "Контроллер корзины")
 public class CartController extends CommonController {
 
     @Autowired
     private CartService cartService;
 
-    @ApiOperation("Получение страницы корзины")
+    @Operation(description = "Получение страницы корзины")
     @ApiResponse(responseCode = "200", description = "Страница корзины")
     @GetMapping("/books/cart")
     public String cartPage(@CookieValue(value = "cartContents", required = false) String cartContents,

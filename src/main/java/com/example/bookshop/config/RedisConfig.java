@@ -1,7 +1,5 @@
 package com.example.bookshop.config;
 
-import liquibase.pro.packaged.K;
-import liquibase.pro.packaged.T;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,8 +31,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<T, K> redisTemplate() {
-        final RedisTemplate<T, K> template = new RedisTemplate<>();
+    public RedisTemplate<Object, Object> redisTemplate() {
+        final RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
         template.setValueSerializer(new GenericToStringSerializer<>(Object.class));
         return template;

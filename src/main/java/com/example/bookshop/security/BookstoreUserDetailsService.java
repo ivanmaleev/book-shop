@@ -1,34 +1,29 @@
 package com.example.bookshop.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
+@AllArgsConstructor
 public class BookstoreUserDetailsService implements UserDetailsService {
 
     private final BookstoreUserRepository bookstoreUserRepository;
 
-    @Autowired
-    public BookstoreUserDetailsService(BookstoreUserRepository bookstoreUserRepository) {
-        this.bookstoreUserRepository = bookstoreUserRepository;
-    }
-
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        BookstoreUser bookstoreUser = bookstoreUserRepository.findBookstoreUserByEmail(s);
-
-        if(bookstoreUser!=null){
-            return new BookstoreUserDetails(bookstoreUser);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDetails userDetails = bookstoreUserRepository.findBookstoreUserByEmail(username)
+                .map(BookstoreUserDetails::new)
+                .orElse(null);
+        if (Objects.isNull(userDetails)) {
+            userDetails = bookstoreUserRepository.findBookstoreUserByPhone(username)
+                    .map(PhoneNumberUserDetails::new)
+                    .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email/phone %s not found", username)));
         }
-
-        bookstoreUser = bookstoreUserRepository.findBookstoreUserByPhone(s);
-        if(bookstoreUser!=null){
-            return new PhoneNumberUserDetails(bookstoreUser);
-        }else {
-            throw new UsernameNotFoundException("user not found doh!!!");
-        }
+        return userDetails;
     }
 }

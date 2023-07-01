@@ -1,4 +1,4 @@
-package com.example.bookshop.security;
+package com.example.bookshop.security.entity;
 
 import com.example.bookshop.entity.AbstractEntity;
 import lombok.AllArgsConstructor;

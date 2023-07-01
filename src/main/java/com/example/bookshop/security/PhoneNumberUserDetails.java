@@ -1,7 +1,8 @@
 package com.example.bookshop.security;
 
-public class PhoneNumberUserDetails extends BookstoreUserDetails {
+import com.example.bookshop.security.entity.BookstoreUser;
 
+public class PhoneNumberUserDetails extends BookstoreUserDetails {
 
     public PhoneNumberUserDetails(BookstoreUser bookstoreUser) {
         super(bookstoreUser);

@@ -4,7 +4,7 @@ import com.example.bookshop.dto.request.CommentRatingRequest;
 import com.example.bookshop.entity.BookComment;
 import com.example.bookshop.entity.BookCommentRating;
 import com.example.bookshop.repository.BookCommentRatingRepository;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.service.BookCommentRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 

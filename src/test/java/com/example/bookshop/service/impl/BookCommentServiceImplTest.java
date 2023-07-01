@@ -4,7 +4,7 @@ import com.example.bookshop.dto.BookCommentDto;
 import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.entity.BookComment;
 import com.example.bookshop.repository.BookCommentRepository;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.service.BookCommentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

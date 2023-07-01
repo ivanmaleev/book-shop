@@ -2,7 +2,6 @@ package com.example.bookshop.data;
 
 import com.example.bookshop.entity.BookFile;
 import lombok.NoArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,7 @@ public class ResourceStorage {
                 Logger.getLogger(this.getClass().getSimpleName()).info("created image folder in " + uploadPath);
             }
 
-            String fileName = slug + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+            String fileName = slug + "."; //FilenameUtils.getExtension(file.getOriginalFilename());
             Path path = Paths.get(uploadPath, fileName);
             resourceURI = "/book-covers/" + fileName;
             file.transferTo(path); //uploading user file here
@@ -66,7 +65,7 @@ public class ResourceStorage {
 
         if (Objects.nonNull(mimeType)) {
             return MediaType.parseMediaType(mimeType);
-        }else {
+        } else {
             return MediaType.APPLICATION_OCTET_STREAM;
         }
     }

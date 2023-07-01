@@ -2,14 +2,13 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.request.BookCommentRequest;
 import com.example.bookshop.dto.request.CommentRatingRequest;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserDetailsService;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.security.jwt.JWTRequestFilter;
 import com.example.bookshop.service.BookCommentRatingService;
 import com.example.bookshop.service.BookCommentService;
 import com.example.bookshop.service.CommonService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

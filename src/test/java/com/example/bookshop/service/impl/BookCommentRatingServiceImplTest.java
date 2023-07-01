@@ -3,7 +3,7 @@ package com.example.bookshop.service.impl;
 import com.example.bookshop.dto.request.CommentRatingRequest;
 import com.example.bookshop.entity.BookCommentRating;
 import com.example.bookshop.repository.BookCommentRatingRepository;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.service.BookCommentRatingService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

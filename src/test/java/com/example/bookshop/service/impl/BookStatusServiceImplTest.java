@@ -1,7 +1,7 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.dto.request.BookCartRequest;
-import com.example.bookshop.security.BookstoreUser;
+import com.example.bookshop.security.entity.BookstoreUser;
 import com.example.bookshop.security.BookstoreUserRegister;
 import com.example.bookshop.service.BookStatusService;
 import com.example.bookshop.service.CartService;

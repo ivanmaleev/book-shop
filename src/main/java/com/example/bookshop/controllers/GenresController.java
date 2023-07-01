@@ -6,14 +6,15 @@ import com.example.bookshop.dto.TopBar;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,8 @@ import java.util.concurrent.TimeoutException;
 @Controller
 @NoArgsConstructor
 @RequestMapping("/genres")
-@Api(description = "Контроллер страницы жанров")
+@Tag(name = "", description = "Контроллер страницы жанров")
+@Validated
 public class GenresController extends CommonController {
 
     @Value("${requests.timout}")
@@ -43,7 +45,7 @@ public class GenresController extends CommonController {
     @Autowired
     private BookService<? extends Book> bookService;
 
-    @ApiOperation("Получение страницы жанров")
+    @Operation(description = "Получение страницы жанров")
     @ApiResponse(responseCode = "200", description = "Страница жанров")
     @GetMapping({"", "/"})
     public String getGenresPage(Model model) {
@@ -52,7 +54,7 @@ public class GenresController extends CommonController {
         return "genres/index";
     }
 
-    @ApiOperation("Получение страницы жанра")
+    @Operation(description = "Получение страницы жанра")
     @ApiResponse(responseCode = "200", description = "Страница жанра")
     @GetMapping("/slug/{id}")
     public String bookPage(@Min(value = 1) @PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {

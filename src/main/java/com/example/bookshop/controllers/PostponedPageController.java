@@ -2,9 +2,9 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.service.PostponedService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
  * Контроллер страницы отложенных книг пользователя
  */
 @Controller
-@Api(description = "Контроллер страницы отложенных книг пользователя")
+@Tag(name = "", description = "Контроллер страницы отложенных книг пользователя")
 public class PostponedPageController extends CommonController {
 
     @Autowired
     private PostponedService postponedService;
 
-    @ApiOperation("Получение страницы отложенных книг")
+    @Operation(description = "Получение страницы отложенных книг")
     @ApiResponse(responseCode = "200", description = "Страница отложенных книг")
     @GetMapping("/books/postponed")
     public String postponedPage(@CookieValue(value = "postponedContents", required = false) String postponedContents,
