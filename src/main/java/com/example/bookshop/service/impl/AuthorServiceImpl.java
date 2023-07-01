@@ -28,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
      * @return мапа авторов
      */
     @Override
-    @Cacheable("authorsMap")
+    @Cacheable(value = "AuthorService::authorsMap")
     public Map<String, List<Author>> getAuthorsMap() {
         return authorsRepository.findAll()
                 .stream()
@@ -43,7 +43,7 @@ public class AuthorServiceImpl implements AuthorService {
      * @throws Exception Если не найден автор
      */
     @Override
-    @Cacheable("author")
+    @Cacheable(value = "AuthorService::findById", key = "#authorId")
     public Author findById(long authorId) throws Exception {
         return authorsRepository.findById(authorId)
                 .orElseThrow(() -> new Exception(String.format("%s %s", "Не найден автор с id = ", authorId)));

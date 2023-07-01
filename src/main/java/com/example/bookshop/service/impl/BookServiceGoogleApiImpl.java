@@ -8,10 +8,6 @@ import com.example.bookshop.dto.GenreDto;
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookGoogleApi;
-import com.example.bookshop.entity.redis.BookRedis;
-import com.example.bookshop.entity.redis.BookRequestRedis;
-import com.example.bookshop.repository.BookRedisRepository;
-import com.example.bookshop.repository.BookRequestRepository;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.GenreService;
 import com.example.bookshop.service.UsersBookService;
@@ -60,11 +56,9 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private BookRedisRepository bookRedisRepository;
-    @Autowired
-    private BookRequestRepository bookRequestRepository;
-    @Autowired
     private UsersBookService usersBookService;
+
+    private Random random = new Random();
 
     /**
      * Возвращает страницу книг автора
@@ -140,13 +134,8 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
      */
     @Override
     public BookGoogleApi getBook(String slug) {
-        return bookRedisRepository.findById(slug)
-                .map(BookGoogleApi::new)
-                .orElseGet(() -> {
-                    com.example.bookshop.data.book.Root root =
-                            restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
-                    return (BookGoogleApi) getBookFromGoogleRoot(root);
-                });
+        com.example.bookshop.data.book.Root root = restTemplate.getForEntity(getGoogleBookApiUrl(slug), com.example.bookshop.data.book.Root.class).getBody();
+        return (BookGoogleApi) getBookFromGoogleRoot(root);
     }
 
     /**
@@ -292,14 +281,12 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
                     book.setPrice(saleInfo.map(SaleInfo::getRetailPrice).map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
                     book.setPriceOld(saleInfo.map(SaleInfo::getListPrice).map(retailPrice -> (int) retailPrice.getAmount()).orElse(0));
                 });
-        bookRedisRepository.save(new BookRedis(book));
         log.debug("Load book " + book);
         return book;
     }
 
     private String getRandomSearchWord(List<AlphabetObject> alphabetObjects) {
-        Random r = new Random();
-        int i = r.nextInt(alphabetObjects.size());
+        int i = random.nextInt(alphabetObjects.size());
         final char letter = alphabetObjects.get(i).getLetter();
         alphabetObjects.remove(i);
         return String.valueOf(letter);
@@ -317,25 +304,11 @@ public class BookServiceGoogleApiImpl implements BookService<BookGoogleApi> {
                 searchWord = getRandomSearchWord(alphabetObjects);
             }
             requestUrl = getGoogleBooksApiUrl(searchWord, from, to, offset, limit);
-            Optional<BookRequestRedis> bookRequestRedisOptional = bookRequestRepository.findById(requestUrl);
-            if (bookRequestRedisOptional.isPresent()) {
-                return bookRequestRedisOptional.get().getBooks()
-                        .stream()
-                        .map(BookGoogleApi::new)
-                        .collect(Collectors.toList());
-            }
             root = restTemplate.getForEntity(requestUrl, Root.class).getBody();
             if (Objects.nonNull(root) && Objects.nonNull(root.getItems())) {
                 break;
             }
         }
-        final Collection<BookGoogleApi> books = getBooksFromGoogleRoot(root);
-        if (StringUtils.isNotBlank(requestUrl)) {
-            bookRequestRepository.save(new BookRequestRedis(requestUrl, books
-                    .stream()
-                    .map(BookRedis::new)
-                    .collect(Collectors.toList())));
-        }
-        return books;
+        return getBooksFromGoogleRoot(root);
     }
 }

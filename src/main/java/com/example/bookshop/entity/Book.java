@@ -1,6 +1,5 @@
 package com.example.bookshop.entity;
 
-import com.example.bookshop.entity.redis.BookRedis;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,20 +53,6 @@ public abstract class Book implements Serializable {
 
     @JsonProperty("price")
     private Integer price = 0;
-
-    protected Book(BookRedis bookRedis) {
-        this.id = bookRedis.getId();
-        this.pubDate = bookRedis.getPubDate();
-        this.author = bookRedis.getAuthor();
-        this.isBestseller = bookRedis.getIsBestseller();
-        this.slug = bookRedis.getSlug();
-        this.title = bookRedis.getTitle();
-        this.image = bookRedis.getImage();
-        this.status = bookRedis.getStatus();
-        this.description = bookRedis.getDescription();
-        this.priceOld = bookRedis.getPriceOld();
-        this.price = bookRedis.getPrice();
-    }
 
     @JsonProperty("discount")
     public Integer getDiscount() {

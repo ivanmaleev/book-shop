@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.constraints.Min;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Контроллер страницы жанров
@@ -57,7 +55,7 @@ public class GenresController extends CommonController {
     @Operation(description = "Получение страницы жанра")
     @ApiResponse(responseCode = "200", description = "Страница жанра")
     @GetMapping("/slug/{id}")
-    public String bookPage(@Min(value = 1) @PathVariable("id") long genreId, Model model) throws ExecutionException, InterruptedException, TimeoutException {
+    public String bookPage(@Min(value = 1) @PathVariable("id") long genreId, Model model) throws Exception {
         CompletableFuture<GenreDto> genreFuture = CompletableFuture.supplyAsync(() -> genreService.findGenreById(genreId, Langs.RU));
         CompletableFuture<? extends Collection<? extends Book>> booksByGenreFuture =
                 CompletableFuture.supplyAsync(() -> bookService.getBooksByGenreId(genreId, 0, 20));

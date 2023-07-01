@@ -19,13 +19,7 @@ import com.example.bookshop.service.impl.CartServiceImpl;
 import com.example.bookshop.service.impl.CommonServiceImpl;
 import com.example.bookshop.service.impl.GenreServiceImpl;
 import com.example.bookshop.service.impl.PostponedServiceImpl;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -34,7 +28,6 @@ import org.springframework.web.client.RestTemplate;
  * Общая конфигурация
  */
 @Configuration
-@EnableCaching
 public class AppConfig {
 
     @Bean

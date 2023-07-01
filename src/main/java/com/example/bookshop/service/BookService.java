@@ -2,6 +2,7 @@ package com.example.bookshop.service;
 
 import com.example.bookshop.entity.Author;
 import com.example.bookshop.entity.Book;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -69,6 +70,7 @@ public interface BookService<T extends Book> {
      * @return Книга
      * @throws Exception Если книга не найдена
      */
+    @Cacheable(value = "BookService::getBook", key = "#slug")
     T getBook(String slug) throws Exception;
 
     /**

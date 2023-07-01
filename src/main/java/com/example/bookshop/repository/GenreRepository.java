@@ -27,16 +27,14 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
     Collection<Genre> findAllByLang(String lang);
 
     /**
-     * Возвращает жанр по наименованию
+     * Возвращает список жанров по локали
      *
-     * @param name Наименование жанра
      * @param lang Локаль
-     * @return Жанр, если найдено
+     * @return Ссписок жанров
      */
     @Query(nativeQuery = true,
             value = "SELECT g.* \n" +
-                    "FROM book_shop.genre(?2) AS g \n" +
-                    "WHERE lower(?1) LIKE concat('%', lower(g.name), '%') \n" +
-                    "LIMIT 1")
-    Optional<Genre> findByName(String name, String lang);
+                    "FROM book_shop.genre(?1) AS g \n" +
+                    "WHERE g.id = (?2)")
+    Optional<Genre> findByIdAndLang(String lang, Long id);
 }
