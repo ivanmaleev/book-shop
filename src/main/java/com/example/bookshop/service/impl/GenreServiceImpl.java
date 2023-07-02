@@ -1,6 +1,7 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.dto.GenreDto;
+import com.example.bookshop.mapper.GenreMapper;
 import com.example.bookshop.repository.GenreRepository;
 import com.example.bookshop.service.GenreService;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,8 @@ public class GenreServiceImpl implements GenreService {
     private int min = 100;
     @Autowired
     private GenreRepository genreRepository;
+    @Autowired
+    private GenreMapper genreMapper;
 
     /**
      * Возвращает список жанров
@@ -30,7 +33,11 @@ public class GenreServiceImpl implements GenreService {
     public List<GenreDto> findGenres(String lang) {
         return genreRepository.findAllByLang(lang)
                 .stream()
-                .map(genre -> new GenreDto(genre.getId(), genre.getName(), genre.getOrder(), getBooksCount(genre.getId(), min, max)))
+                .map(genre -> {
+                    GenreDto genreDto = genreMapper.toDto(genre);
+                    genreDto.setCount(getBooksCount(genre.getId(), min, max));
+                    return genreDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +51,11 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public GenreDto findGenreById(long id, String lang) {
         return genreRepository.findByIdAndLang(lang, id)
-                .map(genre -> new GenreDto(genre.getId(), genre.getName(), genre.getOrder(), getBooksCount(genre.getId(), min, max)))
+                .map(genre -> {
+                    GenreDto genreDto = genreMapper.toDto(genre);
+                    genreDto.setCount(getBooksCount(genre.getId(), min, max));
+                    return genreDto;
+                })
                 .orElse(new GenreDto());
     }
 

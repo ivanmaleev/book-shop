@@ -20,7 +20,7 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<BookLocal, Long> {
 
-    Page<BookLocal> findAllByAuthor(Author author, Pageable pageable);
+    Page<BookLocal> findAllByAuthorId(Long authorId, Pageable pageable);
 
     Page<BookLocal> findAllByGenre(Genre genre, Pageable pageable);
 

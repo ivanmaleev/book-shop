@@ -4,7 +4,6 @@ import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.dto.CartData;
 import com.example.bookshop.dto.request.BookCartRequest;
-import com.example.bookshop.entity.Book;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.BookStatusService;
@@ -33,7 +32,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private BookRatingService bookRatingService;
     @Autowired
-    private BookService<? extends Book> bookService;
+    private BookService bookService;
 
     /**
      * Возвращает данные по суммам в карзине
@@ -66,23 +65,21 @@ public class CartServiceImpl implements CartService {
         cartContents = cartContents.endsWith(CART_DELIMITER) ? cartContents.substring(0, cartContents.length() - 1) :
                 cartContents;
         String[] cookieSlugs = cartContents.split(CART_DELIMITER);
-        Collection<? extends Book> books = bookService.getBooks(Arrays.asList(cookieSlugs));
+        Collection<BookDto> books = bookService.getBooks(Arrays.asList(cookieSlugs));
 
         Map<String, BookRatingDto> bookRatings = new HashMap<>();
         bookRatingService.getBooksRating(books
                         .stream()
-                        .map(Book::getSlug)
+                        .map(BookDto::getSlug)
                         .collect(Collectors.toList()))
                 .forEach(bookRatingDto -> bookRatings.put(bookRatingDto.getBookId(), bookRatingDto));
         return books
                 .stream()
-                .map(book -> {
-                    BookDto bookDto = new BookDto(book);
+                .peek(book -> {
                     BookRatingDto bookRating = bookRatings.get(book.getSlug());
                     if (Objects.nonNull(bookRating)) {
-                        bookDto.setRating(bookRating.getRating());
+                        book.setRating(bookRating.getRating());
                     }
-                    return bookDto;
                 }).collect(Collectors.toList());
     }
 

@@ -1,7 +1,8 @@
 package com.example.bookshop.service;
 
+import com.example.bookshop.dto.AuthorDto;
+import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.entity.Author;
-import com.example.bookshop.entity.Book;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.Collection;
  * Интерфейс сервиса книг
  */
 @Service
-public interface BookService<T extends Book> {
+public interface BookService {
 
     /**
      * Возвращает страницу книг автора
@@ -22,7 +23,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    Collection<T> getBooksByAuthor(Author author, Integer offset, Integer limit);
+    Collection<BookDto> getBooksByAuthor(AuthorDto author, Integer offset, Integer limit);
 
     /**
      * Возвращает страницу рекомендованных книг
@@ -31,7 +32,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    Collection<T> getPageOfRecommendedBooks(Integer offset, Integer limit);
+    Collection<BookDto> getPageOfRecommendedBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу недавних книг
@@ -42,7 +43,7 @@ public interface BookService<T extends Book> {
      * @param end    Конец периода поиска
      * @return Список книг
      */
-    Collection<T> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
+    Collection<BookDto> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end);
 
     /**
      * Возвращает страницу популярных книг
@@ -51,7 +52,7 @@ public interface BookService<T extends Book> {
      * @param limit  Лимит для страницы
      * @return Список книг
      */
-    Collection<T> getPageOfPopularBooks(Integer offset, Integer limit);
+    Collection<BookDto> getPageOfPopularBooks(Integer offset, Integer limit);
 
     /**
      * Возвращает страницу книг по поиску слова
@@ -61,7 +62,7 @@ public interface BookService<T extends Book> {
      * @param limit      Лимит для страницы
      * @return Список книг
      */
-    Collection<T> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
+    Collection<BookDto> getPageOfSearchResult(String searchWord, Integer offset, Integer limit);
 
     /**
      * Возвращает книгу по идентификатору книги
@@ -71,7 +72,7 @@ public interface BookService<T extends Book> {
      * @throws Exception Если книга не найдена
      */
     @Cacheable(value = "BookService::getBook", key = "#slug")
-    T getBook(String slug) throws Exception;
+    BookDto getBook(String slug) throws Exception;
 
     /**
      * Возвращает список книг по списку идентификаторов
@@ -79,7 +80,7 @@ public interface BookService<T extends Book> {
      * @param slugList Список идентификаторов
      * @return Список книг
      */
-    Collection<T> getBooks(Collection<String> slugList);
+    Collection<BookDto> getBooks(Collection<String> slugList);
 
     /**
      * Возвращает страницу книг по жанру
@@ -89,7 +90,7 @@ public interface BookService<T extends Book> {
      * @param limit   Лимит для страницы
      * @return Список книг
      */
-    Collection<T> getBooksByGenreId(long genreId, Integer offset, Integer limit);
+    Collection<BookDto> getBooksByGenreId(long genreId, Integer offset, Integer limit);
 
     /**
      * Вовзращает список книг пользователя
@@ -98,5 +99,5 @@ public interface BookService<T extends Book> {
      * @param archived Флаг указания на то, что кнгиа находится в архиве пользователя
      * @return Список книг
      */
-    Collection<T> findUsersBooks(Long userId, boolean archived);
+    Collection<BookDto> findUsersBooks(Long userId, boolean archived);
 }

@@ -3,8 +3,8 @@
 Проект: Book-shop
 ----------------------------------------------------
 Проект "Книжный магазин".
-Используемые технологии: String Boot, String MVC, String Data, String Security, 
-Hibernate, Redis, Liquibase, Swagger, Maven, PostgreSQL, Thymeleaf, Lombok.
+Используемые технологии: String Boot, String MVC, String Data, String Security, REST, JWT, 
+Hibernate, Redis, Liquibase, Mapstruct, Swagger, JUnit, Maven, PostgreSQL, Thymeleaf, Lombok.
 ----------------------------------------------------
 Проект представляет собой сайт по покупке книг.
 1) На главной странице расположены три раздела "Рекомендуемое", "Новинки", "Популярное". 

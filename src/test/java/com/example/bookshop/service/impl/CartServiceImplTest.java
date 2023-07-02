@@ -39,7 +39,7 @@ class CartServiceImplTest {
     @MockBean
     private BookRatingService bookRatingService;
     @MockBean
-    private BookService<? extends Book> bookService;
+    private BookService bookService;
     private HttpServletResponse httpServletResponse = new MockHttpServletResponse();
     private Model model = new ExtendedModelMap();
 
@@ -57,9 +57,9 @@ class CartServiceImplTest {
 
     @Test
     void getCartBooks() {
-        BookLocal book = new BookLocal();
+        BookDto book = new BookDto();
         book.setSlug("slug");
-        Collection<? extends Book> books = List.of(book);
+        Collection<BookDto> books = List.of(book);
         Mockito.doReturn(books).when(bookService).getBooks(Mockito.anyList());
         Assertions.assertFalse( cartService.getCartBooks("/content/").isEmpty());
     }

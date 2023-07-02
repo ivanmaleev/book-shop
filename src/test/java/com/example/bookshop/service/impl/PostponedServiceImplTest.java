@@ -1,5 +1,6 @@
 package com.example.bookshop.service.impl;
 
+import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookLocal;
@@ -37,15 +38,15 @@ class PostponedServiceImplTest {
     @MockBean
     private BookRatingService bookRatingService;
     @MockBean
-    private BookService<? extends Book> bookService;
+    private BookService bookService;
     private HttpServletResponse httpServletResponse = new MockHttpServletResponse();
     private Model model = new ExtendedModelMap();
 
     @Test
     void getPostponedBooks() {
-        BookLocal book = new BookLocal();
+        BookDto book = new BookDto();
         book.setSlug("slug");
-        Collection<? extends Book> books = List.of(book);
+        Collection<BookDto> books = List.of(book);
         Mockito.doReturn(books).when(bookService).getBooks(Mockito.anyList());
         Assertions.assertFalse(service.getPostponedBooks("/content/").isEmpty());
     }

@@ -1,6 +1,7 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.entity.Author;
+import com.example.bookshop.dto.AuthorDto;
+import com.example.bookshop.mapper.AuthorMapper;
 import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.service.AuthorService;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     private AuthorRepository authorsRepository;
+    @Autowired
+    private AuthorMapper authorMapper;
 
     /**
      * Возвращает мапу Первая буква фамилии - Автор
@@ -29,10 +32,11 @@ public class AuthorServiceImpl implements AuthorService {
      */
     @Override
     @Cacheable(value = "AuthorService::authorsMap")
-    public Map<String, List<Author>> getAuthorsMap() {
+    public Map<String, List<AuthorDto>> getAuthorsMap() {
         return authorsRepository.findAll()
                 .stream()
-                .collect(Collectors.groupingBy((Author a) -> a.getLastName().substring(0, 1)));
+                .map(author -> authorMapper.toDto(author))
+                .collect(Collectors.groupingBy((AuthorDto a) -> a.getLastName().substring(0, 1)));
     }
 
     /**
@@ -44,8 +48,9 @@ public class AuthorServiceImpl implements AuthorService {
      */
     @Override
     @Cacheable(value = "AuthorService::findById", key = "#authorId")
-    public Author findById(long authorId) throws Exception {
+    public AuthorDto findById(long authorId) throws Exception {
         return authorsRepository.findById(authorId)
+                .map(author -> authorMapper.toDto(author))
                 .orElseThrow(() -> new Exception(String.format("%s %s", "Не найден автор с id = ", authorId)));
     }
 }

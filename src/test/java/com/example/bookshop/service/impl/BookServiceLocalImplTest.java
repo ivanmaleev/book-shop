@@ -1,6 +1,6 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.entity.Author;
+import com.example.bookshop.dto.AuthorDto;
 import com.example.bookshop.entity.BookLocal;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.service.BookService;
@@ -28,7 +28,7 @@ import java.util.Optional;
 class BookServiceLocalImplTest {
 
     @Autowired
-    private BookService<BookLocal> bookService;
+    private BookService bookService;
     @MockBean
     private BookRepository bookRepository;
     @MockBean
@@ -36,8 +36,8 @@ class BookServiceLocalImplTest {
 
     @Test
     void getBooksByAuthor() {
-        Mockito.when(bookRepository.findAllByAuthor(Mockito.any(), Mockito.any())).thenReturn(new PageImpl<>(List.of(new BookLocal())));
-        Assertions.assertEquals(1, bookService.getBooksByAuthor(new Author(), 1, 1).size());
+        Mockito.when(bookRepository.findAllByAuthorId(Mockito.any(), Mockito.any())).thenReturn(new PageImpl<>(List.of(new BookLocal())));
+        Assertions.assertEquals(1, bookService.getBooksByAuthor(new AuthorDto(), 1, 1).size());
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.example.bookshop.entity;
 
-import com.example.bookshop.data.BookFileType;
+import com.example.bookshop.dto.BookFileType;
 
 public class BookFile {
 

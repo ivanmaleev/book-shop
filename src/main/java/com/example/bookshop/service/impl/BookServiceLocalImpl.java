@@ -1,9 +1,10 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.entity.Author;
-import com.example.bookshop.entity.BookLocal;
+import com.example.bookshop.dto.AuthorDto;
+import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.entity.Genre;
 import com.example.bookshop.entity.UsersBook;
+import com.example.bookshop.mapper.BookLocalMapper;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
@@ -24,12 +25,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @NoArgsConstructor
 @ConditionalOnProperty(value = "google.books.api.enable", havingValue = "false")
-public class BookServiceLocalImpl implements BookService<BookLocal> {
+public class BookServiceLocalImpl implements BookService {
 
     @Autowired
     private BookRepository bookRepository;
     @Autowired
     private UsersBookService usersBookService;
+    @Autowired
+    private BookLocalMapper bookMapper;
 
     /**
      * Возвращает страницу книг автора
@@ -40,8 +43,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getBooksByAuthor(Author author, Integer offset, Integer limit) {
-        return bookRepository.findAllByAuthor(author, PageRequest.of(offset, limit)).getContent();
+    public Collection<BookDto> getBooksByAuthor(AuthorDto author, Integer offset, Integer limit) {
+        return bookMapper.toDto(bookRepository.findAllByAuthorId(author.getId(), PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -52,8 +55,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getPageOfRecommendedBooks(Integer offset, Integer limit) {
-        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
+    public Collection<BookDto> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+        return bookMapper.toDto(bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -66,8 +69,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
-        return bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent();
+    public Collection<BookDto> getPageOfRecentBooks(Integer offset, Integer limit, LocalDate from, LocalDate end) {
+        return bookMapper.toDto(bookRepository.findAllByPubDateBetween(from, end, PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -78,8 +81,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getPageOfPopularBooks(Integer offset, Integer limit) {
-        return bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent();
+    public Collection<BookDto> getPageOfPopularBooks(Integer offset, Integer limit) {
+        return bookMapper.toDto(bookRepository.findAllByIsBestseller(1, PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -91,8 +94,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
-        return bookRepository.findAllByTitleLikeIgnoreCase(searchWord, PageRequest.of(offset, limit)).getContent();
+    public Collection<BookDto> getPageOfSearchResult(String searchWord, Integer offset, Integer limit) {
+        return bookMapper.toDto(bookRepository.findAllByTitleLikeIgnoreCase(searchWord, PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -103,8 +106,9 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @throws Exception Если книга не найдена
      */
     @Override
-    public BookLocal getBook(String slug) throws Exception {
+    public BookDto getBook(String slug) throws Exception {
         return bookRepository.findTopBySlug(slug)
+                .map(book -> bookMapper.toDto(book))
                 .orElseThrow(() -> new Exception(String.format("%s %s %s", "Книга с id =", slug, "не найдена")));
     }
 
@@ -115,8 +119,8 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getBooks(Collection<String> slugList) {
-        return bookRepository.findAllBySlugIn(slugList);
+    public Collection<BookDto> getBooks(Collection<String> slugList) {
+        return bookMapper.toDto(bookRepository.findAllBySlugIn(slugList));
     }
 
     /**
@@ -128,10 +132,10 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
+    public Collection<BookDto> getBooksByGenreId(long genreId, Integer offset, Integer limit) {
         Genre genre = new Genre();
         genre.setId(genreId);
-        return bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent();
+        return bookMapper.toDto(bookRepository.findAllByGenre(genre, PageRequest.of(offset, limit)).getContent());
     }
 
     /**
@@ -142,11 +146,11 @@ public class BookServiceLocalImpl implements BookService<BookLocal> {
      * @return Список книг
      */
     @Override
-    public Collection<BookLocal> findUsersBooks(Long userId, boolean archived) {
+    public Collection<BookDto> findUsersBooks(Long userId, boolean archived) {
         Collection<String> bookIds = usersBookService.findUsersBooks(userId, Collections.emptyList(), archived)
                 .stream()
                 .map(UsersBook::getBookId)
                 .collect(Collectors.toList());
-        return bookRepository.findAllBySlugIn(bookIds);
+        return bookMapper.toDto(bookRepository.findAllBySlugIn(bookIds));
     }
 }

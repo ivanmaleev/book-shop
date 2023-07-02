@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -25,7 +24,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "book", schema = "book_shop")
-public class BookLocal extends Book implements Serializable {
+public class BookLocal extends Book {
     private static final long serialVersionUID = -328587793115176643L;
 
     @Id

@@ -1,6 +1,6 @@
 package com.example.bookshop.service;
 
-import com.example.bookshop.entity.Author;
+import com.example.bookshop.dto.AuthorDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface AuthorService {
      *
      * @return мапа авторов
      */
-    Map<String, List<Author>> getAuthorsMap();
+    Map<String, List<AuthorDto>> getAuthorsMap();
 
     /**
      * Ищет автора по id
@@ -26,5 +26,5 @@ public interface AuthorService {
      * @return Автор
      * @throws Exception Если не найден автор
      */
-    Author findById(long id) throws Exception;
+    AuthorDto findById(long id) throws Exception;
 }
