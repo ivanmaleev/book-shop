@@ -2,11 +2,13 @@ package com.example.bookshop.service.impl;
 
 import com.example.bookshop.dto.AuthorDto;
 import com.example.bookshop.entity.BookLocal;
+import com.example.bookshop.mapper.BookLocalMapper;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.UsersBookService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -29,6 +31,8 @@ class BookServiceLocalImplTest {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private BookLocalMapper bookLocalMapper;
     @MockBean
     private BookRepository bookRepository;
     @MockBean
@@ -61,10 +65,10 @@ class BookServiceLocalImplTest {
 
     @Test
     void getBook() throws Exception {
-        final BookLocal bookLocal = new BookLocal();
+        BookLocal bookLocal = new BookLocal();
         bookLocal.setId("1");
         Mockito.when(bookRepository.findTopBySlug(Mockito.anyString())).thenReturn(Optional.of(bookLocal));
-        Assertions.assertEquals(bookLocal, bookService.getBook("book"));
+        Assertions.assertEquals(bookLocal.getId(), bookService.getBook("book").getId());
     }
 
     @Test
@@ -100,6 +104,10 @@ class BookServiceLocalImplTest {
         @Bean
         public BookService bookService() {
             return new BookServiceLocalImpl();
+        }
+        @Bean
+        public BookLocalMapper bookLocalMapper() {
+            return Mappers.getMapper(BookLocalMapper.class);
         }
     }
 }

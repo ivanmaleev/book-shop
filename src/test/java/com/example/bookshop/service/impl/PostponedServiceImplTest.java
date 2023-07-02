@@ -4,12 +4,14 @@ import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.request.BookCartRequest;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookLocal;
+import com.example.bookshop.mapper.BookLocalMapper;
 import com.example.bookshop.service.BookRatingService;
 import com.example.bookshop.service.BookService;
 import com.example.bookshop.service.BookStatusService;
 import com.example.bookshop.service.PostponedService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -33,6 +35,8 @@ class PostponedServiceImplTest {
 
     @Autowired
     private PostponedService service;
+    @Autowired
+    private BookLocalMapper bookLocalMapper;
     @MockBean
     private BookStatusService bookStatusService;
     @MockBean
@@ -68,6 +72,11 @@ class PostponedServiceImplTest {
         @Bean
         public PostponedService postponedService() {
             return new PostponedServiceImpl();
+        }
+
+        @Bean
+        public BookLocalMapper bookLocalMapper() {
+            return Mappers.getMapper(BookLocalMapper.class);
         }
     }
 }

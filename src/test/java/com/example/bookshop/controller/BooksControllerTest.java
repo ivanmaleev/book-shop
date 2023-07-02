@@ -1,6 +1,7 @@
 package com.example.bookshop.controller;
 
 import com.example.bookshop.dto.BookCommentDto;
+import com.example.bookshop.dto.BookDto;
 import com.example.bookshop.dto.BookRatingDto;
 import com.example.bookshop.entity.Book;
 import com.example.bookshop.entity.BookLocal;
@@ -72,7 +73,7 @@ class BooksControllerTest {
         BookCommentDto bookCommentDto = new BookCommentDto();
         bookCommentDto.setId(1L);
         bookCommentDto.setUser(bookstoreUser);
-        Book book = new BookLocal();
+        BookDto book = new BookDto();
         book.setTitle("title");
         Mockito.when(userRegister.getCurrentUser()).thenReturn(bookstoreUser);
         Mockito.doReturn(book).when(bookService).getBook("1");

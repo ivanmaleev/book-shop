@@ -1,10 +1,13 @@
 package com.example.bookshop.service.impl;
 
 import com.example.bookshop.entity.Author;
+import com.example.bookshop.mapper.AuthorMapper;
+import com.example.bookshop.mapper.BookLocalMapper;
 import com.example.bookshop.repository.AuthorRepository;
 import com.example.bookshop.service.AuthorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -23,6 +26,8 @@ class AuthorServiceImplTest {
 
     @Autowired
     private AuthorService authorService;
+    @Autowired
+    private AuthorMapper authorMapper;
     @MockBean
     private AuthorRepository authorsRepository;
 
@@ -56,5 +61,10 @@ class AuthorServiceImplTest {
         public AuthorService authorService() {
             return new AuthorServiceImpl();
         }
+
+        @Bean
+        public AuthorMapper authorMapper(){
+            return Mappers.getMapper(AuthorMapper.class);
+        };
     }
 }
